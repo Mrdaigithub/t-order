@@ -1,4 +1,4 @@
-package club.mrdaisite.torderadmin.dto;
+package club.mrdaisite.torder.torderadmin.dto;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.validation.BindingResult;
@@ -20,7 +20,7 @@ public class CommonResult {
     //未认证
     public static final int UNAUTHORIZED = 401;
     //未授权
-    public static final int  FORBIDDEN = 403;
+    public static final int FORBIDDEN = 403;
     private int code;
     private String message;
     private Object data;
@@ -57,9 +57,9 @@ public class CommonResult {
     /**
      * 普通失败提示信息
      */
-    public CommonResult failed() {
+    public CommonResult failed(String message) {
         this.code = FAILED;
-        this.message = "操作失败";
+        this.message = message != null ? message : "操作失败";
         return this;
     }
 
@@ -100,6 +100,7 @@ public class CommonResult {
 
     /**
      * 参数验证失败使用
+     *
      * @param result 错误信息
      */
     public CommonResult validateFailed(BindingResult result) {

@@ -1,4 +1,4 @@
-package club.mrdaisite.torderadmin.bo;
+package club.mrdaisite.torder.torderadmin.bo;
 
 import club.mrdaisite.torder.tordermbg.model.Admin;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,21 +36,21 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

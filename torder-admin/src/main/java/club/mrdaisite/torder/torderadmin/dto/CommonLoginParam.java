@@ -1,4 +1,4 @@
-package club.mrdaisite.torderadmin.dto;
+package club.mrdaisite.torder.torderadmin.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 

@@ -1,8 +1,11 @@
-package club.mrdaisite.torderadmin.config;
+package club.mrdaisite.torder.torderadmin.config;
 
+import club.mrdaisite.torder.torderadmin.bo.AdminUserDetails;
+import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
+import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
+import club.mrdaisite.torder.torderadmin.component.RestfulAccessDeniedHandler;
 import club.mrdaisite.torder.tordermbg.model.Admin;
-import club.mrdaisite.torderadmin.bo.AdminUserDetails;
-import club.mrdaisite.torderadmin.service.AdminService;
+import club.mrdaisite.torder.torderadmin.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +18,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,6 +37,10 @@ import java.util.Arrays;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,12 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
                 .antMatchers("/admin/login", "/admin/register", "/error").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                .antMatchers("/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
         http.headers().cacheControl();
+//        http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.exceptionHandling()
+//                .accessDeniedHandler(restfulAccessDeniedHandler)
+//                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     @Override
@@ -63,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             if (admin != null) {
                 return new AdminUserDetails(admin);
             }
-            return null;
+            throw new UsernameNotFoundException("用户名或密码错误");
         };
     }
 
@@ -71,6 +82,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
+        return new JwtAuthenticationTokenFilter();
     }
 
     @Bean

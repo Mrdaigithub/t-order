@@ -1,4 +1,4 @@
-package club.mrdaisite.torderadmin.config;
+package club.mrdaisite.torder.torderadmin.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,7 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .securitySchemes(schemeList)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("club.mrdaisite.torderadmin.controller"))
+                .apis(RequestHandlerSelectors.basePackage("club.mrdaisite.torder.torderadmin.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
