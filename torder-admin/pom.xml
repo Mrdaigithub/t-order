@@ -8,7 +8,7 @@
         <version>2.1.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>club.mrdaisite</groupId>
+    <groupId>club.mrdaisite.torder</groupId>
     <artifactId>torder-admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>torder-admin</name>

@@ -1,13 +1,14 @@
 package club.mrdaisite.torder.torderadmin.component;
 
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,19 +19,44 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019/03/22
  */
 @ControllerAdvice
-@ResponseBody
 public class GlobalExceptionHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
-
     @ExceptionHandler(BadCredentialsException.class)
-    public CommonResult badCredentialsExceptionHandler(HttpServletRequest request, Exception exception) {
-        LOGGER.error(exception.getMessage());
-        return new CommonResult().failed("");
+    public ResponseEntity badCredentialsExceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().unauthorized("用户名或密码错误");
+    }
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    public ResponseEntity duplicateKeyExceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().badRequest("参数指定的数据已存在");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity dataIntegrityViolationExceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().internalServerError("插入到数据库的数据不完整");
+    }
+
+    @ExceptionHandler(MissingPathVariableException.class)
+    public ResponseEntity missingPathVariableExceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().internalServerError("路径参数不存在");
+    }
+
+    @ExceptionHandler(BadSqlGrammarException.class)
+    public ResponseEntity badSqlGrammarExceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().internalServerError("错误的sql语法");
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity nullPointerExceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().notFound("空指针错误");
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity customExceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().internalServerError(exception.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    public CommonResult exceptionHandler(HttpServletRequest request, Exception exception) {
-        LOGGER.error(exception.getClass().getName() + ": " + exception.getMessage());
-        return new CommonResult().failed("未知错误");
+    public ResponseEntity exceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().internalServerError("未知错误");
     }
 }

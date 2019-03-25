@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 /**
  * @author dai
  */
-public class CommonLoginParam {
+public class AdminLoginParamDTO {
     @ApiModelProperty(value = "用户名", required = true)
     @NotEmpty(message = "用户名不能为空")
     private String username;
