@@ -15,12 +15,26 @@ CREATE TABLE `admin` (
                        `username` varchar(255) NOT NULL COMMENT '管理员用户名',
                        `password` varchar(255) NOT NULL COMMENT '管理员密码',
                        `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                       `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                       `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                        PRIMARY KEY (`id`),
                        UNIQUE KEY `admin_username_uindex` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 INSERT INTO `admin` (`id`, `username`, `password`, `gmt_create`, `gmt_modified`) VALUES
-(2,	'root',	'$2a$10$6dqAS73smpYqNcRw4UY4xOHKv4S3Q.bX2bsKtGysYYfwsZcgqDs2.',	'2019-03-21 03:45:05',	'2019-03-21 03:50:38');
+(2,	'root',	'$2a$10$6dqAS73smpYqNcRw4UY4xOHKv4S3Q.bX2bsKtGysYYfwsZcgqDs2.',	'2019-03-21 03:45:05',	'2019-03-25 03:41:05');
 
--- 2019-03-21 06:16:55
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+                      `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                      `username` varchar(255) NOT NULL COMMENT '用户名',
+                      `password` varchar(255) NOT NULL COMMENT '用户密码',
+                      `back_card` varchar(255) NOT NULL COMMENT '银行卡号',
+                      `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                      `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                      PRIMARY KEY (`id`),
+                      UNIQUE KEY `admin_username_uindex` (`username`),
+                      UNIQUE KEY `user_back_card_uindex` (`back_card`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+
+-- 2019-03-25 08:42:36
