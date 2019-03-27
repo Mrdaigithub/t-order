@@ -3,12 +3,12 @@ package club.mrdaisite.torder.torderadmin.dto;
 import java.util.Date;
 
 /**
- * AdminResultDTO
+ * UserResultDTO
  *
  * @author dai
  * @date 2019/03/25
  */
-public class AdminResultDTO {
+public class UserResultDTO {
     private Long id;
 
     private String username;
@@ -61,7 +61,7 @@ public class AdminResultDTO {
 
     @Override
     public String toString() {
-        return "AdminResultDTO{" +
+        return "UserResultDTO{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", backCard='" + backCard + '\'' +

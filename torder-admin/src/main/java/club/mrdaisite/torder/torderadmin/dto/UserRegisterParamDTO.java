@@ -1,12 +1,12 @@
 package club.mrdaisite.torder.torderadmin.dto;
 
 /**
- * AdminRegisterParamDTO
+ * UserRegisterParamDTO
  *
  * @author dai
  * @date 2019/03/25
  */
-public class AdminRegisterParamDTO {
+public class UserRegisterParamDTO {
     private String username;
 
     private String password;
@@ -39,7 +39,7 @@ public class AdminRegisterParamDTO {
 
     @Override
     public String toString() {
-        return "AdminRegisterParamDTO{" +
+        return "UserRegisterParamDTO{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", backCard='" + backCard + '\'' +

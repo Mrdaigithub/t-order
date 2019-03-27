@@ -3,18 +3,14 @@ package club.mrdaisite.torder.tordermbg.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
+public class Message implements Serializable {
     private Long id;
 
-    private String username;
+    private String name;
 
-    private String password;
+    private String description;
 
-    private String backCard;
-
-    private Integer score;
-
-    private Long pid;
+    private Long broadcasterId;
 
     private Byte isEnabled;
 
@@ -32,44 +28,28 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getBackCard() {
-        return backCard;
+    public Long getBroadcasterId() {
+        return broadcasterId;
     }
 
-    public void setBackCard(String backCard) {
-        this.backCard = backCard;
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public Long getPid() {
-        return pid;
-    }
-
-    public void setPid(Long pid) {
-        this.pid = pid;
+    public void setBroadcasterId(Long broadcasterId) {
+        this.broadcasterId = broadcasterId;
     }
 
     public Byte getIsEnabled() {
@@ -103,11 +83,9 @@ public class User implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", username=").append(username);
-        sb.append(", password=").append(password);
-        sb.append(", backCard=").append(backCard);
-        sb.append(", score=").append(score);
-        sb.append(", pid=").append(pid);
+        sb.append(", name=").append(name);
+        sb.append(", description=").append(description);
+        sb.append(", broadcasterId=").append(broadcasterId);
         sb.append(", isEnabled=").append(isEnabled);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);

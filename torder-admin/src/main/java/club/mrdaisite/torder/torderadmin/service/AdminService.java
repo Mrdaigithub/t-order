@@ -2,9 +2,9 @@ package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.AdminChangeUserPasswordParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.AdminRegisterParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
-import club.mrdaisite.torder.tordermbg.model.Admin;
+import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
+import club.mrdaisite.torder.tordermbg.model.User;
 
 /**
  * AdminService
@@ -19,15 +19,15 @@ public interface AdminService {
      * @param username 用户名
      * @return 指定后台管理员
      */
-    Admin getAdminByUsername(String username);
+    User getAdminByUsername(String username);
 
     /**
      * 用户注册
      *
-     * @param adminRegisterParamDTO 注册参数
+     * @param userRegisterParamDTO 注册参数
      * @return 返回注册的用户信息
      */
-    AdminResultDTO register(AdminRegisterParamDTO adminRegisterParamDTO);
+    UserResultDTO register(UserRegisterParamDTO userRegisterParamDTO);
 
     /**
      * 登录功能
@@ -40,10 +40,19 @@ public interface AdminService {
 
     /**
      * 管理员修改用户密码
-     * @param id 用户id
+     *
+     * @param id                              用户id
      * @param adminChangeUserPasswordParamDTO 新旧密码参数
      * @return
      * @throws CustomException
      */
     Object changeUserPassword(Long id, AdminChangeUserPasswordParamDTO adminChangeUserPasswordParamDTO) throws CustomException;
+
+    /**
+     * 获取指定用户的权限列表
+     *
+     * @param userId 用户id
+     * @return 指定用户的权限列表
+     */
+    Object getPermissionList(Long userId);
 }

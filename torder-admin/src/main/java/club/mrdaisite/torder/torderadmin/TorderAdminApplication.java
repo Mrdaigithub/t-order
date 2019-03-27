@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
  * @author dai
  */
 @SpringBootApplication
-@MapperScan({"club.mrdaisite.torder.tordermbg.mapper"})
+@MapperScan({"club.mrdaisite.torder.tordermbg.mapper", "club.mrdaisite.torder.torderadmin.dao"})
 @EnableTransactionManagement
 public class TorderAdminApplication {
     @Bean

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.User">
+<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.Order">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="back_card" jdbcType="VARCHAR" property="backCard" />
-    <result column="score" jdbcType="INTEGER" property="score" />
-    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="score" jdbcType="TINYINT" property="score" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="broadcaster_id" jdbcType="BIGINT" property="broadcasterId" />
     <result column="is_enabled" jdbcType="TINYINT" property="isEnabled" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
@@ -71,15 +71,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, back_card, score, pid, is_enabled, gmt_create, gmt_modified
+    id, name, description, score, state, broadcaster_id, is_enabled, gmt_create, gmt_modified
   </sql>
-  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.OrderExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from user
+    from order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,50 +90,50 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from user
+    from order
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from user
+    delete from order
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample">
-    delete from user
+  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.OrderExample">
+    delete from order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.User">
+  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.Order">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into user (username, password, back_card, 
-      score, pid, is_enabled, 
+    insert into order (name, description, score, 
+      state, broadcaster_id, is_enabled, 
       gmt_create, gmt_modified)
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{backCard,jdbcType=VARCHAR}, 
-      #{score,jdbcType=INTEGER}, #{pid,jdbcType=BIGINT}, #{isEnabled,jdbcType=TINYINT}, 
+    values (#{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{score,jdbcType=TINYINT}, 
+      #{state,jdbcType=TINYINT}, #{broadcasterId,jdbcType=BIGINT}, #{isEnabled,jdbcType=TINYINT}, 
       #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.User">
+  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.Order">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into user
+    insert into order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        username,
+      <if test="name != null">
+        name,
       </if>
-      <if test="password != null">
-        password,
-      </if>
-      <if test="backCard != null">
-        back_card,
+      <if test="description != null">
+        description,
       </if>
       <if test="score != null">
         score,
       </if>
-      <if test="pid != null">
-        pid,
+      <if test="state != null">
+        state,
+      </if>
+      <if test="broadcasterId != null">
+        broadcaster_id,
       </if>
       <if test="isEnabled != null">
         is_enabled,
@@ -146,20 +146,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="backCard != null">
-        #{backCard,jdbcType=VARCHAR},
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="score != null">
-        #{score,jdbcType=INTEGER},
+        #{score,jdbcType=TINYINT},
       </if>
-      <if test="pid != null">
-        #{pid,jdbcType=BIGINT},
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="broadcasterId != null">
+        #{broadcasterId,jdbcType=BIGINT},
       </if>
       <if test="isEnabled != null">
         #{isEnabled,jdbcType=TINYINT},
@@ -172,32 +172,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample" resultType="java.lang.Long">
-    select count(*) from user
+  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.OrderExample" resultType="java.lang.Long">
+    select count(*) from order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update user
+    update order
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.username != null">
-        username = #{record.username,jdbcType=VARCHAR},
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=VARCHAR},
-      </if>
-      <if test="record.backCard != null">
-        back_card = #{record.backCard,jdbcType=VARCHAR},
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
       </if>
       <if test="record.score != null">
-        score = #{record.score,jdbcType=INTEGER},
+        score = #{record.score,jdbcType=TINYINT},
       </if>
-      <if test="record.pid != null">
-        pid = #{record.pid,jdbcType=BIGINT},
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=TINYINT},
+      </if>
+      <if test="record.broadcasterId != null">
+        broadcaster_id = #{record.broadcasterId,jdbcType=BIGINT},
       </if>
       <if test="record.isEnabled != null">
         is_enabled = #{record.isEnabled,jdbcType=TINYINT},
@@ -214,13 +214,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update user
+    update order
     set id = #{record.id,jdbcType=BIGINT},
-      username = #{record.username,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      back_card = #{record.backCard,jdbcType=VARCHAR},
-      score = #{record.score,jdbcType=INTEGER},
-      pid = #{record.pid,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      score = #{record.score,jdbcType=TINYINT},
+      state = #{record.state,jdbcType=TINYINT},
+      broadcaster_id = #{record.broadcasterId,jdbcType=BIGINT},
       is_enabled = #{record.isEnabled,jdbcType=TINYINT},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
@@ -228,23 +228,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.User">
-    update user
+  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.Order">
+    update order
     <set>
-      <if test="username != null">
-        username = #{username,jdbcType=VARCHAR},
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="backCard != null">
-        back_card = #{backCard,jdbcType=VARCHAR},
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="score != null">
-        score = #{score,jdbcType=INTEGER},
+        score = #{score,jdbcType=TINYINT},
       </if>
-      <if test="pid != null">
-        pid = #{pid,jdbcType=BIGINT},
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="broadcasterId != null">
+        broadcaster_id = #{broadcasterId,jdbcType=BIGINT},
       </if>
       <if test="isEnabled != null">
         is_enabled = #{isEnabled,jdbcType=TINYINT},
@@ -258,13 +258,13 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.User">
-    update user
-    set username = #{username,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      back_card = #{backCard,jdbcType=VARCHAR},
-      score = #{score,jdbcType=INTEGER},
-      pid = #{pid,jdbcType=BIGINT},
+  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.Order">
+    update order
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      score = #{score,jdbcType=TINYINT},
+      state = #{state,jdbcType=TINYINT},
+      broadcaster_id = #{broadcasterId,jdbcType=BIGINT},
       is_enabled = #{isEnabled,jdbcType=TINYINT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}

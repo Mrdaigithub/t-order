@@ -4,8 +4,8 @@ import club.mrdaisite.torder.torderadmin.bo.AdminUserDetails;
 import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
 import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
 import club.mrdaisite.torder.torderadmin.component.RestfulAccessDeniedHandler;
-import club.mrdaisite.torder.tordermbg.model.Admin;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
+import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -70,9 +69,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsServiceBean() throws Exception {
         return username -> {
-            Admin admin = adminService.getAdminByUsername(username);
-            if (admin != null) {
-                return new AdminUserDetails(admin);
+            User user = adminService.getAdminByUsername(username);
+            if (user != null) {
+                return new AdminUserDetails(user);
             }
             throw new UsernameNotFoundException("用户名或密码错误");
         };

@@ -1,22 +1,22 @@
 package club.mrdaisite.torder.torderadmin.bo;
 
-import club.mrdaisite.torder.tordermbg.model.Admin;
+import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 /**
- * torder
+ * AdminUserDetails
  *
  * @author dai
  * @date 2019/03/22
  */
 public class AdminUserDetails implements UserDetails {
-    private Admin admin;
+    private User user;
 
-    public AdminUserDetails(Admin admin) {
-        this.admin = admin;
+    public AdminUserDetails(User user) {
+        this.user = user;
     }
 
     @Override
@@ -26,12 +26,12 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return admin.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return admin.getUsername();
+        return user.getUsername();
     }
 
     @Override
@@ -51,6 +51,6 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getIsEnabled().equals(1);
     }
 }

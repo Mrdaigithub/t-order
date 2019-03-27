@@ -3,18 +3,17 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.component.WebLogAspect;
 import club.mrdaisite.torder.torderadmin.dto.AdminChangeUserPasswordParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.AdminRegisterParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
+import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
-import club.mrdaisite.torder.tordermbg.mapper.AdminMapper;
-import club.mrdaisite.torder.tordermbg.model.Admin;
-import club.mrdaisite.torder.tordermbg.model.AdminExample;
+import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
+import club.mrdaisite.torder.tordermbg.model.User;
+import club.mrdaisite.torder.tordermbg.model.UserExample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,13 +40,13 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
-    private AdminMapper adminMapper;
+    private UserMapper userMapper;
 
     @Override
-    public Admin getAdminByUsername(String username) {
-        AdminExample adminExample = new AdminExample();
-        adminExample.or().andUsernameEqualTo(username);
-        List<Admin> adminList = adminMapper.selectByExample(adminExample);
+    public User getAdminByUsername(String username) {
+        UserExample userExample = new UserExample();
+        userExample.or().andUsernameEqualTo(username);
+        List<User> adminList = userMapper.selectByExample(userExample);
         if (adminList != null && adminList.size() > 0) {
             return adminList.get(0);
         }
@@ -55,19 +54,19 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminResultDTO register(AdminRegisterParamDTO adminRegisterParamDTO) {
-        Admin admin = new Admin();
-        AdminResultDTO adminResultDTO = new AdminResultDTO();
-        BeanUtils.copyProperties(adminRegisterParamDTO, admin);
-        String bCryptPassword = bCryptPasswordEncoder.encode(adminRegisterParamDTO.getPassword());
-        admin.setPassword(bCryptPassword);
-        admin.setGmtCreate(new Date());
-        admin.setGmtModified(new Date());
-        if (adminMapper.insert(admin) != 1) {
+    public UserResultDTO register(UserRegisterParamDTO userRegisterParamDTO) {
+        User user = new User();
+        UserResultDTO userResultDTO = new UserResultDTO();
+        BeanUtils.copyProperties(userRegisterParamDTO, user);
+        String bCryptPassword = bCryptPasswordEncoder.encode(userRegisterParamDTO.getPassword());
+        user.setPassword(bCryptPassword);
+        user.setGmtCreate(new Date());
+        user.setGmtModified(new Date());
+        if (userMapper.insert(user) != 1) {
             return null;
         }
-        BeanUtils.copyProperties(admin, adminResultDTO);
-        return adminResultDTO;
+        BeanUtils.copyProperties(user, userResultDTO);
+        return userResultDTO;
     }
 
     @Override
@@ -81,17 +80,22 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Object changeUserPassword(Long id, AdminChangeUserPasswordParamDTO adminChangeUserPasswordParamDTO) throws CustomException {
-        Admin admin = adminMapper.selectByPrimaryKey(id);
-        if (admin == null) {
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user == null) {
             throw new CustomException("指定的用户不存在");
         }
         String newPassword = bCryptPasswordEncoder.encode(adminChangeUserPasswordParamDTO.getNewPassword());
-        admin.setPassword(newPassword);
-        admin.setGmtModified(new Date());
-        if (adminMapper.insert(admin) != 1) {
+        user.setPassword(newPassword);
+        user.setGmtModified(new Date());
+        if (userMapper.insert(user) != 1) {
             return null;
         }
 //        BeanUtils.copyProperties(admin, adminResultDTO);
+        return null;
+    }
+
+    @Override
+    public Object getPermissionList(Long userId) {
         return null;
     }
 }

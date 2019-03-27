@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.User">
+<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.RolePermissionRelationMapper">
+  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.RolePermissionRelation">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="back_card" jdbcType="VARCHAR" property="backCard" />
-    <result column="score" jdbcType="INTEGER" property="score" />
-    <result column="pid" jdbcType="BIGINT" property="pid" />
-    <result column="is_enabled" jdbcType="TINYINT" property="isEnabled" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="permission_id" jdbcType="BIGINT" property="permissionId" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
@@ -71,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, back_card, score, pid, is_enabled, gmt_create, gmt_modified
+    id, role_id, permission_id, gmt_create, gmt_modified
   </sql>
-  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.RolePermissionRelationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from user
+    from role_permission_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,53 +86,39 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from user
+    from role_permission_relation
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from user
+    delete from role_permission_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample">
-    delete from user
+  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.RolePermissionRelationExample">
+    delete from role_permission_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.User">
+  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.RolePermissionRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into user (username, password, back_card, 
-      score, pid, is_enabled, 
-      gmt_create, gmt_modified)
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{backCard,jdbcType=VARCHAR}, 
-      #{score,jdbcType=INTEGER}, #{pid,jdbcType=BIGINT}, #{isEnabled,jdbcType=TINYINT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+    insert into role_permission_relation (role_id, permission_id, gmt_create, 
+      gmt_modified)
+    values (#{roleId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.User">
+  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.RolePermissionRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into user
+    insert into role_permission_relation
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        username,
+      <if test="roleId != null">
+        role_id,
       </if>
-      <if test="password != null">
-        password,
-      </if>
-      <if test="backCard != null">
-        back_card,
-      </if>
-      <if test="score != null">
-        score,
-      </if>
-      <if test="pid != null">
-        pid,
-      </if>
-      <if test="isEnabled != null">
-        is_enabled,
+      <if test="permissionId != null">
+        permission_id,
       </if>
       <if test="gmtCreate != null">
         gmt_create,
@@ -146,23 +128,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="backCard != null">
-        #{backCard,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null">
-        #{score,jdbcType=INTEGER},
-      </if>
-      <if test="pid != null">
-        #{pid,jdbcType=BIGINT},
-      </if>
-      <if test="isEnabled != null">
-        #{isEnabled,jdbcType=TINYINT},
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=BIGINT},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -172,35 +142,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample" resultType="java.lang.Long">
-    select count(*) from user
+  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.RolePermissionRelationExample" resultType="java.lang.Long">
+    select count(*) from role_permission_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update user
+    update role_permission_relation
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.username != null">
-        username = #{record.username,jdbcType=VARCHAR},
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=BIGINT},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=VARCHAR},
-      </if>
-      <if test="record.backCard != null">
-        back_card = #{record.backCard,jdbcType=VARCHAR},
-      </if>
-      <if test="record.score != null">
-        score = #{record.score,jdbcType=INTEGER},
-      </if>
-      <if test="record.pid != null">
-        pid = #{record.pid,jdbcType=BIGINT},
-      </if>
-      <if test="record.isEnabled != null">
-        is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      <if test="record.permissionId != null">
+        permission_id = #{record.permissionId,jdbcType=BIGINT},
       </if>
       <if test="record.gmtCreate != null">
         gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
@@ -214,40 +172,24 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update user
+    update role_permission_relation
     set id = #{record.id,jdbcType=BIGINT},
-      username = #{record.username,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      back_card = #{record.backCard,jdbcType=VARCHAR},
-      score = #{record.score,jdbcType=INTEGER},
-      pid = #{record.pid,jdbcType=BIGINT},
-      is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      role_id = #{record.roleId,jdbcType=BIGINT},
+      permission_id = #{record.permissionId,jdbcType=BIGINT},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.User">
-    update user
+  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.RolePermissionRelation">
+    update role_permission_relation
     <set>
-      <if test="username != null">
-        username = #{username,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=BIGINT},
       </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="backCard != null">
-        back_card = #{backCard,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null">
-        score = #{score,jdbcType=INTEGER},
-      </if>
-      <if test="pid != null">
-        pid = #{pid,jdbcType=BIGINT},
-      </if>
-      <if test="isEnabled != null">
-        is_enabled = #{isEnabled,jdbcType=TINYINT},
+      <if test="permissionId != null">
+        permission_id = #{permissionId,jdbcType=BIGINT},
       </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -258,14 +200,10 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.User">
-    update user
-    set username = #{username,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      back_card = #{backCard,jdbcType=VARCHAR},
-      score = #{score,jdbcType=INTEGER},
-      pid = #{pid,jdbcType=BIGINT},
-      is_enabled = #{isEnabled,jdbcType=TINYINT},
+  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.RolePermissionRelation">
+    update role_permission_relation
+    set role_id = #{roleId,jdbcType=BIGINT},
+      permission_id = #{permissionId,jdbcType=BIGINT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
