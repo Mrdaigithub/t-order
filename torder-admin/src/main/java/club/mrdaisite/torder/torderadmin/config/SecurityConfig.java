@@ -5,6 +5,7 @@ import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
 import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
 import club.mrdaisite.torder.torderadmin.component.RestfulAccessDeniedHandler;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
+import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +22,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author dai
@@ -54,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
         http.headers().cacheControl();
-//        http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //        http.exceptionHandling()
 //                .accessDeniedHandler(restfulAccessDeniedHandler)
 //                .authenticationEntryPoint(restAuthenticationEntryPoint);
@@ -67,11 +70,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     @Bean
-    public UserDetailsService userDetailsServiceBean() throws Exception {
+    public UserDetailsService userDetailsServiceBean() {
         return username -> {
             User user = adminService.getAdminByUsername(username);
             if (user != null) {
-                return new AdminUserDetails(user);
+                List<Permission> permissionList = adminService.getPermissionList(user.getId());
+                return new AdminUserDetails(user, permissionList);
             }
             throw new UsernameNotFoundException("用户名或密码错误");
         };

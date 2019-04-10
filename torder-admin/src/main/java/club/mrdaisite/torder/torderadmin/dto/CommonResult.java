@@ -35,17 +35,18 @@ public class CommonResult {
      * @param data 获取的数据
      * @return 返回的数据
      */
-    public ResponseEntity pageSuccess(List data) {
-        PageInfo pageInfo = new PageInfo(data);
-        Map<String, Object> result = new HashMap<>();
-        result.put("pageSize", pageInfo.getPageSize());
-        result.put("totalPage", pageInfo.getPages());
-        result.put("total", pageInfo.getTotal());
-        result.put("pageNum", pageInfo.getPageNum());
-        result.put("list", pageInfo.getList());
+    public ResponseEntity pageSuccess(Object data) {
+//        PageInfo pageInfo = new PageInfo(data);
+//        Map<String, Object> result = new HashMap<>();
+//        result.put("pageSize", pageInfo.getPageSize());
+//        result.put("totalPage", pageInfo.getPages());
+//        result.put("total", pageInfo.getTotal());
+//        result.put("pageNum", pageInfo.getPageNum());
+//        result.put("list", pageInfo.getList());
         setCode(HttpStatus.OK.value());
         setMessage("操作成功");
-        setData(result);
+        setData(data);
+//        System.out.println(result);
         return new ResponseEntity<>(this, HttpStatus.OK);
     }
 

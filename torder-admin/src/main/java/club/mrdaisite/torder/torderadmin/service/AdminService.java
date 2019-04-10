@@ -4,7 +4,10 @@ import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.AdminChangeUserPasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
+import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
+
+import java.util.List;
 
 /**
  * AdminService
@@ -39,6 +42,17 @@ public interface AdminService {
     String login(String username, String password);
 
     /**
+     * 获取指定管理员分页列表
+     *
+     * @param page    指定第几页
+     * @param perPage 每页的记录数
+     * @param sortBy  指定返回结果按照哪个属性排序
+     * @param order   排序顺序
+     * @return 指定管理员分页列表
+     */
+    Object listAdmin(Integer page, Integer perPage, String sortBy, String order);
+
+    /**
      * 管理员修改用户密码
      *
      * @param id                              用户id
@@ -54,5 +68,5 @@ public interface AdminService {
      * @param userId 用户id
      * @return 指定用户的权限列表
      */
-    Object getPermissionList(Long userId);
+    List<Permission> getPermissionList(Long userId);
 }

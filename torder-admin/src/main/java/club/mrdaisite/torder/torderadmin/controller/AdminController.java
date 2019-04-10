@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2019/03/21
  */
 @RestController
-@Api(tags = "AdminController", description = "后台用户管理")
+@Api(tags = {"后台用户管理"})
 @RequestMapping("/admin")
 public class AdminController {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
@@ -29,15 +31,25 @@ public class AdminController {
 
     @ApiOperation(value = "test")
     @GetMapping(value = "/test")
+    @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity test() {
         Object permissionList = adminService.getPermissionList(1L);
-        LOGGER.warn(permissionList.toString());
-        return new CommonResult().success("test");
+        return new CommonResult().success(permissionList.toString());
+    }
+
+    @ApiOperation(value = "管理员列表")
+    @GetMapping(value = "/")
+    @PreAuthorize("hasAuthority('admin:read')")
+    public ResponseEntity listAdmin(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                    @RequestParam(value = "per_page", defaultValue = "10") Integer perPage,
+                                    @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+                                    @RequestParam(value = "order", defaultValue = "asc") String order) {
+        return new CommonResult().success(adminService.listAdmin(page, perPage, sortBy, order));
     }
 
     @ApiOperation(value = "管理员注册")
     @PostMapping(value = "/register")
-    public ResponseEntity register(@RequestBody UserRegisterParamDTO userRegisterParamDTO, BindingResult result) {
+    public ResponseEntity register(@Validated @RequestBody UserRegisterParamDTO userRegisterParamDTO, BindingResult result) {
         UserResultDTO userResultDTO = adminService.register(userRegisterParamDTO);
         if (userResultDTO == null) {
             return new CommonResult().internalServerError(null);
@@ -47,14 +59,14 @@ public class AdminController {
 
     @ApiOperation(value = "管理员登录返回token")
     @PostMapping(value = "/login")
-    public ResponseEntity login(@RequestBody UserLoginParamDTO userLoginParamDTO, BindingResult result) {
+    public ResponseEntity login(@Validated @RequestBody UserLoginParamDTO userLoginParamDTO, BindingResult result) {
         String token = adminService.login(userLoginParamDTO.getUsername(), userLoginParamDTO.getPassword());
         return new CommonResult().success(token);
     }
 
     @ApiOperation(value = "管理员修改用户密码")
     @PutMapping(value = "/user/password/{id}")
-    public Object changeUserPassword(@PathVariable Long id, @RequestBody AdminChangeUserPasswordParamDTO adminChangeUserPasswordParamDTO, BindingResult result) throws CustomException {
+    public Object changeUserPassword(@PathVariable Long id, @Validated @RequestBody AdminChangeUserPasswordParamDTO adminChangeUserPasswordParamDTO, BindingResult result) throws CustomException {
         adminService.changeUserPassword(id, adminChangeUserPasswordParamDTO);
         return null;
     }

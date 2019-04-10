@@ -30,4 +30,12 @@ public class UserLoginParamDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "UserLoginParamDTO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

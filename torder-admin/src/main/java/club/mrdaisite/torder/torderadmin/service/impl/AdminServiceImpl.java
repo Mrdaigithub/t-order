@@ -2,14 +2,18 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.component.WebLogAspect;
+import club.mrdaisite.torder.torderadmin.dao.UserRoleRelationDao;
 import club.mrdaisite.torder.torderadmin.dto.AdminChangeUserPasswordParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
+import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
 import club.mrdaisite.torder.tordermbg.model.UserExample;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +45,8 @@ public class AdminServiceImpl implements AdminService {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserRoleRelationDao userRoleRelationDao;
 
     @Override
     public User getAdminByUsername(String username) {
@@ -79,6 +85,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Object listAdmin(Integer page, Integer perPage, String sortBy, String order) {
+//        PageHelper.startPage(page, perPage, sortBy + " " + order);
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andPidIsNull();
+        return new CommonResult().success(userMapper.selectByExample(userExample));
+    }
+
+    @Override
     public Object changeUserPassword(Long id, AdminChangeUserPasswordParamDTO adminChangeUserPasswordParamDTO) throws CustomException {
         User user = userMapper.selectByPrimaryKey(id);
         if (user == null) {
@@ -95,7 +110,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Object getPermissionList(Long userId) {
-        return null;
+    public List<Permission> getPermissionList(Long userId) {
+        return userRoleRelationDao.getPermissionList(userId);
     }
 }
