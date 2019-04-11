@@ -1,8 +1,7 @@
 package club.mrdaisite.torder.torderadmin.component;
 
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +24,6 @@ import java.io.IOException;
  * @date 2019/03/22
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -44,13 +42,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // The part after "Bearer "
             String authToken = authHeader.substring(this.tokenHead.length());
             String username = jwtTokenUtil.getUserNameFromToken(authToken);
-            LOGGER.info("checking username:{}", username);
+            LoggerUtil.logger.info("checking username:{}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                 if (jwtTokenUtil.vallidateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToke = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authenticationToke.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    LOGGER.info("authenticated user:{}", username);
+                    LoggerUtil.logger.info("authenticated user:{}", username);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToke);
                 }
             }

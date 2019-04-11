@@ -1,8 +1,5 @@
 package club.mrdaisite.torder.tordermbg.model;
 
-import club.mrdaisite.torder.tordermbg.View;
-import com.fasterxml.jackson.annotation.JsonView;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,7 +10,7 @@ public class User implements Serializable {
 
     private String password;
 
-    private String backCard;
+    private String bankCard;
 
     private Integer score;
 
@@ -51,12 +48,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getBackCard() {
-        return backCard;
+    public String getBankCard() {
+        return bankCard;
     }
 
-    public void setBackCard(String backCard) {
-        this.backCard = backCard;
+    public void setBankCard(String bankCard) {
+        this.bankCard = bankCard;
     }
 
     public Integer getScore() {
@@ -108,7 +105,7 @@ public class User implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
-        sb.append(", backCard=").append(backCard);
+        sb.append(", bankCard=").append(bankCard);
         sb.append(", score=").append(score);
         sb.append(", pid=").append(pid);
         sb.append(", isEnabled=").append(isEnabled);

@@ -25,7 +25,7 @@ public class UserRegisterParamDTO {
     @ApiModelProperty(value = "银行卡号", required = true)
     @NotEmpty(message = "银行卡号不能为空")
     @Pattern(regexp = "^(998801|998802|622525|622526|435744|435745|483536|528020|526855|622156|622155|356869|531659|622157|627066|627067|627068|627069)/d{10}$", message = "格式错误")
-    private String backCard;
+    private String bankCard;
 
     public String getUsername() {
         return username;
@@ -43,12 +43,12 @@ public class UserRegisterParamDTO {
         this.password = password;
     }
 
-    public String getBackCard() {
-        return backCard;
+    public String getBankCard() {
+        return bankCard;
     }
 
-    public void setBackCard(String backCard) {
-        this.backCard = backCard;
+    public void setBankCard(String bankCard) {
+        this.bankCard = bankCard;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UserRegisterParamDTO {
         return "UserRegisterParamDTO{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", backCard='" + backCard + '\'' +
+                ", bankCard='" + bankCard + '\'' +
                 '}';
     }
 }

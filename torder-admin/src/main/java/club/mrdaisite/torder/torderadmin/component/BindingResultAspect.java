@@ -1,7 +1,6 @@
 package club.mrdaisite.torder.torderadmin.component;
 
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +9,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import sun.rmi.runtime.Log;
 
 /**
  * BindingResultAspect

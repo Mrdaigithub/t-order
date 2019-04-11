@@ -1,19 +1,19 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.component.WebLogAspect;
 import club.mrdaisite.torder.torderadmin.dto.*;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 管理员控制器
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = {"后台用户管理"})
 @RequestMapping("/admin")
 public class AdminController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
     @Autowired
     private AdminService adminService;
 
@@ -41,10 +40,10 @@ public class AdminController {
     @GetMapping(value = "/")
     @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity listAdmin(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                                    @RequestParam(value = "per_page", defaultValue = "10") Integer perPage,
+                                    @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                                     @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
                                     @RequestParam(value = "order", defaultValue = "asc") String order) {
-        return new CommonResult().success(adminService.listAdmin(page, perPage, sortBy, order));
+        return new CommonResult().pageSuccess(Collections.singletonList(adminService.listAdmin(page, perPage, sortBy, order)));
     }
 
     @ApiOperation(value = "管理员注册")

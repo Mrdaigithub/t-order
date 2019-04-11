@@ -1,10 +1,10 @@
 package club.mrdaisite.torder.torderadmin.component;
 
 import club.mrdaisite.torder.torderadmin.bo.WebLog;
+import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.torderadmin.util.RequestUtil;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiOperation;
-import net.logstash.logback.marker.Markers;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -13,8 +13,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -41,7 +39,6 @@ import java.util.Map;
 @Aspect
 @Order(1)
 public class WebLogAspect {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
     private ThreadLocal<Long> startTime = new ThreadLocal<>();
 
     @Pointcut("execution(public * club.mrdaisite.torder.torderadmin.controller.*.*(..))")
@@ -87,7 +84,7 @@ public class WebLogAspect {
         logMap.put("parameter", webLog.getParameter());
         logMap.put("sendTime", webLog.getSpendTime());
         logMap.put("description", webLog.getDescription());
-        LOGGER.info(JSON.toJSONString(logMap));
+        LoggerUtil.logger.info(JSON.toJSONString(logMap));
         return result;
     }
 

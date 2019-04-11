@@ -13,7 +13,7 @@ public class UserResultDTO {
 
     private String username;
 
-    private String backCard;
+    private String bankCard;
 
     private Date gmtModified;
 
@@ -35,12 +35,12 @@ public class UserResultDTO {
         this.username = username;
     }
 
-    public String getBackCard() {
-        return backCard;
+    public String getBankCard() {
+        return bankCard;
     }
 
-    public void setBackCard(String backCard) {
-        this.backCard = backCard;
+    public void setBankCard(String bankCard) {
+        this.bankCard = bankCard;
     }
 
     public Date getGmtModified() {
@@ -64,7 +64,7 @@ public class UserResultDTO {
         return "UserResultDTO{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", backCard='" + backCard + '\'' +
+                ", bankCard='" + bankCard + '\'' +
                 ", gmtModified=" + gmtModified +
                 ", gmtCreate=" + gmtCreate +
                 '}';

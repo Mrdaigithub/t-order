@@ -305,73 +305,73 @@ public class UserExample {
             return (Criteria) this;
         }
 
-        public Criteria andBackCardIsNull() {
-            addCriterion("back_card is null");
+        public Criteria andBankCardIsNull() {
+            addCriterion("bank_card is null");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardIsNotNull() {
-            addCriterion("back_card is not null");
+        public Criteria andBankCardIsNotNull() {
+            addCriterion("bank_card is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardEqualTo(String value) {
-            addCriterion("back_card =", value, "backCard");
+        public Criteria andBankCardEqualTo(String value) {
+            addCriterion("bank_card =", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardNotEqualTo(String value) {
-            addCriterion("back_card <>", value, "backCard");
+        public Criteria andBankCardNotEqualTo(String value) {
+            addCriterion("bank_card <>", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardGreaterThan(String value) {
-            addCriterion("back_card >", value, "backCard");
+        public Criteria andBankCardGreaterThan(String value) {
+            addCriterion("bank_card >", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardGreaterThanOrEqualTo(String value) {
-            addCriterion("back_card >=", value, "backCard");
+        public Criteria andBankCardGreaterThanOrEqualTo(String value) {
+            addCriterion("bank_card >=", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardLessThan(String value) {
-            addCriterion("back_card <", value, "backCard");
+        public Criteria andBankCardLessThan(String value) {
+            addCriterion("bank_card <", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardLessThanOrEqualTo(String value) {
-            addCriterion("back_card <=", value, "backCard");
+        public Criteria andBankCardLessThanOrEqualTo(String value) {
+            addCriterion("bank_card <=", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardLike(String value) {
-            addCriterion("back_card like", value, "backCard");
+        public Criteria andBankCardLike(String value) {
+            addCriterion("bank_card like", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardNotLike(String value) {
-            addCriterion("back_card not like", value, "backCard");
+        public Criteria andBankCardNotLike(String value) {
+            addCriterion("bank_card not like", value, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardIn(List<String> values) {
-            addCriterion("back_card in", values, "backCard");
+        public Criteria andBankCardIn(List<String> values) {
+            addCriterion("bank_card in", values, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardNotIn(List<String> values) {
-            addCriterion("back_card not in", values, "backCard");
+        public Criteria andBankCardNotIn(List<String> values) {
+            addCriterion("bank_card not in", values, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardBetween(String value1, String value2) {
-            addCriterion("back_card between", value1, value2, "backCard");
+        public Criteria andBankCardBetween(String value1, String value2) {
+            addCriterion("bank_card between", value1, value2, "bankCard");
             return (Criteria) this;
         }
 
-        public Criteria andBackCardNotBetween(String value1, String value2) {
-            addCriterion("back_card not between", value1, value2, "backCard");
+        public Criteria andBankCardNotBetween(String value1, String value2) {
+            addCriterion("bank_card not between", value1, value2, "bankCard");
             return (Criteria) this;
         }
 

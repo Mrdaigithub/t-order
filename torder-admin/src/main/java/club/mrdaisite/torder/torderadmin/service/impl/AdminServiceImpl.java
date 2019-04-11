@@ -8,14 +8,16 @@ import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
+import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
+import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
 import club.mrdaisite.torder.tordermbg.model.UserExample;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,15 +29,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author dai
  */
 @Service
 public class AdminServiceImpl implements AdminService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -85,12 +85,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Object listAdmin(Integer page, Integer perPage, String sortBy, String order) {
-//        PageHelper.startPage(page, perPage, sortBy + " " + order);
+    public List<User> listAdmin(Integer page, Integer perPage, String sortBy, String order) {
+        PageHelper.startPage(page, perPage, sortBy + " " + order);
+        UserResultDTO userResultDTO = new UserResultDTO();
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andPidIsNull();
-        return new CommonResult().success(userMapper.selectByExample(userExample));
+        List<User> userList = userMapper.selectByExample(userExample);
+        PageInfo pageInfo = new PageInfo<>(userList);
+        return new FuncUtils().beanUtilsCopyListProperties(pageInfo.getList(), userResultDTO);
     }
 
     @Override
