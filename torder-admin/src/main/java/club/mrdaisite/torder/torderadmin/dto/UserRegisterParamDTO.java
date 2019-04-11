@@ -24,7 +24,7 @@ public class UserRegisterParamDTO {
     private String password;
     @ApiModelProperty(value = "银行卡号", required = true)
     @NotEmpty(message = "银行卡号不能为空")
-    @Pattern(regexp = "^(998801|998802|622525|622526|435744|435745|483536|528020|526855|622156|622155|356869|531659|622157|627066|627067|627068|627069)/d{10}$", message = "格式错误")
+    @Pattern(regexp = "^([1-9])(\\d{15}|\\d{18})$", message = "银行卡号格式错误")
     private String bankCard;
 
     public String getUsername() {

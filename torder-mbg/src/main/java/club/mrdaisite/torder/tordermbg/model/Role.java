@@ -10,7 +10,7 @@ public class Role implements Serializable {
 
     private String description;
 
-    private Byte isEnabled;
+    private Boolean enabled;
 
     private Date gmtCreate;
 
@@ -42,12 +42,12 @@ public class Role implements Serializable {
         this.description = description;
     }
 
-    public Byte getIsEnabled() {
-        return isEnabled;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setIsEnabled(Byte isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Date getGmtCreate() {
@@ -75,7 +75,7 @@ public class Role implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", description=").append(description);
-        sb.append(", isEnabled=").append(isEnabled);
+        sb.append(", enabled=").append(enabled);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);
         sb.append(", serialVersionUID=").append(serialVersionUID);

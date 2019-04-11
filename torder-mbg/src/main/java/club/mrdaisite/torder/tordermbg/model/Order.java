@@ -16,7 +16,7 @@ public class Order implements Serializable {
 
     private Long broadcasterId;
 
-    private Byte isEnabled;
+    private Boolean enabled;
 
     private Date gmtCreate;
 
@@ -72,12 +72,12 @@ public class Order implements Serializable {
         this.broadcasterId = broadcasterId;
     }
 
-    public Byte getIsEnabled() {
-        return isEnabled;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setIsEnabled(Byte isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Date getGmtCreate() {
@@ -108,7 +108,7 @@ public class Order implements Serializable {
         sb.append(", score=").append(score);
         sb.append(", state=").append(state);
         sb.append(", broadcasterId=").append(broadcasterId);
-        sb.append(", isEnabled=").append(isEnabled);
+        sb.append(", enabled=").append(enabled);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);
         sb.append(", serialVersionUID=").append(serialVersionUID);

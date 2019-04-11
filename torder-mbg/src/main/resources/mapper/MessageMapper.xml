@@ -6,7 +6,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="broadcaster_id" jdbcType="BIGINT" property="broadcasterId" />
-    <result column="is_enabled" jdbcType="TINYINT" property="isEnabled" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, description, broadcaster_id, is_enabled, gmt_create, gmt_modified
+    id, name, description, broadcaster_id, enabled, gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.MessageExample" resultMap="BaseResultMap">
     select
@@ -106,10 +106,10 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into message (name, description, broadcaster_id, 
-      is_enabled, gmt_create, gmt_modified
+      enabled, gmt_create, gmt_modified
       )
     values (#{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{broadcasterId,jdbcType=BIGINT}, 
-      #{isEnabled,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+      #{enabled,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.Message">
@@ -127,8 +127,8 @@
       <if test="broadcasterId != null">
         broadcaster_id,
       </if>
-      <if test="isEnabled != null">
-        is_enabled,
+      <if test="enabled != null">
+        enabled,
       </if>
       <if test="gmtCreate != null">
         gmt_create,
@@ -147,8 +147,8 @@
       <if test="broadcasterId != null">
         #{broadcasterId,jdbcType=BIGINT},
       </if>
-      <if test="isEnabled != null">
-        #{isEnabled,jdbcType=TINYINT},
+      <if test="enabled != null">
+        #{enabled,jdbcType=BIT},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -179,8 +179,8 @@
       <if test="record.broadcasterId != null">
         broadcaster_id = #{record.broadcasterId,jdbcType=BIGINT},
       </if>
-      <if test="record.isEnabled != null">
-        is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      <if test="record.enabled != null">
+        enabled = #{record.enabled,jdbcType=BIT},
       </if>
       <if test="record.gmtCreate != null">
         gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
@@ -199,7 +199,7 @@
       name = #{record.name,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       broadcaster_id = #{record.broadcasterId,jdbcType=BIGINT},
-      is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      enabled = #{record.enabled,jdbcType=BIT},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -218,8 +218,8 @@
       <if test="broadcasterId != null">
         broadcaster_id = #{broadcasterId,jdbcType=BIGINT},
       </if>
-      <if test="isEnabled != null">
-        is_enabled = #{isEnabled,jdbcType=TINYINT},
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=BIT},
       </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -235,7 +235,7 @@
     set name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       broadcaster_id = #{broadcasterId,jdbcType=BIGINT},
-      is_enabled = #{isEnabled,jdbcType=TINYINT},
+      enabled = #{enabled,jdbcType=BIT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

@@ -12,9 +12,11 @@ import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
 import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
+import club.mrdaisite.torder.tordermbg.mapper.UserRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
 import club.mrdaisite.torder.tordermbg.model.UserExample;
+import club.mrdaisite.torder.tordermbg.model.UserRoleRelation;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -28,6 +30,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -46,6 +49,8 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
+    private UserRoleRelationMapper userRoleRelationMapper;
+    @Autowired
     private UserRoleRelationDao userRoleRelationDao;
 
     @Override
@@ -62,15 +67,22 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public UserResultDTO register(UserRegisterParamDTO userRegisterParamDTO) {
         User user = new User();
+        UserRoleRelation userRoleRelation = new UserRoleRelation();
         UserResultDTO userResultDTO = new UserResultDTO();
         BeanUtils.copyProperties(userRegisterParamDTO, user);
         String bCryptPassword = bCryptPasswordEncoder.encode(userRegisterParamDTO.getPassword());
         user.setPassword(bCryptPassword);
+        user.setScore(0);
+        user.setEnabled(true);
         user.setGmtCreate(new Date());
         user.setGmtModified(new Date());
-        if (userMapper.insert(user) != 1) {
-            return null;
-        }
+        userMapper.insert(user);
+        userRoleRelation.setUserId(user.getId());
+        userRoleRelation.setRoleId(3L);
+        int i = 1/0;
+        userRoleRelation.setGmtCreate(new Date());
+        userRoleRelation.setGmtModified(new Date());
+        userRoleRelationMapper.insert(userRoleRelation);
         BeanUtils.copyProperties(user, userResultDTO);
         return userResultDTO;
     }

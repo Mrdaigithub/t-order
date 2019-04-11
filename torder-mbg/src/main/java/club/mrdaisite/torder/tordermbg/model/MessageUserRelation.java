@@ -10,7 +10,7 @@ public class MessageUserRelation implements Serializable {
 
     private Long userId;
 
-    private Byte isRead;
+    private Boolean read;
 
     private Date gmtCreate;
 
@@ -42,12 +42,12 @@ public class MessageUserRelation implements Serializable {
         this.userId = userId;
     }
 
-    public Byte getIsRead() {
-        return isRead;
+    public Boolean getRead() {
+        return read;
     }
 
-    public void setIsRead(Byte isRead) {
-        this.isRead = isRead;
+    public void setRead(Boolean read) {
+        this.read = read;
     }
 
     public Date getGmtCreate() {
@@ -75,7 +75,7 @@ public class MessageUserRelation implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", messageId=").append(messageId);
         sb.append(", userId=").append(userId);
-        sb.append(", isRead=").append(isRead);
+        sb.append(", read=").append(read);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);
         sb.append(", serialVersionUID=").append(serialVersionUID);

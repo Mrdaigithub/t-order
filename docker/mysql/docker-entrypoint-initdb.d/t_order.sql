@@ -28,7 +28,7 @@ CREATE TABLE `message` (
   `name` varchar(255) NOT NULL COMMENT '消息标题',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '消息详情',
   `broadcaster_id` bigint(20) unsigned NOT NULL COMMENT '发布者id',
-  `is_enabled` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '启用状态,默认启用',
+  `enabled` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '启用状态,默认启用',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
@@ -40,7 +40,7 @@ CREATE TABLE `message_user_relation` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `message_id` bigint(20) unsigned NOT NULL COMMENT '消息id',
   `user_id` bigint(20) unsigned NOT NULL COMMENT '用户id',
-  `is_read` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '消息是否已读,默认未读',
+  `read` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '消息是否已读,默认未读',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
@@ -55,7 +55,7 @@ CREATE TABLE `order` (
   `score` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '此订单所含的积分',
   `state` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '订单状态\n0: 待提交\n1: 待审核\n2: 审核通过\n3: 审核未通过',
   `broadcaster_id` bigint(20) unsigned NOT NULL COMMENT '发布者id',
-  `is_enabled` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '启用状态,默认启用',
+  `enabled` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '启用状态,默认启用',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
@@ -100,14 +100,14 @@ CREATE TABLE `role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL COMMENT '角色组名称',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '角色组详情',
-  `is_enabled` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '是否启用,默认启用',
+  `enabled` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否启用,默认启用',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name_uindex` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
 
-INSERT INTO `role` (`id`, `name`, `description`, `is_enabled`, `gmt_create`, `gmt_modified`) VALUES
+INSERT INTO `role` (`id`, `name`, `description`, `enabled`, `gmt_create`, `gmt_modified`) VALUES
 (1,	'root',	'根管理员',	1,	'2019-03-27 07:00:03',	'2019-03-27 07:00:23'),
 (2,	'admin',	'普通管理员',	1,	'2019-03-27 07:01:05',	'2019-03-27 07:01:05'),
 (3,	'user',	'普通用户',	1,	'2019-03-27 07:01:27',	'2019-03-27 07:01:27');
@@ -144,7 +144,7 @@ CREATE TABLE `user` (
   `bank_card` varchar(255) DEFAULT NULL COMMENT '银行卡号',
   `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
   `pid` bigint(20) unsigned DEFAULT NULL COMMENT '引荐人id',
-  `is_enabled` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '是否启用',
+  `enabled` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否启用',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
@@ -152,9 +152,9 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_back_card_uindex` (`bank_card`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
-INSERT INTO `user` (`id`, `username`, `password`, `bank_card`, `score`, `pid`, `is_enabled`, `gmt_create`, `gmt_modified`) VALUES
+INSERT INTO `user` (`id`, `username`, `password`, `bank_card`, `score`, `pid`, `enabled`, `gmt_create`, `gmt_modified`) VALUES
 (1,	'root',	'$2a$10$6dqAS73smpYqNcRw4UY4xOHKv4S3Q.bX2bsKtGysYYfwsZcgqDs2.',	NULL,	0,	NULL,	1,	'2019-03-27 02:33:54',	'2019-03-27 07:49:53'),
-(2,	'admin',	'admin',	NULL,	0,	NULL,	1,	'2019-03-27 08:27:43',	'2019-03-27 08:27:43');
+(3,	'admin',	'$2a$10$P9/gDyR53RSYJnk5ZSOXB..1xIRYIZ8QpXTg7jU4w8DXjD8bmN81.',	'6226304550770318',	0,	NULL,	1,	'2019-04-11 07:51:31',	'2019-04-11 07:51:31');
 
 DROP TABLE IF EXISTS `user_role_relation`;
 CREATE TABLE `user_role_relation` (
@@ -167,7 +167,6 @@ CREATE TABLE `user_role_relation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关系表';
 
 INSERT INTO `user_role_relation` (`id`, `user_id`, `role_id`, `gmt_create`, `gmt_modified`) VALUES
-(1,	1,	1,	'2019-03-27 08:25:39',	'2019-03-27 08:25:39'),
-(2,	2,	2,	'2019-03-27 08:28:00',	'2019-03-27 08:28:00');
+(1,	1,	1,	'2019-03-27 08:25:39',	'2019-03-27 08:25:39');
 
--- 2019-04-10 08:18:56
+-- 2019-04-11 09:00:13

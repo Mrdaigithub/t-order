@@ -15,9 +15,15 @@ public class UserResultDTO {
 
     private String bankCard;
 
-    private Date gmtModified;
+    private Integer score;
+
+    private Long pid;
+
+    private Boolean enabled;
 
     private Date gmtCreate;
+
+    private Date gmtModified;
 
     public Long getId() {
         return id;
@@ -43,12 +49,28 @@ public class UserResultDTO {
         this.bankCard = bankCard;
     }
 
-    public Date getGmtModified() {
-        return gmtModified;
+    public Integer getScore() {
+        return score;
     }
 
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Date getGmtCreate() {
@@ -59,14 +81,25 @@ public class UserResultDTO {
         this.gmtCreate = gmtCreate;
     }
 
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+
     @Override
     public String toString() {
         return "UserResultDTO{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", bankCard='" + bankCard + '\'' +
-                ", gmtModified=" + gmtModified +
+                ", score=" + score +
+                ", pid=" + pid +
+                ", enabled=" + enabled +
                 ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
                 '}';
     }
 }

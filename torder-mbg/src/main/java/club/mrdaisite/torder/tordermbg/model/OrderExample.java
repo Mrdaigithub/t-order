@@ -485,63 +485,63 @@ public class OrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledIsNull() {
-            addCriterion("is_enabled is null");
+        public Criteria andEnabledIsNull() {
+            addCriterion("enabled is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledIsNotNull() {
-            addCriterion("is_enabled is not null");
+        public Criteria andEnabledIsNotNull() {
+            addCriterion("enabled is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledEqualTo(Byte value) {
-            addCriterion("is_enabled =", value, "isEnabled");
+        public Criteria andEnabledEqualTo(Boolean value) {
+            addCriterion("enabled =", value, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledNotEqualTo(Byte value) {
-            addCriterion("is_enabled <>", value, "isEnabled");
+        public Criteria andEnabledNotEqualTo(Boolean value) {
+            addCriterion("enabled <>", value, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledGreaterThan(Byte value) {
-            addCriterion("is_enabled >", value, "isEnabled");
+        public Criteria andEnabledGreaterThan(Boolean value) {
+            addCriterion("enabled >", value, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledGreaterThanOrEqualTo(Byte value) {
-            addCriterion("is_enabled >=", value, "isEnabled");
+        public Criteria andEnabledGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("enabled >=", value, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledLessThan(Byte value) {
-            addCriterion("is_enabled <", value, "isEnabled");
+        public Criteria andEnabledLessThan(Boolean value) {
+            addCriterion("enabled <", value, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledLessThanOrEqualTo(Byte value) {
-            addCriterion("is_enabled <=", value, "isEnabled");
+        public Criteria andEnabledLessThanOrEqualTo(Boolean value) {
+            addCriterion("enabled <=", value, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledIn(List<Byte> values) {
-            addCriterion("is_enabled in", values, "isEnabled");
+        public Criteria andEnabledIn(List<Boolean> values) {
+            addCriterion("enabled in", values, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledNotIn(List<Byte> values) {
-            addCriterion("is_enabled not in", values, "isEnabled");
+        public Criteria andEnabledNotIn(List<Boolean> values) {
+            addCriterion("enabled not in", values, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledBetween(Byte value1, Byte value2) {
-            addCriterion("is_enabled between", value1, value2, "isEnabled");
+        public Criteria andEnabledBetween(Boolean value1, Boolean value2) {
+            addCriterion("enabled between", value1, value2, "enabled");
             return (Criteria) this;
         }
 
-        public Criteria andIsEnabledNotBetween(Byte value1, Byte value2) {
-            addCriterion("is_enabled not between", value1, value2, "isEnabled");
+        public Criteria andEnabledNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("enabled not between", value1, value2, "enabled");
             return (Criteria) this;
         }
 

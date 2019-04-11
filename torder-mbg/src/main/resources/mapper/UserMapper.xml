@@ -8,7 +8,7 @@
     <result column="bank_card" jdbcType="VARCHAR" property="bankCard" />
     <result column="score" jdbcType="INTEGER" property="score" />
     <result column="pid" jdbcType="BIGINT" property="pid" />
-    <result column="is_enabled" jdbcType="TINYINT" property="isEnabled" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, bank_card, score, pid, is_enabled, gmt_create, gmt_modified
+    id, username, password, bank_card, score, pid, enabled, gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample" resultMap="BaseResultMap">
     select
@@ -108,11 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into user (username, password, bank_card, 
-      score, pid, is_enabled, 
-      gmt_create, gmt_modified)
+      score, pid, enabled, gmt_create, 
+      gmt_modified)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR}, 
-      #{score,jdbcType=INTEGER}, #{pid,jdbcType=BIGINT}, #{isEnabled,jdbcType=TINYINT}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+      #{score,jdbcType=INTEGER}, #{pid,jdbcType=BIGINT}, #{enabled,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.User">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -135,8 +135,8 @@
       <if test="pid != null">
         pid,
       </if>
-      <if test="isEnabled != null">
-        is_enabled,
+      <if test="enabled != null">
+        enabled,
       </if>
       <if test="gmtCreate != null">
         gmt_create,
@@ -161,8 +161,8 @@
       <if test="pid != null">
         #{pid,jdbcType=BIGINT},
       </if>
-      <if test="isEnabled != null">
-        #{isEnabled,jdbcType=TINYINT},
+      <if test="enabled != null">
+        #{enabled,jdbcType=BIT},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -199,8 +199,8 @@
       <if test="record.pid != null">
         pid = #{record.pid,jdbcType=BIGINT},
       </if>
-      <if test="record.isEnabled != null">
-        is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      <if test="record.enabled != null">
+        enabled = #{record.enabled,jdbcType=BIT},
       </if>
       <if test="record.gmtCreate != null">
         gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
@@ -221,7 +221,7 @@
       bank_card = #{record.bankCard,jdbcType=VARCHAR},
       score = #{record.score,jdbcType=INTEGER},
       pid = #{record.pid,jdbcType=BIGINT},
-      is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      enabled = #{record.enabled,jdbcType=BIT},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -246,8 +246,8 @@
       <if test="pid != null">
         pid = #{pid,jdbcType=BIGINT},
       </if>
-      <if test="isEnabled != null">
-        is_enabled = #{isEnabled,jdbcType=TINYINT},
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=BIT},
       </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -265,7 +265,7 @@
       bank_card = #{bankCard,jdbcType=VARCHAR},
       score = #{score,jdbcType=INTEGER},
       pid = #{pid,jdbcType=BIGINT},
-      is_enabled = #{isEnabled,jdbcType=TINYINT},
+      enabled = #{enabled,jdbcType=BIT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

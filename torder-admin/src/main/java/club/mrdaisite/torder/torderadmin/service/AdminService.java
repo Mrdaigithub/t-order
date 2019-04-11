@@ -6,6 +6,7 @@ import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public interface AdminService {
      * @param userRegisterParamDTO 注册参数
      * @return 返回注册的用户信息
      */
+    @Transactional(rollbackFor = Exception.class)
     UserResultDTO register(UserRegisterParamDTO userRegisterParamDTO);
 
     /**

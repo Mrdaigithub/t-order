@@ -68,6 +68,11 @@ public class GlobalExceptionHandler {
         return new CommonResult().badRequest("必要的请求参数不存在");
     }
 
+    @ExceptionHandler(ArithmeticException.class)
+    public ResponseEntity arithmeticExceptionHandler(HttpServletRequest request, ArithmeticException exception) {
+        return new CommonResult().badRequest("算术异常");
+    }
+
     @ExceptionHandler(CustomException.class)
     public ResponseEntity customExceptionHandler(CustomException exception) {
         return new CommonResult().internalServerError(exception.getMessage());

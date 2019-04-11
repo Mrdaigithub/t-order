@@ -16,7 +16,7 @@ public class User implements Serializable {
 
     private Long pid;
 
-    private Byte isEnabled;
+    private Boolean enabled;
 
     private Date gmtCreate;
 
@@ -72,12 +72,12 @@ public class User implements Serializable {
         this.pid = pid;
     }
 
-    public Byte getIsEnabled() {
-        return isEnabled;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setIsEnabled(Byte isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Date getGmtCreate() {
@@ -108,7 +108,7 @@ public class User implements Serializable {
         sb.append(", bankCard=").append(bankCard);
         sb.append(", score=").append(score);
         sb.append(", pid=").append(pid);
-        sb.append(", isEnabled=").append(isEnabled);
+        sb.append(", enabled=").append(enabled);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);
         sb.append(", serialVersionUID=").append(serialVersionUID);

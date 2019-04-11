@@ -285,63 +285,63 @@ public class MessageUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsReadIsNull() {
-            addCriterion("is_read is null");
+        public Criteria andReadIsNull() {
+            addCriterion("read is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadIsNotNull() {
-            addCriterion("is_read is not null");
+        public Criteria andReadIsNotNull() {
+            addCriterion("read is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadEqualTo(Byte value) {
-            addCriterion("is_read =", value, "isRead");
+        public Criteria andReadEqualTo(Boolean value) {
+            addCriterion("read =", value, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotEqualTo(Byte value) {
-            addCriterion("is_read <>", value, "isRead");
+        public Criteria andReadNotEqualTo(Boolean value) {
+            addCriterion("read <>", value, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadGreaterThan(Byte value) {
-            addCriterion("is_read >", value, "isRead");
+        public Criteria andReadGreaterThan(Boolean value) {
+            addCriterion("read >", value, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadGreaterThanOrEqualTo(Byte value) {
-            addCriterion("is_read >=", value, "isRead");
+        public Criteria andReadGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("read >=", value, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadLessThan(Byte value) {
-            addCriterion("is_read <", value, "isRead");
+        public Criteria andReadLessThan(Boolean value) {
+            addCriterion("read <", value, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadLessThanOrEqualTo(Byte value) {
-            addCriterion("is_read <=", value, "isRead");
+        public Criteria andReadLessThanOrEqualTo(Boolean value) {
+            addCriterion("read <=", value, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadIn(List<Byte> values) {
-            addCriterion("is_read in", values, "isRead");
+        public Criteria andReadIn(List<Boolean> values) {
+            addCriterion("read in", values, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotIn(List<Byte> values) {
-            addCriterion("is_read not in", values, "isRead");
+        public Criteria andReadNotIn(List<Boolean> values) {
+            addCriterion("read not in", values, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadBetween(Byte value1, Byte value2) {
-            addCriterion("is_read between", value1, value2, "isRead");
+        public Criteria andReadBetween(Boolean value1, Boolean value2) {
+            addCriterion("read between", value1, value2, "read");
             return (Criteria) this;
         }
 
-        public Criteria andIsReadNotBetween(Byte value1, Byte value2) {
-            addCriterion("is_read not between", value1, value2, "isRead");
+        public Criteria andReadNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("read not between", value1, value2, "read");
             return (Criteria) this;
         }
 
