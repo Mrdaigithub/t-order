@@ -1,8 +1,8 @@
 package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.dto.AdminChangeUserPasswordParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
@@ -18,21 +18,33 @@ import java.util.List;
  */
 public interface AdminService {
     /**
-     * 根据用户名获取后台管理员
+     * 获取指定管理员分页列表
      *
-     * @param username 用户名
-     * @return 指定后台管理员
+     * @param page    指定第几页
+     * @param perPage 每页的记录数
+     * @param sortBy  指定返回结果按照哪个属性排序
+     * @param order   排序顺序
+     * @return 指定管理员分页列表
      */
-    User getAdminByUsername(String username);
+    Object listUser(Integer page, Integer perPage, String sortBy, String order);
 
     /**
-     * 用户注册
+     * 根据用户名获取后台管理员
      *
-     * @param userRegisterParamDTO 注册参数
-     * @return 返回注册的用户信息
+     * @param id 管理员id
+     * @return 指定后台管理员
+     */
+    User getUserById(Long id);
+
+    /**
+     * 添加用户
+     *
+     * @param userInsertParamDTO 用户参数
+     * @param roleId             用户组id
+     * @return 返回添加的用户信息
      */
     @Transactional(rollbackFor = Exception.class)
-    UserResultDTO register(UserRegisterParamDTO userRegisterParamDTO);
+    UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO, Long roleId);
 
     /**
      * 登录功能
@@ -44,25 +56,20 @@ public interface AdminService {
     String login(String username, String password);
 
     /**
-     * 获取指定管理员分页列表
-     *
-     * @param page    指定第几页
-     * @param perPage 每页的记录数
-     * @param sortBy  指定返回结果按照哪个属性排序
-     * @param order   排序顺序
-     * @return 指定管理员分页列表
+     * 修改用户密码
+     * @param id                     用户id
+     * @param updatePasswordParamDTO 新旧密码参数
+     * @return 密码是否修改
      */
-    Object listAdmin(Integer page, Integer perPage, String sortBy, String order);
+    Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO);
 
     /**
-     * 管理员修改用户密码
+     * 根据用户名获取后台管理员
      *
-     * @param id                              用户id
-     * @param adminChangeUserPasswordParamDTO 新旧密码参数
-     * @return
-     * @throws CustomException
+     * @param username 用户名
+     * @return 指定后台管理员
      */
-    Object changeUserPassword(Long id, AdminChangeUserPasswordParamDTO adminChangeUserPasswordParamDTO) throws CustomException;
+    User getAdminByUsername(String username);
 
     /**
      * 获取指定用户的权限列表

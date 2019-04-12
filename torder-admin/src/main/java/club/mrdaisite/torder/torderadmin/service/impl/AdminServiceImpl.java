@@ -1,23 +1,20 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.component.WebLogAspect;
 import club.mrdaisite.torder.torderadmin.dao.UserRoleRelationDao;
-import club.mrdaisite.torder.torderadmin.dto.AdminChangeUserPasswordParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
-import club.mrdaisite.torder.torderadmin.dto.UserRegisterParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
 import club.mrdaisite.torder.tordermbg.mapper.UserRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
 import club.mrdaisite.torder.tordermbg.model.UserExample;
 import club.mrdaisite.torder.tordermbg.model.UserRoleRelation;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +27,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
 
 import java.util.*;
 
@@ -54,23 +50,29 @@ public class AdminServiceImpl implements AdminService {
     private UserRoleRelationDao userRoleRelationDao;
 
     @Override
-    public User getAdminByUsername(String username) {
+    public List<User> listUser(Integer page, Integer perPage, String sortBy, String order) {
+        PageHelper.startPage(page, perPage, sortBy + " " + order);
+        UserResultDTO userResultDTO = new UserResultDTO();
         UserExample userExample = new UserExample();
-        userExample.or().andUsernameEqualTo(username);
-        List<User> adminList = userMapper.selectByExample(userExample);
-        if (adminList != null && adminList.size() > 0) {
-            return adminList.get(0);
-        }
-        return null;
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andPidIsNull();
+        List<User> userList = userMapper.selectByExample(userExample);
+        PageInfo pageInfo = new PageInfo<>(userList);
+        return new FuncUtils().beanUtilsCopyListProperties(pageInfo.getList(), userResultDTO);
     }
 
     @Override
-    public UserResultDTO register(UserRegisterParamDTO userRegisterParamDTO) {
+    public User getUserById(Long id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO, Long roleId) {
         User user = new User();
         UserRoleRelation userRoleRelation = new UserRoleRelation();
         UserResultDTO userResultDTO = new UserResultDTO();
-        BeanUtils.copyProperties(userRegisterParamDTO, user);
-        String bCryptPassword = bCryptPasswordEncoder.encode(userRegisterParamDTO.getPassword());
+        BeanUtils.copyProperties(userInsertParamDTO, user);
+        String bCryptPassword = bCryptPasswordEncoder.encode(userInsertParamDTO.getPassword());
         user.setPassword(bCryptPassword);
         user.setScore(0);
         user.setEnabled(true);
@@ -78,8 +80,7 @@ public class AdminServiceImpl implements AdminService {
         user.setGmtModified(new Date());
         userMapper.insert(user);
         userRoleRelation.setUserId(user.getId());
-        userRoleRelation.setRoleId(3L);
-        int i = 1/0;
+        userRoleRelation.setRoleId(roleId);
         userRoleRelation.setGmtCreate(new Date());
         userRoleRelation.setGmtModified(new Date());
         userRoleRelationMapper.insert(userRoleRelation);
@@ -97,30 +98,22 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<User> listAdmin(Integer page, Integer perPage, String sortBy, String order) {
-        PageHelper.startPage(page, perPage, sortBy + " " + order);
-        UserResultDTO userResultDTO = new UserResultDTO();
-        UserExample userExample = new UserExample();
-        UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andPidIsNull();
-        List<User> userList = userMapper.selectByExample(userExample);
-        PageInfo pageInfo = new PageInfo<>(userList);
-        return new FuncUtils().beanUtilsCopyListProperties(pageInfo.getList(), userResultDTO);
+    public Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO) {
+        User user = userMapper.selectByPrimaryKey(id);
+        String newPassword = bCryptPasswordEncoder.encode(updatePasswordParamDTO.getNewPassword());
+        user.setPassword(newPassword);
+        user.setGmtModified(new Date());
+        return userMapper.updateByPrimaryKey(user) == 1;
     }
 
     @Override
-    public Object changeUserPassword(Long id, AdminChangeUserPasswordParamDTO adminChangeUserPasswordParamDTO) throws CustomException {
-        User user = userMapper.selectByPrimaryKey(id);
-        if (user == null) {
-            throw new CustomException("指定的用户不存在");
+    public User getAdminByUsername(String username) {
+        UserExample userExample = new UserExample();
+        userExample.or().andUsernameEqualTo(username);
+        List<User> adminList = userMapper.selectByExample(userExample);
+        if (adminList != null && adminList.size() > 0) {
+            return adminList.get(0);
         }
-        String newPassword = bCryptPasswordEncoder.encode(adminChangeUserPasswordParamDTO.getNewPassword());
-        user.setPassword(newPassword);
-        user.setGmtModified(new Date());
-        if (userMapper.insert(user) != 1) {
-            return null;
-        }
-//        BeanUtils.copyProperties(admin, adminResultDTO);
         return null;
     }
 

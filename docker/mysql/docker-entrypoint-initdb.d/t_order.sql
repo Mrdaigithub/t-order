@@ -123,8 +123,8 @@ CREATE TABLE `role_permission_relation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限关系表';
 
 INSERT INTO `role_permission_relation` (`id`, `role_id`, `permission_id`, `gmt_create`, `gmt_modified`) VALUES
-(1,	1,	1,	'2019-03-27 07:46:34',	'2019-03-27 07:46:34'),
-(2,	1,	2,	'2019-03-27 07:46:39',	'2019-03-27 07:46:39'),
+(1,	1,	1,	'2019-03-27 07:46:34',	'2019-04-12 03:19:43'),
+(2,	1,	2,	'2019-03-27 07:46:39',	'2019-04-12 07:33:35'),
 (3,	1,	3,	'2019-03-27 07:46:54',	'2019-03-27 07:46:54'),
 (4,	1,	4,	'2019-03-27 07:46:58',	'2019-03-27 07:46:58'),
 (5,	1,	5,	'2019-03-27 08:30:17',	'2019-03-27 08:30:17'),
@@ -154,7 +154,10 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `bank_card`, `score`, `pid`, `enabled`, `gmt_create`, `gmt_modified`) VALUES
 (1,	'root',	'$2a$10$6dqAS73smpYqNcRw4UY4xOHKv4S3Q.bX2bsKtGysYYfwsZcgqDs2.',	NULL,	0,	NULL,	1,	'2019-03-27 02:33:54',	'2019-03-27 07:49:53'),
-(3,	'admin',	'$2a$10$P9/gDyR53RSYJnk5ZSOXB..1xIRYIZ8QpXTg7jU4w8DXjD8bmN81.',	'6226304550770318',	0,	NULL,	1,	'2019-04-11 07:51:31',	'2019-04-11 07:51:31');
+(2,	'admin',	'$2a$10$P9/gDyR53RSYJnk5ZSOXB..1xIRYIZ8QpXTg7jU4w8DXjD8bmN81.',	'6226304550770318',	0,	NULL,	1,	'2019-04-11 07:51:31',	'2019-04-12 07:29:14'),
+(25,	'admin1',	'$2a$10$f9AZ0ufjoINmhE6qB8TE..9tm9J59i1CyKWIlGrXA4eAHh94OLFji',	NULL,	0,	NULL,	1,	'2019-04-12 07:32:18',	'2019-04-12 07:32:18'),
+(29,	'user1',	'$2a$10$v.DIUgWe7J/AK0WwV0ycVeMwWLl4opgJs3pmCmBgDhOF7t6gdYGuy',	'6226304550770317',	0,	NULL,	1,	'2019-04-12 07:35:04',	'2019-04-12 07:35:04'),
+(30,	'user2',	'$2a$10$JEEjOb2MlzA/YVFvMCMC2eyAAttdoCCHh6tyu/YWS7cvuxefwf/GS',	'6226304550770316',	0,	NULL,	1,	'2019-04-12 07:37:15',	'2019-04-12 08:35:54');
 
 DROP TABLE IF EXISTS `user_role_relation`;
 CREATE TABLE `user_role_relation` (
@@ -167,6 +170,10 @@ CREATE TABLE `user_role_relation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关系表';
 
 INSERT INTO `user_role_relation` (`id`, `user_id`, `role_id`, `gmt_create`, `gmt_modified`) VALUES
-(1,	1,	1,	'2019-03-27 08:25:39',	'2019-03-27 08:25:39');
+(1,	1,	1,	'2019-03-27 08:25:39',	'2019-03-27 08:25:39'),
+(8,	2,	2,	'2019-04-12 07:29:24',	'2019-04-12 07:33:09'),
+(9,	25,	2,	'2019-04-12 07:32:18',	'2019-04-12 07:32:18'),
+(10,	29,	3,	'2019-04-12 07:35:04',	'2019-04-12 07:35:04'),
+(11,	30,	3,	'2019-04-12 07:37:15',	'2019-04-12 07:37:15');
 
--- 2019-04-11 09:00:13
+-- 2019-04-12 08:56:46

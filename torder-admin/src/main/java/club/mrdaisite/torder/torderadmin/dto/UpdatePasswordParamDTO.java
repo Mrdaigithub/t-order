@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
  * @author dai
  * @date 2019/03/25
  */
-public class AdminChangeUserPasswordParamDTO {
+public class UpdatePasswordParamDTO {
     @ApiModelProperty(value = "新密码", required = true)
     @NotEmpty(message = "新密码不能为空")
     private String newPassword;
@@ -25,7 +25,7 @@ public class AdminChangeUserPasswordParamDTO {
 
     @Override
     public String toString() {
-        return "AdminChangeUserPasswordParamDTO{" +
+        return "UpdatePasswordParamDTO{" +
                 "newPassword='" + newPassword + '\'' +
                 '}';
     }

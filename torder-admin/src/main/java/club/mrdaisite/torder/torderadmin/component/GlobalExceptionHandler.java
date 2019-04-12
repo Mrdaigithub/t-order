@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -64,13 +65,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity httpMessageNotReadableExceptionHandler(HttpServletRequest request, HttpRequestMethodNotSupportedException exception) {
+    public ResponseEntity httpMessageNotReadableExceptionHandler(HttpServletRequest request, HttpMessageNotReadableException exception) {
         return new CommonResult().badRequest("必要的请求参数不存在");
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity httpMediaTypeNotSupportedExceptionHandler(HttpServletRequest request, HttpMediaTypeNotSupportedException exception) {
+        return new CommonResult().badRequest("Http媒体类型不支持");
     }
 
     @ExceptionHandler(ArithmeticException.class)
     public ResponseEntity arithmeticExceptionHandler(HttpServletRequest request, ArithmeticException exception) {
         return new CommonResult().badRequest("算术异常");
+    }
+
+    @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
+    public ResponseEntity arrayIndexOutOfBoundsExceptionHandler(HttpServletRequest request, ArrayIndexOutOfBoundsException exception) {
+        return new CommonResult().internalServerError("数组索引超出界限");
     }
 
     @ExceptionHandler(CustomException.class)

@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
-                .antMatchers("/admin/login", "/admin/register", "/error").permitAll()
+                .antMatchers("/admin/login", "/admin/insertUser", "/error").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();

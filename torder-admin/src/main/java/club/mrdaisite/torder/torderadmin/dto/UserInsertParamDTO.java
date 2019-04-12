@@ -8,12 +8,12 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * UserRegisterParamDTO
+ * UserInsertParamDTO
  *
  * @author dai
  * @date 2019/03/25
  */
-public class UserRegisterParamDTO {
+public class UserInsertParamDTO {
     @ApiModelProperty(value = "用户名", required = true)
     @NotEmpty(message = "用户名不能为空")
     @Length(min = 4, max = 12, message = "用户名长度必须位于4到12之间")
@@ -22,7 +22,7 @@ public class UserRegisterParamDTO {
     @NotEmpty(message = "密码不能为空")
     @Size(min = 4, max = 12, message = "密码长度必须位于4到12之间")
     private String password;
-    @ApiModelProperty(value = "银行卡号", required = true)
+    @ApiModelProperty(value = "银行卡号")
     @NotEmpty(message = "银行卡号不能为空")
     @Pattern(regexp = "^([1-9])(\\d{15}|\\d{18})$", message = "银行卡号格式错误")
     private String bankCard;
@@ -53,7 +53,7 @@ public class UserRegisterParamDTO {
 
     @Override
     public String toString() {
-        return "UserRegisterParamDTO{" +
+        return "UserInsertParamDTO{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", bankCard='" + bankCard + '\'' +
