@@ -1,6 +1,5 @@
 package club.mrdaisite.torder.torderadmin.service;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
@@ -26,7 +25,7 @@ public interface AdminService {
      * @param order   排序顺序
      * @return 指定管理员分页列表
      */
-    Object listUser(Integer page, Integer perPage, String sortBy, String order);
+    List<Object> listUser(Integer page, Integer perPage, String sortBy, String order);
 
     /**
      * 根据用户名获取后台管理员

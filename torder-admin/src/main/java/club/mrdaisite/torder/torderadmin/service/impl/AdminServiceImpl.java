@@ -1,14 +1,14 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dao.UserRoleRelationDao;
-import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
+import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
+import io.jsonwebtoken.security.Keys;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
 import club.mrdaisite.torder.tordermbg.mapper.UserRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.Permission;
@@ -17,6 +17,8 @@ import club.mrdaisite.torder.tordermbg.model.UserExample;
 import club.mrdaisite.torder.tordermbg.model.UserRoleRelation;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +30,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.*;
 
 /**
@@ -50,15 +53,15 @@ public class AdminServiceImpl implements AdminService {
     private UserRoleRelationDao userRoleRelationDao;
 
     @Override
-    public List<User> listUser(Integer page, Integer perPage, String sortBy, String order) {
+    public List<Object> listUser(Integer page, Integer perPage, String sortBy, String order) {
         PageHelper.startPage(page, perPage, sortBy + " " + order);
-        UserResultDTO userResultDTO = new UserResultDTO();
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andPidIsNull();
         List<User> userList = userMapper.selectByExample(userExample);
         PageInfo pageInfo = new PageInfo<>(userList);
-        return new FuncUtils().beanUtilsCopyListProperties(pageInfo.getList(), userResultDTO);
+        List<Object> pageInfoList = pageInfo.getList();
+        return new FuncUtils().beanUtilsCopyListProperties(pageInfoList, new ArrayList<>(Collections.nCopies(pageInfoList.size(), new UserResultDTO())));
     }
 
     @Override

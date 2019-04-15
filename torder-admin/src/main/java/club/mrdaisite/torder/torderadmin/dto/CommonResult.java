@@ -1,12 +1,7 @@
 package club.mrdaisite.torder.torderadmin.dto;
 
-import com.github.pagehelper.PageInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author dai
@@ -26,26 +21,6 @@ public class CommonResult {
         setCode(HttpStatus.OK.value());
         setMessage("操作成功");
         setData(data);
-        return new ResponseEntity<>(this, HttpStatus.OK);
-    }
-
-    /**
-     * 返回分页成功数据
-     *
-     * @param data 获取的数据
-     * @return 返回的数据
-     */
-    public ResponseEntity pageSuccess(List<Object> data) {
-        PageInfo pageInfo = new PageInfo<>(data);
-        Map<String, Object> result = new HashMap<>();
-        result.put("pageSize", pageInfo.getPageSize());
-        result.put("totalPage", pageInfo.getPages());
-        result.put("total", pageInfo.getTotal());
-        result.put("pageNum", pageInfo.getPageNum());
-        result.put("list", pageInfo.getList());
-        setCode(HttpStatus.OK.value());
-        setMessage("操作成功");
-        setData(result);
         return new ResponseEntity<>(this, HttpStatus.OK);
     }
 
