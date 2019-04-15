@@ -2,30 +2,15 @@ package club.mrdaisite.torder.torderadmin.controller;
 
 import club.mrdaisite.torder.torderadmin.dto.*;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
-import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import sun.rmi.runtime.Log;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Key;
 
 /**
  * 管理员控制器
