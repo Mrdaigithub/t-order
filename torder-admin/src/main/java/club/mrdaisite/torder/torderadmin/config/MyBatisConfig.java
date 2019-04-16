@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * torder
+ * MyBatisConfig
  *
  * @author dai
  * @date 2019/04/10

@@ -72,9 +72,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsServiceBean() {
         return username -> {
-            User user = adminService.getAdminByUsername(username);
+            User user = adminService.getUserByUsername(username);
             if (user != null) {
-                List<Permission> permissionList = adminService.getPermissionList(user.getId());
+                List<Permission> permissionList = adminService.getPermissionListByUsername(user.getUsername());
                 return new AdminUserDetails(user, permissionList);
             }
             throw new UsernameNotFoundException("用户名或密码错误");

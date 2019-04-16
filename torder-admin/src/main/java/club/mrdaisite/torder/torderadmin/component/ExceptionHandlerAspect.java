@@ -24,7 +24,11 @@ public class ExceptionHandlerAspect {
 
     @Before("exceptionHandler()")
     public void doBefore(JoinPoint joinpoint) {
-        Exception exception = (Exception) (joinpoint.getArgs())[1];
-        LoggerUtil.logger.error(exception.getClass().getName() + ": " + exception.getMessage());
+        for (int i = 0; i < joinpoint.getArgs().length; i++) {
+            if (joinpoint.getArgs()[i] instanceof Exception) {
+                Exception exception = (Exception) joinpoint.getArgs()[i];
+                LoggerUtil.logger.error(exception.getClass().getName() + ": " + exception.getMessage());
+            }
+        }
     }
 }
