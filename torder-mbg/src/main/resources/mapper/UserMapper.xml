@@ -237,15 +237,11 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="bankCard != null">
-        bank_card = #{bankCard,jdbcType=VARCHAR},
-      </if>
+      bank_card = #{bankCard,jdbcType=VARCHAR},
       <if test="score != null">
         score = #{score,jdbcType=INTEGER},
       </if>
-      <if test="pid != null">
-        pid = #{pid,jdbcType=BIGINT},
-      </if>
+      pid = #{pid,jdbcType=BIGINT},
       <if test="enabled != null">
         enabled = #{enabled,jdbcType=BIT},
       </if>

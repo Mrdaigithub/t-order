@@ -4,13 +4,14 @@ import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
+import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.Role;
 import club.mrdaisite.torder.tordermbg.model.User;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.AccessDeniedException;
-import java.security.Principal;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -66,8 +67,30 @@ public interface AdminService {
      * @param updatePasswordParamDTO 新旧密码参数
      * @param roleName               修改的用户组
      * @return 密码是否修改
+     * @throws AccessDeniedException 用户不存在异常
      */
     Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException;
+
+    /**
+     * 修改用户信息
+     *
+     * @param id                 用户id
+     * @param userUpdateParamDTO 修改后的用户参数
+     * @param roleName           修改的用户组
+     * @return 修改后的用户信息
+     * @throws AccessDeniedException 用户不存在异常
+     */
+    UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException;
+
+    /**
+     * 删除管理员
+     *
+     * @param id       用户id
+     * @param roleName 修改的用户组
+     * @throws AccessDeniedException 用户不存在异常
+     */
+    @Transactional(rollbackFor = Exception.class)
+    void deleteUser(Long id, String roleName);
 
     /**
      * 根据用户名获取后台管理员

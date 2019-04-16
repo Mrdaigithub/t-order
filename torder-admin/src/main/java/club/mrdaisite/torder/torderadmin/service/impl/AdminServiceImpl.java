@@ -4,9 +4,11 @@ import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
+import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminService;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
+import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.tordermbg.mapper.*;
 import club.mrdaisite.torder.tordermbg.model.*;
 import com.github.pagehelper.PageHelper;
@@ -23,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -113,15 +116,31 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException {
-        User user = userMapper.selectByPrimaryKey(id);
-        Role role = getRoleByUsername(user.getUsername());
-        if (!role.getName().equals(roleName)) {
-            throw new AccessDeniedException(null);
-        }
+        canOperateRole(id, roleName);
+        User user = new User();
         String newPassword = bCryptPasswordEncoder.encode(updatePasswordParamDTO.getNewPassword());
         user.setPassword(newPassword);
         user.setGmtModified(new Date());
         return userMapper.updateByPrimaryKey(user) == 1;
+    }
+
+    @Override
+    public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException {
+        canOperateRole(id, roleName);
+        User user = new User();
+        org.apache.commons.beanutils.BeanUtils.copyProperties(user, userUpdateParamDTO);
+        user.setGmtModified(new Date());
+        LoggerUtil.logger.error(user.toString());
+        userMapper.updateByPrimaryKeySelective(user);
+        UserResultDTO userResultDTO = new UserResultDTO();
+        BeanUtils.copyProperties(user, userResultDTO);
+        return userResultDTO;
+    }
+
+    @Override
+    public void deleteUser(Long id, String roleName) throws AccessDeniedException {
+        canOperateRole(id, roleName);
+        userMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -171,5 +190,19 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         return permissionList;
+    }
+
+    /**
+     * 判断当前用户是否有权限操作指定用户组
+     *
+     * @param id       当前用户id
+     * @param roleName 要操作的用户组
+     */
+    private void canOperateRole(Long id, String roleName) {
+        User user = userMapper.selectByPrimaryKey(id);
+        Role role = getRoleByUsername(user.getUsername());
+        if (!role.getName().equals(roleName)) {
+            throw new AccessDeniedException(null);
+        }
     }
 }

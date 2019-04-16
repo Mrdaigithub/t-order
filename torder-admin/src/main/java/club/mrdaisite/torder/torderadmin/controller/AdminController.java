@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 
@@ -94,7 +95,7 @@ public class AdminController {
     @ApiOperation(value = "修改管理员密码")
     @PutMapping(value = "/password/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity updateAdminPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) throws AccessDeniedException {
+    public ResponseEntity updateAdminPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
         if (adminService.updateUserPassword(id, updatePasswordParamDTO, "admin")) {
             return new CommonResult().success(null);
         }
@@ -104,10 +105,38 @@ public class AdminController {
     @ApiOperation(value = "修改用户密码")
     @PutMapping(value = "/user/password/{id}")
     @PreAuthorize("hasAuthority('user:update')")
-    public ResponseEntity updateUserPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) throws AccessDeniedException {
+    public ResponseEntity updateUserPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
         if (adminService.updateUserPassword(id, updatePasswordParamDTO, "user")) {
             return new CommonResult().success(null);
         }
         return new CommonResult().badRequest(null);
+    }
+
+    @ApiOperation(value = "修改管理员信息")
+    @PutMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity updateAdmin(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) throws InvocationTargetException, IllegalAccessException {
+        return new CommonResult().success(adminService.updateUser(id, userUpdateParamDTO, "admin"));
+    }
+
+    @ApiOperation(value = "修改用户信息")
+    @PutMapping(value = "/user/{id}")
+    @PreAuthorize("hasAuthority('user:update')")
+    public ResponseEntity updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) throws InvocationTargetException, IllegalAccessException {
+        return new CommonResult().success(adminService.updateUser(id, userUpdateParamDTO, "user"));
+    }
+
+    @ApiOperation(value = "删除管理员")
+    @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
+    public void deleteAdmin(@PathVariable Long id) {
+        adminService.deleteUser(id, "admin");
+    }
+
+    @ApiOperation(value = "删除用户")
+    @DeleteMapping(value = "/user/{id}")
+    @PreAuthorize("hasAuthority('user:delete')")
+    public void deleteUser(@PathVariable Long id) {
+        adminService.deleteUser(id, "user");
     }
 }
