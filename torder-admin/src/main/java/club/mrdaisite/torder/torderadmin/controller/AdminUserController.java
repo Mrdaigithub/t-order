@@ -16,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 
 /**
@@ -27,18 +26,10 @@ import java.security.Principal;
  */
 @RestController
 @Api(tags = {"后台用户管理"})
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/user")
+public class AdminUserController {
     @Autowired
     private AdminService adminService;
-
-    @ApiOperation(value = "test")
-    @GetMapping(value = "/test")
-    public ResponseEntity test(Principal principal) {
-        LoggerUtil.logger.warn(principal.getName());
-        Object permissionList = adminService.getPermissionListByUsername("root");
-        return new CommonResult().success(permissionList.toString());
-    }
 
     @ApiOperation(value = "用户列表")
     @GetMapping()
@@ -83,26 +74,6 @@ public class AdminController {
     @PreAuthorize("hasAuthority('user:create')")
     public ResponseEntity insertUser(@Validated @RequestBody UserInsertParamDTO userInsertParamDTO, BindingResult result) {
         return new CommonResult().success(adminService.insertUser(userInsertParamDTO, "user"));
-    }
-
-    @ApiOperation(value = "修改管理员密码")
-    @PutMapping(value = "/password/{id}")
-    @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity updateAdminPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
-        if (adminService.updateUserPassword(id, updatePasswordParamDTO, "admin")) {
-            return new CommonResult().success(null);
-        }
-        return new CommonResult().badRequest(null);
-    }
-
-    @ApiOperation(value = "修改用户密码")
-    @PutMapping(value = "/user/password/{id}")
-    @PreAuthorize("hasAuthority('user:update')")
-    public ResponseEntity updateUserPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
-        if (adminService.updateUserPassword(id, updatePasswordParamDTO, "user")) {
-            return new CommonResult().success(null);
-        }
-        return new CommonResult().badRequest(null);
     }
 
     @ApiOperation(value = "修改管理员信息")

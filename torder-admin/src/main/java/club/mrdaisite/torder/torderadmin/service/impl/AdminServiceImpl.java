@@ -32,6 +32,7 @@ import java.util.List;
 
 /**
  * @author dai
+ * @date 2019/03/21
  */
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -115,16 +116,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException {
-        canOperateRole(id, roleName);
-        User user = new User();
-        String newPassword = bCryptPasswordEncoder.encode(updatePasswordParamDTO.getNewPassword());
-        user.setPassword(newPassword);
-        user.setGmtModified(new Date());
-        return userMapper.updateByPrimaryKey(user) == 1;
-    }
-
-    @Override
     public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException {
         canOperateRole(id, roleName);
         User user = new User();
@@ -140,6 +131,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteUser(Long id, String roleName) throws AccessDeniedException {
         canOperateRole(id, roleName);
+        User user = userMapper.selectByPrimaryKey(id);
+        UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
+        userRoleRelationExample.or().andUserIdEqualTo(user.getId());
+        userRoleRelationMapper.deleteByExample(userRoleRelationExample);
         userMapper.deleteByPrimaryKey(id);
     }
 
@@ -156,15 +151,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Role getRoleByUsername(String username) {
-        UserExample userExample = new UserExample();
-        userExample.or().andUsernameEqualTo(username);
-        List<User> userList = userMapper.selectByExample(userExample);
-        Long userId = userList.get(0).getId();
-        UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
-        userRoleRelationExample.or().andUserIdEqualTo(userId);
-        List<UserRoleRelation> userRoleRelationList = userRoleRelationMapper.selectByExample(userRoleRelationExample);
-        UserRoleRelation userRoleRelation = userRoleRelationList.get(0);
-        return roleMapper.selectByPrimaryKey(userRoleRelation.getRoleId());
+        return getRole(username, userMapper, userRoleRelationMapper, roleMapper);
     }
 
     @Override
