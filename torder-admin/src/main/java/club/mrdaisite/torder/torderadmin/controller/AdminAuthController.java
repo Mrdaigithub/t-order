@@ -4,7 +4,6 @@ import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserLoginParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminAuthService;
-import club.mrdaisite.torder.torderadmin.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class AdminAuthController {
     @PutMapping(value = "/password/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity updateAdminPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
-        if (adminService.updateUserPassword(id, updatePasswordParamDTO, "admin")) {
+        if (adminAuthService.updateUserPassword(id, updatePasswordParamDTO, "admin")) {
             return new CommonResult().success(null);
         }
         return new CommonResult().badRequest(null);
@@ -48,7 +47,7 @@ public class AdminAuthController {
     @PutMapping(value = "/user/password/{id}")
     @PreAuthorize("hasAuthority('user:update')")
     public ResponseEntity updateUserPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
-        if (adminService.updateUserPassword(id, updatePasswordParamDTO, "user")) {
+        if (adminAuthService.updateUserPassword(id, updatePasswordParamDTO, "user")) {
             return new CommonResult().success(null);
         }
         return new CommonResult().badRequest(null);

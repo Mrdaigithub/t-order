@@ -1,15 +1,16 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.service.AdminService;
+import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
 import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
-import club.mrdaisite.torder.tordermbg.mapper.*;
+import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
+import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
+import club.mrdaisite.torder.tordermbg.mapper.UserRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -35,7 +36,7 @@ import java.util.List;
  * @date 2019/03/21
  */
 @Service
-public class AdminServiceImpl implements AdminService {
+public class AdminUserServiceImpl implements AdminUserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -48,11 +49,7 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private RoleMapper roleMapper;
     @Autowired
-    private PermissionMapper permissionMapper;
-    @Autowired
     private UserRoleRelationMapper userRoleRelationMapper;
-    @Autowired
-    private RolePermissionRelationMapper rolePermissionRelationMapper;
 
     @Override
     public List<Object> listUser(Integer page, Integer perPage, String sortBy, String order) {
@@ -117,7 +114,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException {
-        canOperateRole(id, roleName);
+        new FuncUtils().canOperateRole(id, roleName);
         User user = new User();
         org.apache.commons.beanutils.BeanUtils.copyProperties(user, userUpdateParamDTO);
         user.setGmtModified(new Date());
@@ -130,7 +127,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteUser(Long id, String roleName) throws AccessDeniedException {
-        canOperateRole(id, roleName);
+        new FuncUtils().canOperateRole(id, roleName);
         User user = userMapper.selectByPrimaryKey(id);
         UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
         userRoleRelationExample.or().andUserIdEqualTo(user.getId());
@@ -147,49 +144,5 @@ public class AdminServiceImpl implements AdminService {
             return adminList.get(0);
         }
         return null;
-    }
-
-    @Override
-    public Role getRoleByUsername(String username) {
-        return getRole(username, userMapper, userRoleRelationMapper, roleMapper);
-    }
-
-    @Override
-    public Permission getPermissionByPermissionValue(String permissionValue) {
-        PermissionExample permissionExample = new PermissionExample();
-        permissionExample.or().andValueEqualTo(permissionValue);
-        List<Permission> permissionList = permissionMapper.selectByExample(permissionExample);
-        return permissionList.get(0);
-    }
-
-    @Override
-    public List<Permission> getPermissionListByUsername(String username) {
-        List<Permission> permissionList = new ArrayList<>();
-        User user = getUserByUsername(username);
-        Role role = getRoleByUsername(user.getUsername());
-        RolePermissionRelationExample rolePermissionRelationExample = new RolePermissionRelationExample();
-        rolePermissionRelationExample.or().andRoleIdEqualTo(role.getId());
-        List<RolePermissionRelation> rolePermissionRelationList = rolePermissionRelationMapper.selectByExample(rolePermissionRelationExample);
-        for (RolePermissionRelation rolePermissionRelation : rolePermissionRelationList) {
-            Permission permission = permissionMapper.selectByPrimaryKey(rolePermissionRelation.getPermissionId());
-            if (permission != null) {
-                permissionList.add(permission);
-            }
-        }
-        return permissionList;
-    }
-
-    /**
-     * 判断当前用户是否有权限操作指定用户组
-     *
-     * @param id       当前用户id
-     * @param roleName 要操作的用户组
-     */
-    private void canOperateRole(Long id, String roleName) {
-        User user = userMapper.selectByPrimaryKey(id);
-        Role role = getRoleByUsername(user.getUsername());
-        if (!role.getName().equals(roleName)) {
-            throw new AccessDeniedException(null);
-        }
     }
 }

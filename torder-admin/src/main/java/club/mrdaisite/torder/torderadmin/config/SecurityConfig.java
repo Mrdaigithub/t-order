@@ -4,7 +4,8 @@ import club.mrdaisite.torder.torderadmin.bo.AdminUserDetails;
 import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
 import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
 import club.mrdaisite.torder.torderadmin.component.RestfulAccessDeniedHandler;
-import club.mrdaisite.torder.torderadmin.service.AdminService;
+import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
+import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,9 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private AdminService adminService;
+    private AdminUserService adminUserService;
+    @Autowired
+    private AdminPermissionService adminPermissionService;
     @Autowired
     private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     @Autowired
@@ -72,9 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsServiceBean() {
         return username -> {
-            User user = adminService.getUserByUsername(username);
+            User user = adminUserService.getUserByUsername(username);
             if (user != null) {
-                List<Permission> permissionList = adminService.getPermissionListByUsername(user.getUsername());
+                List<Permission> permissionList = adminPermissionService.getPermissionListByUsername(user.getUsername());
                 return new AdminUserDetails(user, permissionList);
             }
             throw new UsernameNotFoundException("用户名或密码错误");

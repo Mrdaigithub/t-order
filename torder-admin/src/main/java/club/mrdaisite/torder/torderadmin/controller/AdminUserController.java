@@ -2,8 +2,7 @@ package club.mrdaisite.torder.torderadmin.controller;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.*;
-import club.mrdaisite.torder.torderadmin.service.AdminService;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
+import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.tordermbg.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +28,7 @@ import java.security.Principal;
 @RequestMapping("/user")
 public class AdminUserController {
     @Autowired
-    private AdminService adminService;
+    private AdminUserService adminUserService;
 
     @ApiOperation(value = "用户列表")
     @GetMapping()
@@ -38,13 +37,13 @@ public class AdminUserController {
                                    @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                                    @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
                                    @RequestParam(value = "order", defaultValue = "asc") String order) {
-        return new CommonResult().success(adminService.listUser(page, perPage, sortBy, order));
+        return new CommonResult().success(adminUserService.listUser(page, perPage, sortBy, order));
     }
 
     @ApiOperation(value = "获取当前登录用户")
     @GetMapping(value = "/info")
     public ResponseEntity getInfo(Principal principal) {
-        User user = adminService.getUserByUsername(principal.getName());
+        User user = adminUserService.getUserByUsername(principal.getName());
         UserResultDTO userResultDTO = new UserResultDTO();
         BeanUtils.copyProperties(user, userResultDTO);
         return new CommonResult().success(userResultDTO);
@@ -53,7 +52,7 @@ public class AdminUserController {
     @ApiOperation(value = "获取指定单个用户")
     @GetMapping(value = "/{id}")
     public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
-        return new CommonResult().success(adminService.getUserById(id));
+        return new CommonResult().success(adminUserService.getUserById(id));
     }
 
     @ApiOperation(value = "添加管理员")
@@ -62,7 +61,7 @@ public class AdminUserController {
     public ResponseEntity insertAdmin(@Validated @RequestBody AdminInsertParamDTO adminInsertParamDTO, BindingResult result) {
         UserInsertParamDTO userInsertParamDTO = new UserInsertParamDTO();
         BeanUtils.copyProperties(adminInsertParamDTO, userInsertParamDTO);
-        UserResultDTO userResultDTO = adminService.insertUser(userInsertParamDTO, "admin");
+        UserResultDTO userResultDTO = adminUserService.insertUser(userInsertParamDTO, "admin");
         if (userResultDTO == null) {
             return new CommonResult().internalServerError(null);
         }
@@ -73,34 +72,34 @@ public class AdminUserController {
     @PostMapping(value = "/user")
     @PreAuthorize("hasAuthority('user:create')")
     public ResponseEntity insertUser(@Validated @RequestBody UserInsertParamDTO userInsertParamDTO, BindingResult result) {
-        return new CommonResult().success(adminService.insertUser(userInsertParamDTO, "user"));
+        return new CommonResult().success(adminUserService.insertUser(userInsertParamDTO, "user"));
     }
 
     @ApiOperation(value = "修改管理员信息")
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity updateAdmin(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) throws InvocationTargetException, IllegalAccessException {
-        return new CommonResult().success(adminService.updateUser(id, userUpdateParamDTO, "admin"));
+        return new CommonResult().success(adminUserService.updateUser(id, userUpdateParamDTO, "admin"));
     }
 
     @ApiOperation(value = "修改用户信息")
     @PutMapping(value = "/user/{id}")
     @PreAuthorize("hasAuthority('user:update')")
     public ResponseEntity updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) throws InvocationTargetException, IllegalAccessException {
-        return new CommonResult().success(adminService.updateUser(id, userUpdateParamDTO, "user"));
+        return new CommonResult().success(adminUserService.updateUser(id, userUpdateParamDTO, "user"));
     }
 
     @ApiOperation(value = "删除管理员")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('admin:delete')")
     public void deleteAdmin(@PathVariable Long id) {
-        adminService.deleteUser(id, "admin");
+        adminUserService.deleteUser(id, "admin");
     }
 
     @ApiOperation(value = "删除用户")
     @DeleteMapping(value = "/user/{id}")
     @PreAuthorize("hasAuthority('user:delete')")
     public void deleteUser(@PathVariable Long id) {
-        adminService.deleteUser(id, "user");
+        adminUserService.deleteUser(id, "user");
     }
 }

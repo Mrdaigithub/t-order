@@ -1,12 +1,9 @@
 package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
-import club.mrdaisite.torder.tordermbg.model.Permission;
-import club.mrdaisite.torder.tordermbg.model.Role;
 import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +17,7 @@ import java.util.List;
  * @author dai
  * @date 2019/03/21
  */
-public interface AdminService {
+public interface AdminUserService {
     /**
      * 获取指定管理员分页列表
      *
@@ -61,17 +58,6 @@ public interface AdminService {
     String login(String username, String password);
 
     /**
-     * 修改用户密码
-     *
-     * @param id                     用户id
-     * @param updatePasswordParamDTO 新旧密码参数
-     * @param roleName               修改的用户组
-     * @return 密码是否修改
-     * @throws AccessDeniedException 用户不存在异常
-     */
-    Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException;
-
-    /**
      * 修改用户信息
      *
      * @param id                 用户id
@@ -99,28 +85,4 @@ public interface AdminService {
      * @return 指定后台管理员
      */
     User getUserByUsername(String username);
-
-    /**
-     * 根据用户名获取用户组
-     *
-     * @param username 用户名
-     * @return 指定用户组
-     */
-    Role getRoleByUsername(String username);
-
-    /**
-     * 根据权限值获取权限
-     *
-     * @param permissionValue 权限值
-     * @return 指定权限
-     */
-    Permission getPermissionByPermissionValue(String permissionValue);
-
-    /**
-     * 获取指定用户的权限列表
-     *
-     * @param username 用户名
-     * @return 指定用户的权限列表
-     */
-    List<Permission> getPermissionListByUsername(String username);
 }
