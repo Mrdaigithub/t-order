@@ -62,6 +62,17 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        UserExample userExample = new UserExample();
+        userExample.or().andUsernameEqualTo(username);
+        List<User> adminList = userMapper.selectByExample(userExample);
+        if (adminList != null && adminList.size() > 0) {
+            return adminList.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO, String roleName) {
         User user = new User();
         UserRoleRelation userRoleRelation = new UserRoleRelation();
@@ -112,13 +123,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        UserExample userExample = new UserExample();
-        userExample.or().andUsernameEqualTo(username);
-        List<User> adminList = userMapper.selectByExample(userExample);
-        if (adminList != null && adminList.size() > 0) {
-            return adminList.get(0);
-        }
-        return null;
+    public Boolean userExists(Long id) {
+        return userMapper.selectByPrimaryKey(id) != null;
     }
 }

@@ -40,7 +40,7 @@ public class AdminRoleController {
     @ApiOperation(value = "获取指定单个角色组")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
+    public ResponseEntity getRoleById(@PathVariable Long id) throws CustomException {
         if (!adminRoleService.roleExists(id)) {
             throw new CustomException("不存在的角色组");
         }

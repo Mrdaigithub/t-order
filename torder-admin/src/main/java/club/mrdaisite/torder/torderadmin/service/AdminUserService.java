@@ -77,4 +77,12 @@ public interface AdminUserService {
      */
     @Transactional(rollbackFor = Exception.class)
     void deleteUser(Long id, String roleName);
+
+    /**
+     * 判断用户是否存在
+     *
+     * @param id 用户id
+     * @return 用户是否存在
+     */
+    Boolean userExists(Long id);
 }
