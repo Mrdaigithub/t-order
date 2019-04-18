@@ -83,7 +83,7 @@ CREATE TABLE `permission` (
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `permission_name_uindex` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='权限表';
 
 INSERT INTO `permission` (`id`, `name`, `value`, `gmt_create`, `gmt_modified`) VALUES
 (1,	'管理员列表',	'admin:read',	'2019-03-27 07:42:13',	'2019-03-29 06:10:52'),
@@ -93,7 +93,15 @@ INSERT INTO `permission` (`id`, `name`, `value`, `gmt_create`, `gmt_modified`) V
 (5,	'用户列表',	'user:read',	'2019-03-27 08:28:52',	'2019-03-27 08:28:52'),
 (6,	'添加用户',	'user:create',	'2019-03-27 08:29:13',	'2019-03-27 08:29:13'),
 (7,	'编辑用户',	'user:update',	'2019-03-27 08:29:29',	'2019-03-27 08:29:29'),
-(8,	'删除用户',	'user:delete',	'2019-03-27 08:29:46',	'2019-03-27 08:29:46');
+(8,	'删除用户',	'user:delete',	'2019-03-27 08:29:46',	'2019-03-27 08:29:46'),
+(9,	'用户组列表',	'role:read',	'2019-04-18 02:31:02',	'2019-04-18 02:31:02'),
+(10,	'添加用户组',	'role:create',	'2019-04-18 02:31:02',	'2019-04-18 02:31:02'),
+(11,	'编辑用户组',	'role:update',	'2019-04-18 02:31:02',	'2019-04-18 02:31:02'),
+(12,	'删除用户组',	'role:delete',	'2019-04-18 02:31:02',	'2019-04-18 02:31:02'),
+(13,	'权限列表',	'permission:read',	'2019-04-18 02:31:02',	'2019-04-18 07:56:02'),
+(14,	'添加权限',	'permission:create',	'2019-04-18 02:31:02',	'2019-04-18 02:34:30'),
+(15,	'编辑权限',	'permission:update',	'2019-04-18 02:31:02',	'2019-04-18 02:34:30'),
+(16,	'删除权限',	'permission:delete',	'2019-04-18 02:31:02',	'2019-04-18 02:34:33');
 
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
@@ -105,12 +113,13 @@ CREATE TABLE `role` (
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name_uindex` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
 INSERT INTO `role` (`id`, `name`, `description`, `enabled`, `gmt_create`, `gmt_modified`) VALUES
 (1,	'root',	'根管理员',	1,	'2019-03-27 07:00:03',	'2019-03-27 07:00:23'),
 (2,	'admin',	'普通管理员',	1,	'2019-03-27 07:01:05',	'2019-03-27 07:01:05'),
-(3,	'user',	'普通用户',	1,	'2019-03-27 07:01:27',	'2019-03-27 07:01:27');
+(3,	'user',	'普通用户',	1,	'2019-03-27 07:01:27',	'2019-03-27 07:01:27'),
+(4,	'string',	'string',	1,	'2019-04-18 06:07:15',	'2019-04-18 06:07:15');
 
 DROP TABLE IF EXISTS `role_permission_relation`;
 CREATE TABLE `role_permission_relation` (
@@ -120,7 +129,7 @@ CREATE TABLE `role_permission_relation` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='角色权限关系表';
 
 INSERT INTO `role_permission_relation` (`id`, `role_id`, `permission_id`, `gmt_create`, `gmt_modified`) VALUES
 (1,	1,	1,	'2019-03-27 07:46:34',	'2019-04-12 03:19:43'),
@@ -131,10 +140,18 @@ INSERT INTO `role_permission_relation` (`id`, `role_id`, `permission_id`, `gmt_c
 (6,	1,	6,	'2019-03-27 08:30:22',	'2019-03-27 08:30:22'),
 (7,	1,	7,	'2019-03-27 08:30:27',	'2019-03-27 08:30:27'),
 (8,	1,	8,	'2019-03-27 08:30:32',	'2019-03-27 08:30:32'),
-(10,	2,	5,	'2019-03-27 08:30:59',	'2019-03-27 08:30:59'),
-(11,	2,	6,	'2019-03-27 08:31:06',	'2019-03-27 08:31:06'),
-(12,	2,	7,	'2019-03-27 08:31:12',	'2019-03-27 08:31:12'),
-(13,	2,	8,	'2019-03-27 08:31:16',	'2019-03-27 08:31:16');
+(9,	1,	9,	'2019-03-27 08:30:59',	'2019-04-18 03:56:38'),
+(10,	1,	10,	'2019-03-27 08:31:06',	'2019-04-18 03:56:41'),
+(11,	1,	11,	'2019-03-27 08:31:12',	'2019-04-18 03:56:45'),
+(12,	1,	12,	'2019-03-27 08:31:16',	'2019-04-18 03:56:48'),
+(13,	1,	13,	'2019-03-27 08:31:16',	'2019-04-18 03:56:50'),
+(14,	1,	14,	'2019-03-27 08:31:16',	'2019-04-18 03:56:52'),
+(15,	1,	15,	'2019-03-27 08:31:16',	'2019-04-18 03:56:54'),
+(16,	1,	16,	'2019-03-27 08:31:16',	'2019-04-18 03:56:55'),
+(19,	2,	5,	'2019-03-27 08:31:16',	'2019-04-18 03:56:55'),
+(20,	2,	6,	'2019-03-27 08:31:16',	'2019-04-18 03:56:55'),
+(21,	2,	7,	'2019-03-27 08:31:16',	'2019-04-18 03:56:55'),
+(22,	2,	8,	'2019-03-27 08:31:16',	'2019-04-18 03:56:55');
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -150,14 +167,13 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `admin_username_uindex` (`username`),
   UNIQUE KEY `user_back_card_uindex` (`bank_card`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 INSERT INTO `user` (`id`, `username`, `password`, `bank_card`, `score`, `pid`, `enabled`, `gmt_create`, `gmt_modified`) VALUES
-(1,	'root',	'$2a$10$6dqAS73smpYqNcRw4UY4xOHKv4S3Q.bX2bsKtGysYYfwsZcgqDs2.',	NULL,	0,	NULL,	1,	'2019-03-27 02:33:54',	'2019-03-27 07:49:53'),
-(2,	'admin',	'$2a$10$P9/gDyR53RSYJnk5ZSOXB..1xIRYIZ8QpXTg7jU4w8DXjD8bmN81.',	'6226304550770318',	0,	NULL,	1,	'2019-04-11 07:51:31',	'2019-04-12 07:29:14'),
+(1,	'root',	'$2a$10$PevJ33dwSK9lnR42jdcyteQFX4NkkEYtnjXaT8Bme.af5VXs6sh/i',	NULL,	0,	NULL,	1,	'2019-03-27 02:33:54',	'2019-04-16 08:28:22'),
+(2,	'admin',	'$2a$10$ppA6v8PkZN15NgPN.Bwa0e3bX0mOYjjH2puO6p1ijPEx8uI7AjaOm',	'6226304550770318',	0,	NULL,	1,	'2019-04-11 07:51:31',	'2019-04-16 08:34:23'),
 (25,	'admin1',	'$2a$10$f9AZ0ufjoINmhE6qB8TE..9tm9J59i1CyKWIlGrXA4eAHh94OLFji',	NULL,	0,	NULL,	1,	'2019-04-12 07:32:18',	'2019-04-12 07:32:18'),
-(29,	'user1',	'$2a$10$v.DIUgWe7J/AK0WwV0ycVeMwWLl4opgJs3pmCmBgDhOF7t6gdYGuy',	'6226304550770317',	0,	NULL,	1,	'2019-04-12 07:35:04',	'2019-04-12 07:35:04'),
-(30,	'user2',	'$2a$10$JEEjOb2MlzA/YVFvMCMC2eyAAttdoCCHh6tyu/YWS7cvuxefwf/GS',	'6226304550770316',	0,	NULL,	1,	'2019-04-12 07:37:15',	'2019-04-12 08:35:54');
+(29,	'user1',	'$2a$10$kjznicY6OOMxjstbYu5s0.N1kEK8xJYzknWCTv0IXlWEgg2waM04y',	'6226304550770317',	0,	NULL,	1,	'2019-04-12 07:35:04',	'2019-04-16 08:37:20');
 
 DROP TABLE IF EXISTS `user_role_relation`;
 CREATE TABLE `user_role_relation` (
@@ -167,13 +183,12 @@ CREATE TABLE `user_role_relation` (
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='用户角色关系表';
 
 INSERT INTO `user_role_relation` (`id`, `user_id`, `role_id`, `gmt_create`, `gmt_modified`) VALUES
 (1,	1,	1,	'2019-03-27 08:25:39',	'2019-03-27 08:25:39'),
-(8,	2,	2,	'2019-04-12 07:29:24',	'2019-04-12 07:33:09'),
+(8,	2,	2,	'2019-04-12 07:29:24',	'2019-04-16 02:57:01'),
 (9,	25,	2,	'2019-04-12 07:32:18',	'2019-04-12 07:32:18'),
-(10,	29,	3,	'2019-04-12 07:35:04',	'2019-04-12 07:35:04'),
-(11,	30,	3,	'2019-04-12 07:37:15',	'2019-04-12 07:37:15');
+(10,	29,	3,	'2019-04-12 07:35:04',	'2019-04-12 07:35:04');
 
--- 2019-04-12 08:56:46
+-- 2019-04-18 08:01:28

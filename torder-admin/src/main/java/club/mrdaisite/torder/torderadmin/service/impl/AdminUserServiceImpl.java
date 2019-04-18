@@ -6,8 +6,6 @@ import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
-import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
 import club.mrdaisite.torder.tordermbg.mapper.UserRoleRelationMapper;
@@ -17,12 +15,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,12 +30,6 @@ import java.util.List;
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -104,21 +90,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public String login(String username, String password) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return jwtTokenUtil.generateToken(userDetails);
-    }
-
-    @Override
     public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException {
         new FuncUtils().canOperateRole(id, roleName);
         User user = new User();
         org.apache.commons.beanutils.BeanUtils.copyProperties(user, userUpdateParamDTO);
         user.setGmtModified(new Date());
-        LoggerUtil.logger.error(user.toString());
         userMapper.updateByPrimaryKeySelective(user);
         UserResultDTO userResultDTO = new UserResultDTO();
         BeanUtils.copyProperties(user, userResultDTO);

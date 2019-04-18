@@ -19,18 +19,18 @@ import java.util.List;
  */
 public interface AdminUserService {
     /**
-     * 获取指定管理员分页列表
+     * 获取用户分页列表
      *
      * @param page    指定第几页
      * @param perPage 每页的记录数
      * @param sortBy  指定返回结果按照哪个属性排序
      * @param order   排序顺序
-     * @return 指定管理员分页列表
+     * @return 用户分页列表
      */
     List<Object> listUser(Integer page, Integer perPage, String sortBy, String order);
 
     /**
-     * 根据用户名获取后台管理员
+     * 根据id获取后台管理员
      *
      * @param id 管理员id
      * @return 指定后台管理员
@@ -39,32 +39,32 @@ public interface AdminUserService {
     UserResultDTO getUserById(Long id) throws CustomException;
 
     /**
+     * 根据用户名获取后台管理员
+     *
+     * @param username 用户名
+     * @return 指定后台管理员
+     */
+    User getUserByUsername(String username);
+
+    /**
      * 添加用户
      *
      * @param userInsertParamDTO 用户参数
-     * @param roleName           用户组名
+     * @param roleName           角色组名
      * @return 返回添加的用户信息
      */
     @Transactional(rollbackFor = Exception.class)
     UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO, String roleName);
 
     /**
-     * 登录功能
-     *
-     * @param username 用户名
-     * @param password 密码
-     * @return 生成的JWT的token
-     */
-    String login(String username, String password);
-
-    /**
      * 修改用户信息
-     *
      * @param id                 用户id
      * @param userUpdateParamDTO 修改后的用户参数
-     * @param roleName           修改的用户组
+     * @param roleName           修改的角色组
      * @return 修改后的用户信息
      * @throws AccessDeniedException 用户不存在异常
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
      */
     UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException;
 
@@ -72,17 +72,9 @@ public interface AdminUserService {
      * 删除管理员
      *
      * @param id       用户id
-     * @param roleName 修改的用户组
+     * @param roleName 修改的角色组
      * @throws AccessDeniedException 用户不存在异常
      */
     @Transactional(rollbackFor = Exception.class)
     void deleteUser(Long id, String roleName);
-
-    /**
-     * 根据用户名获取后台管理员
-     *
-     * @param username 用户名
-     * @return 指定后台管理员
-     */
-    User getUserByUsername(String username);
 }

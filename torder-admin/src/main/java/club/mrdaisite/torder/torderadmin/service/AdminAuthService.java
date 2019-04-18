@@ -24,7 +24,7 @@ public interface AdminAuthService {
      *
      * @param id                     用户id
      * @param updatePasswordParamDTO 新旧密码参数
-     * @param roleName               修改的用户组
+     * @param roleName               修改的角色组
      * @return 密码是否修改
      * @throws AccessDeniedException 用户不存在异常
      */
