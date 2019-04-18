@@ -1,9 +1,11 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
+import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
@@ -22,6 +24,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author dai
@@ -30,6 +34,8 @@ import java.util.List;
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private AdminRoleService adminRoleService;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -48,6 +54,20 @@ public class AdminUserServiceImpl implements AdminUserService {
             targetList.add(new UserResultDTO());
         }
         return new FuncUtils().beanUtilsCopyListProperties(pageInfoList, targetList);
+    }
+
+    @Override
+    public List<User> listUserByRoleId(Long roleId) throws CustomException {
+        if (!adminRoleService.roleExists(roleId)) {
+            throw new CustomException("不存在的角色组");
+        }
+        UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
+        userRoleRelationExample.or().andRoleIdEqualTo(roleId);
+        List<UserRoleRelation> userRoleRelationList = userRoleRelationMapper.selectByExample(userRoleRelationExample);
+        return userRoleRelationList.stream()
+                .map(userRoleRelation -> userMapper.selectByPrimaryKey(userRoleRelation.getUserId()))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -110,6 +130,16 @@ public class AdminUserServiceImpl implements AdminUserService {
         UserResultDTO userResultDTO = new UserResultDTO();
         BeanUtils.copyProperties(user, userResultDTO);
         return userResultDTO;
+    }
+
+    @Override
+    public Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException {
+        new FuncUtils().canOperateRole(id, roleName);
+        User user = new User();
+        String newPassword = bCryptPasswordEncoder.encode(updatePasswordParamDTO.getNewPassword());
+        user.setPassword(newPassword);
+        user.setGmtModified(new Date());
+        return userMapper.updateByPrimaryKey(user) == 1;
     }
 
     @Override

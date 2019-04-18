@@ -35,7 +35,7 @@ public class AdminMessageController {
 
     @ApiOperation(value = "消息列表")
     @GetMapping()
-    @PreAuthorize("hasAuthority('Message:read')")
+    @PreAuthorize("hasAuthority('message:list')")
     public ResponseEntity listMessage(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                       @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                                       @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
@@ -45,7 +45,7 @@ public class AdminMessageController {
 
     @ApiOperation(value = "获取指定单个消息")
     @GetMapping(value = "/{id}")
-    @PreAuthorize("hasAuthority('Message:read')")
+    @PreAuthorize("hasAuthority('message:read')")
     public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
         if (!adminMessageService.messageExists(id)) {
             throw new CustomException("不存在的消息");
@@ -55,10 +55,10 @@ public class AdminMessageController {
 
     @ApiOperation(value = "添加消息")
     @PostMapping()
-    @PreAuthorize("hasAuthority('Message:create')")
+    @PreAuthorize("hasAuthority('message:create')")
     public ResponseEntity insertMessage(@Validated @RequestBody MessageInsertParamDTO messageInsertParamDTO, BindingResult result, Principal principal) throws CustomException {
         User user = adminUserService.getUserByUsername(principal.getName());
-        if (adminUserService.userExists(user.getId())) {
+        if (!adminUserService.userExists(user.getId())) {
             throw new CustomException("不存在的用户");
         }
         return new CommonResult().success(adminMessageService.insertMessage(messageInsertParamDTO, user.getId()));
@@ -66,7 +66,7 @@ public class AdminMessageController {
 
     @ApiOperation(value = "修改消息信息")
     @PutMapping(value = "/{id}")
-    @PreAuthorize("hasAuthority('Message:update')")
+    @PreAuthorize("hasAuthority('message:update')")
     public ResponseEntity updateMessage(@PathVariable Long id, @Validated @RequestBody MessageUpdateParamDTO messageUpdateParamDTO, BindingResult result) throws CustomException {
         if (!adminMessageService.messageExists(id)) {
             throw new CustomException("不存在的消息");
@@ -76,7 +76,7 @@ public class AdminMessageController {
 
     @ApiOperation(value = "删除消息")
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("hasAuthority('Message:delete')")
+    @PreAuthorize("hasAuthority('message:delete')")
     public void deleteMessage(@PathVariable Long id) throws CustomException {
         if (!adminMessageService.messageExists(id)) {
             throw new CustomException("不存在的消息");

@@ -26,6 +26,14 @@ public interface AdminRoleService {
     List<Object> listRole(Integer page, Integer perPage, String sortBy, String order);
 
     /**
+     * 根据名称获取角色组列表
+     *
+     * @param roleName 角色组名称
+     * @return 角色组列表
+     */
+    List<Role> listRoleByName(String roleName);
+
+    /**
      * 根据id获取指定角色组
      *
      * @param id 角色组id

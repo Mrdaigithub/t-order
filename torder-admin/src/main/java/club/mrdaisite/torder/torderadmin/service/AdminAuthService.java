@@ -1,8 +1,5 @@
 package club.mrdaisite.torder.torderadmin.service;
 
-import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
-import org.springframework.security.access.AccessDeniedException;
-
 /**
  * AdminService
  *
@@ -18,15 +15,4 @@ public interface AdminAuthService {
      * @return 生成的JWT的token
      */
     String login(String username, String password);
-
-    /**
-     * 修改用户密码
-     *
-     * @param id                     用户id
-     * @param updatePasswordParamDTO 新旧密码参数
-     * @param roleName               修改的角色组
-     * @return 密码是否修改
-     * @throws AccessDeniedException 用户不存在异常
-     */
-    Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException;
 }

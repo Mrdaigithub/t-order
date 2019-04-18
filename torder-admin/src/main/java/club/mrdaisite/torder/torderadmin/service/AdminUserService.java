@@ -1,6 +1,7 @@
 package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
+import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
@@ -28,6 +29,15 @@ public interface AdminUserService {
      * @return 用户分页列表
      */
     List<Object> listUser(Integer page, Integer perPage, String sortBy, String order);
+
+    /**
+     * 根据角色组id获取用户列表
+     *
+     * @param roleId 角色组id
+     * @return 用户列表
+     * @throws CustomException 角色组不存在异常
+     */
+    List<User> listUserByRoleId(Long roleId) throws CustomException;
 
     /**
      * 根据id获取后台管理员
@@ -58,15 +68,27 @@ public interface AdminUserService {
 
     /**
      * 修改用户信息
+     *
      * @param id                 用户id
      * @param userUpdateParamDTO 修改后的用户参数
      * @param roleName           修改的角色组
      * @return 修改后的用户信息
-     * @throws AccessDeniedException 用户不存在异常
+     * @throws AccessDeniedException     用户不存在异常
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
     UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException;
+
+    /**
+     * 修改用户密码
+     *
+     * @param id                     用户id
+     * @param updatePasswordParamDTO 新旧密码参数
+     * @param roleName               修改的角色组
+     * @return 密码是否修改
+     * @throws AccessDeniedException 用户不存在异常
+     */
+    Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException;
 
     /**
      * 删除管理员

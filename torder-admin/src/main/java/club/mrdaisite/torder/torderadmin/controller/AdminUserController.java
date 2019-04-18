@@ -32,7 +32,7 @@ public class AdminUserController {
 
     @ApiOperation(value = "用户列表")
     @GetMapping()
-    @PreAuthorize("hasAuthority('admin:read') or hasAuthority('user:read')")
+    @PreAuthorize("hasAuthority('admin:list') or hasAuthority('user:list')")
     public ResponseEntity listUser(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                    @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                                    @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
@@ -51,6 +51,7 @@ public class AdminUserController {
 
     @ApiOperation(value = "获取指定单个用户")
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('admin:read') or hasAuthority('user:read')")
     public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
         return new CommonResult().success(adminUserService.getUserById(id));
     }
@@ -87,6 +88,26 @@ public class AdminUserController {
     @PreAuthorize("hasAuthority('user:update')")
     public ResponseEntity updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) throws InvocationTargetException, IllegalAccessException {
         return new CommonResult().success(adminUserService.updateUser(id, userUpdateParamDTO, "user"));
+    }
+
+    @ApiOperation(value = "修改管理员密码")
+    @PutMapping(value = "/password/{id}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity updateAdminPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
+        if (adminUserService.updateUserPassword(id, updatePasswordParamDTO, "admin")) {
+            return new CommonResult().success(null);
+        }
+        return new CommonResult().badRequest(null);
+    }
+
+    @ApiOperation(value = "修改用户密码")
+    @PutMapping(value = "/user/password/{id}")
+    @PreAuthorize("hasAuthority('user:update')")
+    public ResponseEntity updateUserPassword(@PathVariable Long id, @Validated @RequestBody UpdatePasswordParamDTO updatePasswordParamDTO, BindingResult result) {
+        if (adminUserService.updateUserPassword(id, updatePasswordParamDTO, "user")) {
+            return new CommonResult().success(null);
+        }
+        return new CommonResult().badRequest(null);
     }
 
     @ApiOperation(value = "删除管理员")

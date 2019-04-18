@@ -29,7 +29,7 @@ public class AdminRoleController {
 
     @ApiOperation(value = "角色组列表")
     @GetMapping()
-    @PreAuthorize("hasAuthority('role:read')")
+    @PreAuthorize("hasAuthority('role:list')")
     public ResponseEntity listRole(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                    @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                                    @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,

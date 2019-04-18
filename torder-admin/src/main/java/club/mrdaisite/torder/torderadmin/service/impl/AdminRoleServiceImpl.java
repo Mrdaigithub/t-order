@@ -38,6 +38,13 @@ public class AdminRoleServiceImpl implements AdminRoleService {
     }
 
     @Override
+    public List<Role> listRoleByName(String roleName) {
+        RoleExample roleExample = new RoleExample();
+        roleExample.or().andNameEqualTo(roleName);
+        return roleMapper.selectByExample(roleExample);
+    }
+
+    @Override
     public Role getRoleById(Long id) {
         return roleMapper.selectByPrimaryKey(id);
     }

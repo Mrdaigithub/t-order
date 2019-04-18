@@ -1,5 +1,6 @@
 package club.mrdaisite.torder.torderadmin.service;
 
+import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.MessageInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
 import club.mrdaisite.torder.tordermbg.model.Message;
@@ -39,9 +40,10 @@ public interface AdminMessageService {
      * @param messageInsertParamDTO 消息参数
      * @param userId                发布者id
      * @return 返回添加的消息信息
+     * @throws CustomException 资源不存在异常
      */
     @Transactional(rollbackFor = Exception.class)
-    Message insertMessage(MessageInsertParamDTO messageInsertParamDTO, Long userId);
+    Message insertMessage(MessageInsertParamDTO messageInsertParamDTO, Long userId) throws CustomException;
 
     /**
      * 修改消息信息

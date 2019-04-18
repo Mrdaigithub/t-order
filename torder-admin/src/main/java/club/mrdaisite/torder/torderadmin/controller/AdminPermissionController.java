@@ -27,7 +27,7 @@ public class AdminPermissionController {
 
     @ApiOperation(value = "权限列表")
     @GetMapping()
-    @PreAuthorize("hasAuthority('permission:read')")
+    @PreAuthorize("hasAuthority('permission:list')")
     public ResponseEntity listPermission() {
         return new CommonResult().success(adminPermissionService.listPermission());
     }
@@ -35,7 +35,7 @@ public class AdminPermissionController {
     @ApiOperation(value = "获取指定单个权限")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('permission:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
+    public ResponseEntity getPermissionById(@PathVariable Long id) throws CustomException {
         if (!adminPermissionService.permissionExists(id)) {
             throw new CustomException("不存在的权限");
         }
@@ -62,7 +62,7 @@ public class AdminPermissionController {
     @ApiOperation(value = "删除权限")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:delete')")
-    public void deleteRole(@PathVariable Long id) throws CustomException {
+    public void deletePermission(@PathVariable Long id) throws CustomException {
         if (!adminPermissionService.permissionExists(id)) {
             throw new CustomException("不存在的权限");
         }
