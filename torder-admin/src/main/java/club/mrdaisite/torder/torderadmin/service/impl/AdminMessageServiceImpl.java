@@ -70,7 +70,7 @@ public class AdminMessageServiceImpl implements AdminMessageService {
             MessageUserRelation messageUserRelation = new MessageUserRelation();
             messageUserRelation.setMessageId(messageId);
             messageUserRelation.setUserId(user.getId());
-            messageUserRelation.setRead(true);
+            messageUserRelation.setHaveRead(false);
             messageUserRelation.setGmtCreate(new Date());
             messageUserRelation.setGmtModified(new Date());
             messageUserRelationMapper.insert(messageUserRelation);
