@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -27,6 +28,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity badCredentialsExceptionHandler(HttpServletRequest request, BadCredentialsException exception) {
         return new CommonResult().unauthorized("用户名或密码错误");
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity badCredentialsExceptionHandler(HttpServletRequest request, DisabledException exception) {
+        return new CommonResult().forbidden("此用户未启用");
     }
 
     @ExceptionHandler(DuplicateKeyException.class)

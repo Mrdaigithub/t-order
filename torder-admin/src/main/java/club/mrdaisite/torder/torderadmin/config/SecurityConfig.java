@@ -4,10 +4,10 @@ import club.mrdaisite.torder.torderadmin.bo.AdminUserDetails;
 import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
 import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
 import club.mrdaisite.torder.torderadmin.component.RestfulAccessDeniedHandler;
+import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
-import club.mrdaisite.torder.torderadmin.service.AdminUserService;
+import club.mrdaisite.torder.tordermbg.model.Admin;
 import club.mrdaisite.torder.tordermbg.model.Permission;
-import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +39,7 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private AdminUserService adminUserService;
+    private AdminAdminService adminAdminService;
     @Autowired
     private AdminPermissionService adminPermissionService;
     @Autowired
@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
-                .antMatchers("/admin/login", "/admin/insertUser", "/error").permitAll()
+                .antMatchers("/admin/login", "/admin/insertAdmin", "/error").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
@@ -75,10 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsServiceBean() {
         return username -> {
-            User user = adminUserService.getUserByUsername(username);
-            if (user != null) {
-                List<Permission> permissionList = adminPermissionService.listPermissionByUsername(user.getUsername());
-                return new AdminUserDetails(user, permissionList);
+            Admin admin = adminAdminService.getAdminByUsername(username);
+            if (admin != null) {
+                List<Permission> permissionList = adminPermissionService.listPermissionByUsername(admin.getUsername());
+                return new AdminUserDetails(admin, permissionList);
             }
             throw new UsernameNotFoundException("用户名或密码错误");
         };

@@ -4,9 +4,9 @@ import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.MessageInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminMessageService;
-import club.mrdaisite.torder.torderadmin.service.AdminUserService;
-import club.mrdaisite.torder.tordermbg.model.User;
+import club.mrdaisite.torder.tordermbg.model.Admin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class AdminMessageController {
     @Autowired
     private AdminMessageService adminMessageService;
     @Autowired
-    private AdminUserService adminUserService;
+    private AdminAdminService adminAdminService;
 
     @ApiOperation(value = "消息列表")
     @GetMapping()
@@ -57,11 +57,11 @@ public class AdminMessageController {
     @PostMapping()
     @PreAuthorize("hasAuthority('message:create')")
     public ResponseEntity insertMessage(@Validated @RequestBody MessageInsertParamDTO messageInsertParamDTO, BindingResult result, Principal principal) throws CustomException {
-        User user = adminUserService.getUserByUsername(principal.getName());
-        if (!adminUserService.userExists(user.getId())) {
+        Admin admin = adminAdminService.getAdminByUsername(principal.getName());
+        if (!adminAdminService.adminExists(admin.getId())) {
             throw new CustomException("不存在的用户");
         }
-        return new CommonResult().success(adminMessageService.insertMessage(messageInsertParamDTO, user.getId()));
+        return new CommonResult().success(adminMessageService.insertMessage(messageInsertParamDTO, admin.getId()));
     }
 
     @ApiOperation(value = "修改消息信息")

@@ -1,10 +1,8 @@
 package club.mrdaisite.torder.torderadmin.util;
 
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
-import club.mrdaisite.torder.tordermbg.model.Role;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
 
@@ -30,18 +28,5 @@ public class FuncUtils {
             BeanUtils.copyProperties(sourceList.get(i), targetList.get(i));
         }
         return targetList;
-    }
-
-    /**
-     * 判断当前用户是否有权限操作指定角色组
-     *
-     * @param id       当前用户id
-     * @param roleName 要操作的角色组
-     */
-    public void canOperateRole(Long id, String roleName) {
-        Role role = adminRoleService.getRoleByUserId(id);
-        if (!role.getName().equals(roleName)) {
-            throw new AccessDeniedException(null);
-        }
     }
 }

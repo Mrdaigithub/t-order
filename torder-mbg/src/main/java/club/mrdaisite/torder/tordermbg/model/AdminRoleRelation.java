@@ -3,10 +3,10 @@ package club.mrdaisite.torder.tordermbg.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserRoleRelation implements Serializable {
+public class AdminRoleRelation implements Serializable {
     private Long id;
 
-    private Long userId;
+    private Long adminId;
 
     private Long roleId;
 
@@ -24,12 +24,12 @@ public class UserRoleRelation implements Serializable {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getAdminId() {
+        return adminId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 
     public Long getRoleId() {
@@ -63,7 +63,7 @@ public class UserRoleRelation implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", userId=").append(userId);
+        sb.append(", adminId=").append(adminId);
         sb.append(", roleId=").append(roleId);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);

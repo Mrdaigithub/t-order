@@ -1,7 +1,7 @@
 package club.mrdaisite.torder.torderadmin.bo;
 
+import club.mrdaisite.torder.tordermbg.model.Admin;
 import club.mrdaisite.torder.tordermbg.model.Permission;
-import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
  * @date 2019/03/22
  */
 public class AdminUserDetails implements UserDetails {
-    private User user;
+    private Admin admin;
     private List<Permission> permissionList;
 
-    public AdminUserDetails(User user, List<Permission> permissionList) {
-        this.user = user;
+    public AdminUserDetails(Admin admin, List<Permission> permissionList) {
+        this.admin = admin;
         this.permissionList = permissionList;
     }
 
@@ -36,12 +36,12 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return admin.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return admin.getUsername();
     }
 
     @Override
@@ -61,6 +61,6 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getEnabled();
+        return admin.getEnabled();
     }
 }

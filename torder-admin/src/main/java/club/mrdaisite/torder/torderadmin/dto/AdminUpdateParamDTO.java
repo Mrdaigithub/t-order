@@ -3,25 +3,22 @@ package club.mrdaisite.torder.torderadmin.dto;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * AdminInsertParamDTO
+ * AdminUpdateParamDTO
  *
  * @author dai
- * @date 2019/03/25
+ * @date 2019/04/16
  */
-public class AdminInsertParamDTO {
-    @ApiModelProperty(value = "用户名", required = true)
-    @NotEmpty(message = "用户名不能为空")
+public class AdminUpdateParamDTO {
+    @ApiModelProperty(value = "用户名")
     @Length(min = 4, max = 12, message = "用户名长度必须位于4到12之间")
     private String username;
-    @ApiModelProperty(value = "密码", required = true)
-    @NotEmpty(message = "密码不能为空")
+    @ApiModelProperty(value = "密码")
     @Size(min = 4, max = 12, message = "密码长度必须位于4到12之间")
     private String password;
-    @ApiModelProperty(value = "启用状态", required = true)
+    @ApiModelProperty(value = "启用状态")
     private Boolean enabled;
 
     public String getUsername() {
@@ -50,7 +47,7 @@ public class AdminInsertParamDTO {
 
     @Override
     public String toString() {
-        return "AdminInsertParamDTO{" +
+        return "AdminUpdateParamDTO{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +

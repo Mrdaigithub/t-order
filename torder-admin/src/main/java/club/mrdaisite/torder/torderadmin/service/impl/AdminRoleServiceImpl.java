@@ -3,9 +3,9 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
+import club.mrdaisite.torder.tordermbg.mapper.AdminRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RolePermissionRelationMapper;
-import club.mrdaisite.torder.tordermbg.mapper.UserRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,7 +25,7 @@ public class AdminRoleServiceImpl implements AdminRoleService {
     @Autowired
     private RoleMapper roleMapper;
     @Autowired
-    private UserRoleRelationMapper userRoleRelationMapper;
+    private AdminRoleRelationMapper adminRoleRelationMapper;
     @Autowired
     private RolePermissionRelationMapper rolePermissionRelationMapper;
 
@@ -50,11 +50,11 @@ public class AdminRoleServiceImpl implements AdminRoleService {
     }
 
     @Override
-    public Role getRoleByUserId(Long id) {
-        UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
-        userRoleRelationExample.or().andUserIdEqualTo(id);
-        List<UserRoleRelation> userRoleRelationList = userRoleRelationMapper.selectByExample(userRoleRelationExample);
-        return roleMapper.selectByPrimaryKey(userRoleRelationList.get(0).getRoleId());
+    public Role getRoleByAdminId(Long id) {
+        AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
+        adminRoleRelationExample.or().andAdminIdEqualTo(id);
+        List<AdminRoleRelation> adminRoleRelationList = adminRoleRelationMapper.selectByExample(adminRoleRelationExample);
+        return roleMapper.selectByPrimaryKey(adminRoleRelationList.get(0).getRoleId());
     }
 
     @Override
@@ -78,11 +78,11 @@ public class AdminRoleServiceImpl implements AdminRoleService {
 
     @Override
     public void deleteRole(Long id) {
-        UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
-        userRoleRelationExample.or().andRoleIdEqualTo(id);
+        AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
+        adminRoleRelationExample.or().andRoleIdEqualTo(id);
         RolePermissionRelationExample rolePermissionRelationExample = new RolePermissionRelationExample();
         rolePermissionRelationExample.or().andRoleIdEqualTo(id);
-        userRoleRelationMapper.deleteByExample(userRoleRelationExample);
+        adminRoleRelationMapper.deleteByExample(adminRoleRelationExample);
         rolePermissionRelationMapper.deleteByExample(rolePermissionRelationExample);
         roleMapper.deleteByPrimaryKey(id);
     }

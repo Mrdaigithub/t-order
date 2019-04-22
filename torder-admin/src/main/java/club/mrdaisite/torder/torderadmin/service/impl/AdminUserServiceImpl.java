@@ -1,17 +1,14 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
-import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
-import club.mrdaisite.torder.tordermbg.mapper.UserRoleRelationMapper;
-import club.mrdaisite.torder.tordermbg.model.*;
+import club.mrdaisite.torder.tordermbg.model.User;
+import club.mrdaisite.torder.tordermbg.model.UserExample;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -20,12 +17,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author dai
@@ -35,13 +29,7 @@ import java.util.stream.Collectors;
 public class AdminUserServiceImpl implements AdminUserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
-    private AdminRoleService adminRoleService;
-    @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private RoleMapper roleMapper;
-    @Autowired
-    private UserRoleRelationMapper userRoleRelationMapper;
 
     @Override
     public List<Object> listUser(Integer page, Integer perPage, String sortBy, String order) {
@@ -57,17 +45,8 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public List<User> listUserByRoleId(Long roleId) throws CustomException {
-        if (!adminRoleService.roleExists(roleId)) {
-            throw new CustomException("不存在的角色组");
-        }
-        UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
-        userRoleRelationExample.or().andRoleIdEqualTo(roleId);
-        List<UserRoleRelation> userRoleRelationList = userRoleRelationMapper.selectByExample(userRoleRelationExample);
-        return userRoleRelationList.stream()
-                .map(userRoleRelation -> userMapper.selectByPrimaryKey(userRoleRelation.getUserId()))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    public List<User> listUser() {
+        return userMapper.selectByExample(new UserExample());
     }
 
     @Override
@@ -93,15 +72,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO, String roleName) {
+    public UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO) {
         User user = new User();
-        UserRoleRelation userRoleRelation = new UserRoleRelation();
         UserResultDTO userResultDTO = new UserResultDTO();
 
-        RoleExample roleExample = new RoleExample();
-        roleExample.or().andNameEqualTo(roleName);
-        List<Role> roleList = roleMapper.selectByExample(roleExample);
-        Role role = roleList.get(0);
         BeanUtils.copyProperties(userInsertParamDTO, user);
 
         String bCryptPassword = bCryptPasswordEncoder.encode(userInsertParamDTO.getPassword());
@@ -111,44 +85,27 @@ public class AdminUserServiceImpl implements AdminUserService {
         user.setGmtCreate(new Date());
         user.setGmtModified(new Date());
         userMapper.insert(user);
-        userRoleRelation.setUserId(user.getId());
-        userRoleRelation.setRoleId(role.getId());
-        userRoleRelation.setGmtCreate(new Date());
-        userRoleRelation.setGmtModified(new Date());
-        userRoleRelationMapper.insert(userRoleRelation);
         BeanUtils.copyProperties(user, userResultDTO);
         return userResultDTO;
     }
 
     @Override
-    public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException {
-        new FuncUtils().canOperateRole(id, roleName);
-        User user = new User();
-        org.apache.commons.beanutils.BeanUtils.copyProperties(user, userUpdateParamDTO);
+    public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws AccessDeniedException, CustomException {
+        User user = userMapper.selectByPrimaryKey(id);
+        BeanUtils.copyProperties(userUpdateParamDTO, user);
+        if (user.getPid() == null) {
+            user.setPid(null);
+        }
+        if (user.getPassword() != null) {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
         user.setGmtModified(new Date());
         userMapper.updateByPrimaryKeySelective(user);
-        UserResultDTO userResultDTO = new UserResultDTO();
-        BeanUtils.copyProperties(user, userResultDTO);
-        return userResultDTO;
+        return getUserById(id);
     }
 
     @Override
-    public Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException {
-        new FuncUtils().canOperateRole(id, roleName);
-        User user = new User();
-        String newPassword = bCryptPasswordEncoder.encode(updatePasswordParamDTO.getNewPassword());
-        user.setPassword(newPassword);
-        user.setGmtModified(new Date());
-        return userMapper.updateByPrimaryKey(user) == 1;
-    }
-
-    @Override
-    public void deleteUser(Long id, String roleName) throws AccessDeniedException {
-        new FuncUtils().canOperateRole(id, roleName);
-        User user = userMapper.selectByPrimaryKey(id);
-        UserRoleRelationExample userRoleRelationExample = new UserRoleRelationExample();
-        userRoleRelationExample.or().andUserIdEqualTo(user.getId());
-        userRoleRelationMapper.deleteByExample(userRoleRelationExample);
+    public void deleteUser(Long id) throws AccessDeniedException {
         userMapper.deleteByPrimaryKey(id);
     }
 

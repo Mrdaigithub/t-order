@@ -1,10 +1,8 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.MessageInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminMessageService;
-import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.tordermbg.mapper.MessageMapper;
@@ -26,8 +24,6 @@ import java.util.List;
 @Service
 public class AdminMessageServiceImpl implements AdminMessageService {
     @Autowired
-    private AdminRoleService adminRoleService;
-    @Autowired
     private AdminUserService adminUserService;
     @Autowired
     private MessageMapper messageMapper;
@@ -48,7 +44,7 @@ public class AdminMessageServiceImpl implements AdminMessageService {
     }
 
     @Override
-    public Message insertMessage(MessageInsertParamDTO messageInsertParamDTO, Long userId) throws CustomException {
+    public Message insertMessage(MessageInsertParamDTO messageInsertParamDTO, Long userId) {
         Message message = new Message();
         BeanUtils.copyProperties(messageInsertParamDTO, message);
         message.setBroadcasterId(userId);
@@ -58,14 +54,7 @@ public class AdminMessageServiceImpl implements AdminMessageService {
         messageMapper.insert(message);
         Long messageId = message.getId();
 
-        List<Role> roleList = adminRoleService.listRoleByName("user");
-        if (roleList.size() <= 0) {
-            throw new CustomException("不存在的角色组");
-        }
-        Role role = roleList.get(0);
-
-        List<User> userList = adminUserService.listUserByRoleId(role.getId());
-        LoggerUtil.logger.error(userList.toString());
+        List<User> userList = adminUserService.listUser();
         for (User user : userList) {
             MessageUserRelation messageUserRelation = new MessageUserRelation();
             messageUserRelation.setMessageId(messageId);

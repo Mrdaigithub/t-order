@@ -42,12 +42,12 @@ public interface AdminRoleService {
     Role getRoleById(Long id);
 
     /**
-     * 根据用户id获取指定角色组
+     * 根据管理员id获取指定角色组
      *
-     * @param id 用户id
+     * @param id 管理员id
      * @return 指定角色组
      */
-    Role getRoleByUserId(Long id);
+    Role getRoleByAdminId(Long id);
 
     /**
      * 添加角色组

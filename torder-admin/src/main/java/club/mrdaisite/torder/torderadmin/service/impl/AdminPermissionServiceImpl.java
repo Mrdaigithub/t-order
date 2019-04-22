@@ -4,7 +4,7 @@ import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
-import club.mrdaisite.torder.torderadmin.service.AdminUserService;
+import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.tordermbg.mapper.PermissionMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RolePermissionRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.*;
@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 public class AdminPermissionServiceImpl implements AdminPermissionService {
     @Autowired
-    private AdminUserService adminUserService;
+    private AdminAdminService adminAdminService;
     @Autowired
     private AdminRoleService adminRoleService;
     @Autowired
@@ -39,8 +39,8 @@ public class AdminPermissionServiceImpl implements AdminPermissionService {
     @Override
     public List<Permission> listPermissionByUsername(String username) {
         List<Permission> permissionList = new ArrayList<>();
-        User user = adminUserService.getUserByUsername(username);
-        Role role = adminRoleService.getRoleByUserId(user.getId());
+        Admin admin = adminAdminService.getAdminByUsername(username);
+        Role role = adminRoleService.getRoleByAdminId(admin.getId());
         RolePermissionRelationExample rolePermissionRelationExample = new RolePermissionRelationExample();
         rolePermissionRelationExample.or().andRoleIdEqualTo(role.getId());
         List<RolePermissionRelation> rolePermissionRelationList = rolePermissionRelationMapper.selectByExample(rolePermissionRelationExample);

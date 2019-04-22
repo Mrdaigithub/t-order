@@ -1,7 +1,6 @@
 package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.dto.UpdatePasswordParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
@@ -13,10 +12,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
- * AdminService
+ * AdminUserService
  *
  * @author dai
- * @date 2019/03/21
+ * @date 2019/04/22
  */
 public interface AdminUserService {
     /**
@@ -31,13 +30,11 @@ public interface AdminUserService {
     List<Object> listUser(Integer page, Integer perPage, String sortBy, String order);
 
     /**
-     * 根据角色组id获取用户列表
+     * 获取用户列表
      *
-     * @param roleId 角色组id
      * @return 用户列表
-     * @throws CustomException 角色组不存在异常
      */
-    List<User> listUserByRoleId(Long roleId) throws CustomException;
+    List<User> listUser();
 
     /**
      * 根据id获取后台管理员
@@ -60,45 +57,31 @@ public interface AdminUserService {
      * 添加用户
      *
      * @param userInsertParamDTO 用户参数
-     * @param roleName           角色组名
      * @return 返回添加的用户信息
      */
     @Transactional(rollbackFor = Exception.class)
-    UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO, String roleName);
+    UserResultDTO insertUser(UserInsertParamDTO userInsertParamDTO);
 
     /**
      * 修改用户信息
      *
      * @param id                 用户id
      * @param userUpdateParamDTO 修改后的用户参数
-     * @param roleName           修改的角色组
      * @return 修改后的用户信息
      * @throws AccessDeniedException     用户不存在异常
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO, String roleName) throws AccessDeniedException, InvocationTargetException, IllegalAccessException;
-
-    /**
-     * 修改用户密码
-     *
-     * @param id                     用户id
-     * @param updatePasswordParamDTO 新旧密码参数
-     * @param roleName               修改的角色组
-     * @return 密码是否修改
-     * @throws AccessDeniedException 用户不存在异常
-     */
-    Boolean updateUserPassword(Long id, UpdatePasswordParamDTO updatePasswordParamDTO, String roleName) throws AccessDeniedException;
+    UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws AccessDeniedException, CustomException;
 
     /**
      * 删除管理员
      *
-     * @param id       用户id
-     * @param roleName 修改的角色组
+     * @param id 用户id
      * @throws AccessDeniedException 用户不存在异常
      */
     @Transactional(rollbackFor = Exception.class)
-    void deleteUser(Long id, String roleName);
+    void deleteUser(Long id);
 
     /**
      * 判断用户是否存在
