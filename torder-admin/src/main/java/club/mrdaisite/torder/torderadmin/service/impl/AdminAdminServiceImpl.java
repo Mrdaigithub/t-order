@@ -1,11 +1,11 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.tordermbg.mapper.AdminMapper;
 import club.mrdaisite.torder.tordermbg.mapper.AdminRoleRelationMapper;
@@ -15,7 +15,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,9 +54,9 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public List<Admin> listAdminByRoleId(Long roleId) throws CustomException {
+    public List<Admin> listAdminByRoleId(Long roleId) {
         if (!adminRoleService.roleExists(roleId)) {
-            throw new CustomException("不存在的角色组");
+            new ErrorCodeUtils(4045000).throwError();
         }
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
         adminRoleRelationExample.or().andRoleIdEqualTo(roleId);
@@ -69,12 +68,13 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public AdminResultDTO getAdminById(Long id) throws CustomException {
+    public AdminResultDTO getAdminById(Long id) {
         AdminResultDTO adminResultDTO = new AdminResultDTO();
         Admin admin = adminMapper.selectByPrimaryKey(id);
         if (admin == null) {
-            throw new CustomException("不存在的用户");
+            new ErrorCodeUtils(4040000).throwError();
         }
+        assert admin != null;
         BeanUtils.copyProperties(admin, adminResultDTO);
         return adminResultDTO;
     }
@@ -84,10 +84,11 @@ public class AdminAdminServiceImpl implements AdminAdminService {
         AdminExample adminExample = new AdminExample();
         adminExample.or().andUsernameEqualTo(username);
         List<Admin> adminList = adminMapper.selectByExample(adminExample);
-        if (adminList != null && adminList.size() > 0) {
-            return adminList.get(0);
+        if (adminList == null || adminList.size() <= 0) {
+            new ErrorCodeUtils(4040000).throwError();
         }
-        return null;
+        assert adminList != null;
+        return adminList.get(0);
     }
 
     @Override
@@ -118,7 +119,10 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO) throws AccessDeniedException, CustomException {
+    public AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO) {
+        if (!adminExists(id)) {
+            new ErrorCodeUtils(4040000).throwError();
+        }
         Admin admin = adminMapper.selectByPrimaryKey(id);
         BeanUtils.copyProperties(adminUpdateParamDTO, admin);
         if (admin.getPassword() != null) {
@@ -131,6 +135,9 @@ public class AdminAdminServiceImpl implements AdminAdminService {
 
     @Override
     public void deleteAdmin(Long id) {
+        if (!adminExists(id)) {
+            new ErrorCodeUtils(4040000).throwError();
+        }
         Admin admin = adminMapper.selectByPrimaryKey(id);
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
         adminRoleRelationExample.or().andAdminIdEqualTo(admin.getId());

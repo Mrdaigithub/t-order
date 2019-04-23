@@ -1,4 +1,4 @@
-package club.mrdaisite.torder.torderadmin.component;
+package club.mrdaisite.torder.torderadmin.exception;
 
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -90,8 +90,28 @@ public class GlobalExceptionHandler {
         return new CommonResult().internalServerError("数组索引超出界限");
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity customExceptionHandler(CustomException exception) {
+    @ExceptionHandler(CustomBadRequestException.class)
+    public ResponseEntity customBadRequestException(CustomBadRequestException exception) {
+        return new CommonResult().badRequest(exception.getMessage());
+    }
+
+    @ExceptionHandler(CustomUnauthorizedException.class)
+    public ResponseEntity customUnauthorizedException(CustomUnauthorizedException exception) {
+        return new CommonResult().unauthorized(exception.getMessage());
+    }
+
+    @ExceptionHandler(CustomForbiddenException.class)
+    public ResponseEntity customForbiddenException(CustomForbiddenException exception) {
+        return new CommonResult().forbidden(exception.getMessage());
+    }
+
+    @ExceptionHandler(CustomNotFoundException.class)
+    public ResponseEntity customNotFoundException(CustomNotFoundException exception) {
+        return new CommonResult().forbidden(exception.getMessage());
+    }
+
+    @ExceptionHandler(CustomInternalException.class)
+    public ResponseEntity customExceptionHandler(CustomInternalException exception) {
         return new CommonResult().internalServerError(exception.getMessage());
     }
 

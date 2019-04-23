@@ -1,6 +1,5 @@
 package club.mrdaisite.torder.torderadmin.service;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
@@ -31,20 +30,18 @@ public interface AdminAdminService {
     /**
      * 根据角色组id获取管理员列表
      *
-     * @param roleId 角色组id
+     * @param roleId roleId 角色组id
      * @return 管理员列表
-     * @throws CustomException 角色组不存在异常
      */
-    List<Admin> listAdminByRoleId(Long roleId) throws CustomException;
+    List<Admin> listAdminByRoleId(Long roleId);
 
     /**
      * 根据id获取管理员
      *
      * @param id 管理员id
      * @return 指定后台管理员
-     * @throws CustomException 用户不存在异常
      */
-    AdminResultDTO getAdminById(Long id) throws CustomException;
+    AdminResultDTO getAdminById(Long id);
 
     /**
      * 根据用户名获取后台管理员
@@ -70,14 +67,13 @@ public interface AdminAdminService {
      * @param id                  管理员id
      * @param adminUpdateParamDTO 修改后的管理员参数
      * @return 修改后的管理员信息
-     * @throws AccessDeniedException 管理员不存在异常
      */
-    AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO) throws AccessDeniedException, CustomException;
+    AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO);
 
     /**
      * 删除管理员
      *
-     * @param id       管理员id
+     * @param id 管理员id
      * @throws AccessDeniedException 管理员不存在异常
      */
     @Transactional(rollbackFor = Exception.class)

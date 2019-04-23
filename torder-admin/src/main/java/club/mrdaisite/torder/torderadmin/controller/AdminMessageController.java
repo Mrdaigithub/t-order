@@ -1,11 +1,11 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.MessageInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminMessageService;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.model.Admin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,9 +46,9 @@ public class AdminMessageController {
     @ApiOperation(value = "获取指定单个消息")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('message:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
+    public ResponseEntity getUserById(@PathVariable Long id) {
         if (!adminMessageService.messageExists(id)) {
-            throw new CustomException("不存在的消息");
+            new ErrorCodeUtils(4043000).throwError();
         }
         return new CommonResult().success(adminMessageService.getMessageById(id));
     }
@@ -56,10 +56,10 @@ public class AdminMessageController {
     @ApiOperation(value = "添加消息")
     @PostMapping()
     @PreAuthorize("hasAuthority('message:create')")
-    public ResponseEntity insertMessage(@Validated @RequestBody MessageInsertParamDTO messageInsertParamDTO, BindingResult result, Principal principal) throws CustomException {
+    public ResponseEntity insertMessage(@Validated @RequestBody MessageInsertParamDTO messageInsertParamDTO, BindingResult result, Principal principal) {
         Admin admin = adminAdminService.getAdminByUsername(principal.getName());
         if (!adminAdminService.adminExists(admin.getId())) {
-            throw new CustomException("不存在的用户");
+            new ErrorCodeUtils(4041000).throwError();
         }
         return new CommonResult().success(adminMessageService.insertMessage(messageInsertParamDTO, admin.getId()));
     }
@@ -67,9 +67,9 @@ public class AdminMessageController {
     @ApiOperation(value = "修改消息信息")
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('message:update')")
-    public ResponseEntity updateMessage(@PathVariable Long id, @Validated @RequestBody MessageUpdateParamDTO messageUpdateParamDTO, BindingResult result) throws CustomException {
+    public ResponseEntity updateMessage(@PathVariable Long id, @Validated @RequestBody MessageUpdateParamDTO messageUpdateParamDTO, BindingResult result) {
         if (!adminMessageService.messageExists(id)) {
-            throw new CustomException("不存在的消息");
+            new ErrorCodeUtils(4043000).throwError();
         }
         return new CommonResult().success(adminMessageService.updateMessage(id, messageUpdateParamDTO));
     }
@@ -77,9 +77,9 @@ public class AdminMessageController {
     @ApiOperation(value = "删除消息")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('message:delete')")
-    public void deleteMessage(@PathVariable Long id) throws CustomException {
+    public void deleteMessage(@PathVariable Long id) {
         if (!adminMessageService.messageExists(id)) {
-            throw new CustomException("不存在的消息");
+            new ErrorCodeUtils(4043000).throwError();
         }
         adminMessageService.deleteMessage(id);
     }

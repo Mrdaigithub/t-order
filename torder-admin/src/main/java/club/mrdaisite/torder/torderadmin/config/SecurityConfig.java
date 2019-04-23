@@ -3,7 +3,6 @@ package club.mrdaisite.torder.torderadmin.config;
 import club.mrdaisite.torder.torderadmin.bo.AdminUserDetails;
 import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
 import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
-import club.mrdaisite.torder.torderadmin.component.RestfulAccessDeniedHandler;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.tordermbg.model.Admin;
@@ -42,8 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AdminAdminService adminAdminService;
     @Autowired
     private AdminPermissionService adminPermissionService;
-    @Autowired
-    private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 

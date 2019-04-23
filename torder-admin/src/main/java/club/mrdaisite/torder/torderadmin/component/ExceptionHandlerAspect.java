@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Order(1)
 public class ExceptionHandlerAspect {
-    @Pointcut("execution(public * club.mrdaisite.torder.torderadmin.component.GlobalExceptionHandler.*(..))")
+    @Pointcut("execution(public * club.mrdaisite.torder.torderadmin.exception.GlobalExceptionHandler.*(..))")
     public void exceptionHandler() {
     }
 

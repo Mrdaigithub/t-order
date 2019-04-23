@@ -1,10 +1,10 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class AdminUserController {
     @ApiOperation(value = "获取指定单个用户")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('user:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
+    public ResponseEntity getUserById(@PathVariable Long id) {
         return new CommonResult().success(adminUserService.getUserById(id));
     }
 
@@ -54,9 +54,9 @@ public class AdminUserController {
     @ApiOperation(value = "修改用户信息")
     @PutMapping(value = "/user/{id}")
     @PreAuthorize("hasAuthority('user:update')")
-    public ResponseEntity updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) throws CustomException {
-        if (!adminUserService.userExists(id)){
-            throw new CustomException("不存在的用户");
+    public ResponseEntity updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) {
+        if (!adminUserService.userExists(id)) {
+            new ErrorCodeUtils(4041000).throwError();
         }
         return new CommonResult().success(adminUserService.updateUser(id, userUpdateParamDTO));
     }
@@ -64,9 +64,9 @@ public class AdminUserController {
     @ApiOperation(value = "删除用户")
     @DeleteMapping(value = "/user/{id}")
     @PreAuthorize("hasAuthority('user:delete')")
-    public void deleteUser(@PathVariable Long id) throws CustomException {
-        if (!adminUserService.userExists(id)){
-            throw new CustomException("不存在的用户");
+    public void deleteUser(@PathVariable Long id) {
+        if (!adminUserService.userExists(id)) {
+            new ErrorCodeUtils(4041000).throwError();
         }
         adminUserService.deleteUser(id);
     }

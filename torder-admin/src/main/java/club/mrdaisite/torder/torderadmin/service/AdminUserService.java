@@ -1,14 +1,13 @@
 package club.mrdaisite.torder.torderadmin.service;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.*;
 import club.mrdaisite.torder.tordermbg.model.User;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -41,9 +40,9 @@ public interface AdminUserService {
      *
      * @param id 管理员id
      * @return 指定后台管理员
-     * @throws CustomException 用户不存在异常
+     * @throws CustomInternalException 用户不存在异常
      */
-    UserResultDTO getUserById(Long id) throws CustomException;
+    UserResultDTO getUserById(Long id) ;
 
     /**
      * 根据用户名获取后台管理员
@@ -69,10 +68,8 @@ public interface AdminUserService {
      * @param userUpdateParamDTO 修改后的用户参数
      * @return 修改后的用户信息
      * @throws AccessDeniedException     用户不存在异常
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
      */
-    UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws AccessDeniedException, CustomException;
+    UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws AccessDeniedException;
 
     /**
      * 删除管理员

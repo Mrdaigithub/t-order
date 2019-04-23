@@ -1,8 +1,10 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.dto.*;
+import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +37,9 @@ public class AdminPermissionController {
     @ApiOperation(value = "获取指定单个权限")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('permission:read')")
-    public ResponseEntity getPermissionById(@PathVariable Long id) throws CustomException {
+    public ResponseEntity getPermissionById(@PathVariable Long id) {
         if (!adminPermissionService.permissionExists(id)) {
-            throw new CustomException("不存在的权限");
+            new ErrorCodeUtils(4046000).throwError();
         }
         return new CommonResult().success(adminPermissionService.getPermissionById(id));
     }
@@ -52,9 +54,9 @@ public class AdminPermissionController {
     @ApiOperation(value = "修改权限信息")
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:update')")
-    public ResponseEntity updatePermission(@PathVariable Long id, @Validated @RequestBody PermissionUpdateParamDTO permissionUpdateParamDTO, BindingResult result) throws CustomException {
+    public ResponseEntity updatePermission(@PathVariable Long id, @Validated @RequestBody PermissionUpdateParamDTO permissionUpdateParamDTO, BindingResult result) {
         if (!adminPermissionService.permissionExists(id)) {
-            throw new CustomException("不存在的权限");
+            new ErrorCodeUtils(4046000).throwError();
         }
         return new CommonResult().success(adminPermissionService.updatePermission(id, permissionUpdateParamDTO));
     }
@@ -62,9 +64,9 @@ public class AdminPermissionController {
     @ApiOperation(value = "删除权限")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:delete')")
-    public void deletePermission(@PathVariable Long id) throws CustomException {
+    public void deletePermission(@PathVariable Long id) {
         if (!adminPermissionService.permissionExists(id)) {
-            throw new CustomException("不存在的权限");
+            new ErrorCodeUtils(4046000).throwError();
         }
         adminPermissionService.deletePermission(id);
     }

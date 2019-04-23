@@ -1,8 +1,11 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
-import club.mrdaisite.torder.torderadmin.dto.*;
+import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
+import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.model.Admin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +45,10 @@ public class AdminAdminController {
     @ApiOperation(value = "获取当前登录管理员")
     @GetMapping(value = "/info")
     public ResponseEntity getInfo(Principal principal) {
+        if (principal == null) {
+            new ErrorCodeUtils(4030000).throwError();
+        }
+        assert principal != null;
         Admin admin = adminAdminService.getAdminByUsername(principal.getName());
         AdminResultDTO adminResultDTO = new AdminResultDTO();
         BeanUtils.copyProperties(admin, adminResultDTO);
@@ -51,7 +58,7 @@ public class AdminAdminController {
     @ApiOperation(value = "获取指定单个管理员")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('admin:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) throws CustomException {
+    public ResponseEntity getUserById(@PathVariable Long id) {
         return new CommonResult().success(adminAdminService.getAdminById(id));
     }
 
@@ -61,7 +68,7 @@ public class AdminAdminController {
     public ResponseEntity insertAdmin(@Validated @RequestBody AdminInsertParamDTO adminInsertParamDTO, BindingResult result) {
         AdminResultDTO adminResultDTO = adminAdminService.insertAdmin(adminInsertParamDTO, "admin");
         if (adminResultDTO == null) {
-            return new CommonResult().internalServerError(null);
+            new ErrorCodeUtils(5000000).throwError();
         }
         return new CommonResult().success(adminResultDTO);
     }
@@ -69,20 +76,14 @@ public class AdminAdminController {
     @ApiOperation(value = "修改管理员信息")
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity updateAdmin(@PathVariable Long id, @Validated @RequestBody AdminUpdateParamDTO adminUpdateParamDTO, BindingResult result) throws CustomException {
-        if (!adminAdminService.adminExists(id)) {
-            throw new CustomException("不存在的用户");
-        }
+    public ResponseEntity updateAdmin(@PathVariable Long id, @Validated @RequestBody AdminUpdateParamDTO adminUpdateParamDTO, BindingResult result) {
         return new CommonResult().success(adminAdminService.updateAdmin(id, adminUpdateParamDTO));
     }
 
     @ApiOperation(value = "删除管理员")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('admin:delete')")
-    public void deleteAdmin(@PathVariable Long id) throws CustomException {
-        if (!adminAdminService.adminExists(id)){
-            throw new CustomException("不存在的用户");
-        }
+    public void deleteAdmin(@PathVariable Long id) {
         adminAdminService.deleteAdmin(id);
     }
 }

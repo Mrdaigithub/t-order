@@ -1,10 +1,10 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
-import club.mrdaisite.torder.torderadmin.component.CustomException;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.tordermbg.mapper.UserMapper;
 import club.mrdaisite.torder.tordermbg.model.User;
@@ -50,11 +50,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public UserResultDTO getUserById(Long id) throws CustomException {
+    public UserResultDTO getUserById(Long id) {
         UserResultDTO userResultDTO = new UserResultDTO();
         User user = userMapper.selectByPrimaryKey(id);
         if (user == null) {
-            throw new CustomException("不存在的用户");
+            new ErrorCodeUtils(4041000).throwError();
         }
         BeanUtils.copyProperties(user, userResultDTO);
         return userResultDTO;
@@ -90,7 +90,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws AccessDeniedException, CustomException {
+    public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws AccessDeniedException{
         User user = userMapper.selectByPrimaryKey(id);
         BeanUtils.copyProperties(userUpdateParamDTO, user);
         if (user.getPid() == null) {
