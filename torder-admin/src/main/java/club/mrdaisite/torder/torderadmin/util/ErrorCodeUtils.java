@@ -18,73 +18,90 @@ public class ErrorCodeUtils {
      * @param eC 错误码
      */
     public ErrorCodeUtils(Integer eC) {
-        // admin
         HashMap<Integer, String> hashMap = new HashMap<>();
+
+        // global
+        hashMap.put(4000000, "参数指定的数据已存在");
+        hashMap.put(4000001, "必要的请求参数不存在");
+        hashMap.put(4000002, "Http媒体类型不支持");
+        hashMap.put(4000003, "路径参数不存在");
+        hashMap.put(4000004, "方法参数类型不匹配");
+        hashMap.put(4010000, "用户名或密码错误");
         hashMap.put(4030000, "账号未登录");
-        hashMap.put(4040000, "不存在的管理员");
-        hashMap.put(5000000, "添加管理员失败");
+        hashMap.put(4030001, "无权限操作");
+        hashMap.put(4030002, "此账号未启用");
+        hashMap.put(4040000, "不允许访问");
+        hashMap.put(4050000, "请求方法不支持");
+        hashMap.put(5000000, "未知错误");
+        hashMap.put(5000001, "错误的sql语法");
+        hashMap.put(5000002, "空指针错误");
+        hashMap.put(5000003, "算术异常");
+        hashMap.put(5000004, "数组索引超出界限");
+        hashMap.put(5000005, "插入到数据库的数据不完整");
+        // admin
+        hashMap.put(4041000, "不存在的管理员");
+        hashMap.put(5001000, "添加管理员失败");
         // user
-        hashMap.put(4041000, "不存在的用户");
-        // user
-        hashMap.put(4042000, "不存在的商铺");
+        hashMap.put(4042000, "不存在的用户");
+        // merchants
+        hashMap.put(4043000, "不存在的商铺");
         // message
-        hashMap.put(4043000, "不存在的消息");
+        hashMap.put(4044000, "不存在的消息");
         // message
-        hashMap.put(4044000, "不存在的配置项");
+        hashMap.put(4045000, "不存在的配置项");
         // role
-        hashMap.put(4045000, "不存在的角色组");
+        hashMap.put(4046000, "不存在的角色组");
         // permission
-        hashMap.put(4046000, "不存在的权限");
+        hashMap.put(4047000, "不存在的权限");
 
         setECode(eC);
         setEMessage(hashMap.get(eC));
     }
 
-    public void throwError() {
+    public void throwBadRequestException() throws CustomBadRequestException {
         if (getEMessage() == null || getECode() == null) {
             return;
         }
-        switch (getECode().toString().substring(0, 3)) {
-            case "400":
-                try {
-                    throw new CustomBadRequestException(eMessage);
-                } catch (CustomBadRequestException e) {
-                    e.printStackTrace();
-                }
-            case "401":
-                try {
-                    throw new CustomUnauthorizedException(eMessage);
-                } catch (CustomUnauthorizedException e) {
-                    e.printStackTrace();
-                }
-            case "403":
-                try {
-                    throw new CustomForbiddenException(eMessage);
-                } catch (CustomForbiddenException e) {
-                    e.printStackTrace();
-                }
-            case "404":
-                try {
-                    throw new CustomNotFoundException(eMessage);
-                } catch (CustomNotFoundException e) {
-                    e.printStackTrace();
-                }
-            case "500":
-                try {
-                    throw new CustomInternalException(eMessage);
-                } catch (CustomInternalException e) {
-                    e.printStackTrace();
-                }
-            default:
-                try {
-                    throw new CustomInternalException("未知错误");
-                } catch (CustomInternalException e) {
-                    e.printStackTrace();
-                }
-        }
+        throw new CustomBadRequestException(getEMessage());
     }
 
-    private Integer getECode() {
+    public void throwUnauthorizedException() throws CustomUnauthorizedException {
+        if (getEMessage() == null || getECode() == null) {
+            return;
+        }
+        throw new CustomUnauthorizedException(getEMessage());
+    }
+
+    public void throwForbiddenException() throws CustomForbiddenException {
+        if (getEMessage() == null || getECode() == null) {
+            return;
+        }
+        throw new CustomForbiddenException(getEMessage());
+    }
+
+    public void throwNotFoundException() throws CustomNotFoundException {
+        if (getEMessage() == null || getECode() == null) {
+            return;
+        }
+        LoggerUtil.logger.warn("ok2");
+        throw new CustomNotFoundException(getEMessage());
+    }
+
+    public void throwMethodNotAllowedException() throws CustomMethodNotAllowedException {
+        if (getEMessage() == null || getECode() == null) {
+            return;
+        }
+        throw new CustomMethodNotAllowedException(getEMessage());
+    }
+
+    public void throwInternalException() throws CustomInternalException {
+        if (getEMessage() == null || getECode() == null) {
+            return;
+        }
+        throw new CustomInternalException(getEMessage());
+    }
+
+    public Integer getECode() {
         return eCode;
     }
 
@@ -92,7 +109,7 @@ public class ErrorCodeUtils {
         this.eCode = eCode;
     }
 
-    private String getEMessage() {
+    public String getEMessage() {
         return eMessage;
     }
 

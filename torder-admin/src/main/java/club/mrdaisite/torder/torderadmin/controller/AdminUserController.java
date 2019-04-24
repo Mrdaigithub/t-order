@@ -3,6 +3,7 @@ package club.mrdaisite.torder.torderadmin.controller;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
@@ -40,7 +41,7 @@ public class AdminUserController {
     @ApiOperation(value = "获取指定单个用户")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('user:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) {
+    public ResponseEntity getUserById(@PathVariable Long id) throws CustomNotFoundException {
         return new CommonResult().success(adminUserService.getUserById(id));
     }
 
@@ -54,9 +55,9 @@ public class AdminUserController {
     @ApiOperation(value = "修改用户信息")
     @PutMapping(value = "/user/{id}")
     @PreAuthorize("hasAuthority('user:update')")
-    public ResponseEntity updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) {
+    public ResponseEntity updateUser(@PathVariable Long id, @Validated @RequestBody UserUpdateParamDTO userUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
         if (!adminUserService.userExists(id)) {
-            new ErrorCodeUtils(4041000).throwError();
+            new ErrorCodeUtils(4042000).throwNotFoundException();
         }
         return new CommonResult().success(adminUserService.updateUser(id, userUpdateParamDTO));
     }
@@ -64,9 +65,9 @@ public class AdminUserController {
     @ApiOperation(value = "删除用户")
     @DeleteMapping(value = "/user/{id}")
     @PreAuthorize("hasAuthority('user:delete')")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminUserService.userExists(id)) {
-            new ErrorCodeUtils(4041000).throwError();
+            new ErrorCodeUtils(4042000).throwNotFoundException();
         }
         adminUserService.deleteUser(id);
     }

@@ -3,6 +3,7 @@ package club.mrdaisite.torder.torderadmin.controller;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
@@ -40,9 +41,9 @@ public class AdminRoleController {
     @ApiOperation(value = "获取指定单个角色组")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:read')")
-    public ResponseEntity getRoleById(@PathVariable Long id) {
+    public ResponseEntity getRoleById(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminRoleService.roleExists(id)) {
-            new ErrorCodeUtils(4045000).throwError();
+            new ErrorCodeUtils(4046000).throwNotFoundException();
         }
         return new CommonResult().success(adminRoleService.getRoleById(id));
     }
@@ -57,9 +58,9 @@ public class AdminRoleController {
     @ApiOperation(value = "修改角色组信息")
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:update')")
-    public ResponseEntity updateRole(@PathVariable Long id, @Validated @RequestBody RoleUpdateParamDTO roleUpdateParamDTO, BindingResult result) {
+    public ResponseEntity updateRole(@PathVariable Long id, @Validated @RequestBody RoleUpdateParamDTO roleUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
         if (!adminRoleService.roleExists(id)) {
-            new ErrorCodeUtils(4045000).throwError();
+            new ErrorCodeUtils(4046000).throwNotFoundException();
         }
         return new CommonResult().success(adminRoleService.updateRole(id, roleUpdateParamDTO));
     }
@@ -67,9 +68,9 @@ public class AdminRoleController {
     @ApiOperation(value = "删除角色组")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:delete')")
-    public void deleteRole(@PathVariable Long id) {
+    public void deleteRole(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminRoleService.roleExists(id)) {
-            new ErrorCodeUtils(4045000).throwError();
+            new ErrorCodeUtils(4046000).throwNotFoundException();
         }
         adminRoleService.deleteRole(id);
     }

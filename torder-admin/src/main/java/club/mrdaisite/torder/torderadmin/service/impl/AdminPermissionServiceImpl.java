@@ -2,6 +2,7 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
@@ -37,7 +38,7 @@ public class AdminPermissionServiceImpl implements AdminPermissionService {
     }
 
     @Override
-    public List<Permission> listPermissionByUsername(String username) {
+    public List<Permission> listPermissionByUsername(String username) throws CustomNotFoundException {
         List<Permission> permissionList = new ArrayList<>();
         Admin admin = adminAdminService.getAdminByUsername(username);
         Role role = adminRoleService.getRoleByAdminId(admin.getId());

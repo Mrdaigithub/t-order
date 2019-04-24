@@ -1,6 +1,8 @@
 package club.mrdaisite.torder.torderadmin.exception;
 
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,67 +30,72 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity badCredentialsExceptionHandler(HttpServletRequest request, BadCredentialsException exception) {
-        return new CommonResult().unauthorized("用户名或密码错误");
+        return new CommonResult().unauthorized(new ErrorCodeUtils(4010000).getEMessage());
     }
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity badCredentialsExceptionHandler(HttpServletRequest request, DisabledException exception) {
-        return new CommonResult().forbidden("此用户未启用");
+        return new CommonResult().forbidden(new ErrorCodeUtils(4030002).getEMessage());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity duplicateKeyExceptionHandler(HttpServletRequest request, DuplicateKeyException exception) {
-        return new CommonResult().badRequest("参数指定的数据已存在");
+        return new CommonResult().badRequest(new ErrorCodeUtils(4000000).getEMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity dataIntegrityViolationExceptionHandler(HttpServletRequest request, DataIntegrityViolationException exception) {
-        return new CommonResult().internalServerError("插入到数据库的数据不完整");
+        return new CommonResult().internalServerError(new ErrorCodeUtils(5000005).getEMessage());
     }
 
     @ExceptionHandler(MissingPathVariableException.class)
     public ResponseEntity missingPathVariableExceptionHandler(HttpServletRequest request, MissingPathVariableException exception) {
-        return new CommonResult().internalServerError("路径参数不存在");
+        return new CommonResult().badRequest(new ErrorCodeUtils(4000003).getEMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity methodArgumentTypeMismatchExceptionHandler(HttpServletRequest request, MethodArgumentTypeMismatchException exception) {
+        return new CommonResult().badRequest(new ErrorCodeUtils(4000004).getEMessage());
     }
 
     @ExceptionHandler(BadSqlGrammarException.class)
     public ResponseEntity badSqlGrammarExceptionHandler(HttpServletRequest request, BadSqlGrammarException exception) {
-        return new CommonResult().internalServerError("错误的sql语法");
+        return new CommonResult().internalServerError(new ErrorCodeUtils(5000001).getEMessage());
     }
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity nullPointerExceptionHandler(HttpServletRequest request, NullPointerException exception) {
-        return new CommonResult().notFound("空指针错误");
+        return new CommonResult().internalServerError(new ErrorCodeUtils(5000002).getEMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity accessDeniedExceptionHandler(HttpServletRequest request, AccessDeniedException exception) {
-        return new CommonResult().forbidden("不允许访问");
+        return new CommonResult().forbidden(new ErrorCodeUtils(4030001).getEMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity httpRequestMethodNotSupportedExceptionHandler(HttpServletRequest request, HttpRequestMethodNotSupportedException exception) {
-        return new CommonResult().methodNotAllowed("请求方法不支持");
+        return new CommonResult().methodNotAllowed(new ErrorCodeUtils(4050000).getEMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity httpMessageNotReadableExceptionHandler(HttpServletRequest request, HttpMessageNotReadableException exception) {
-        return new CommonResult().badRequest("必要的请求参数不存在");
+        return new CommonResult().badRequest(new ErrorCodeUtils(4000001).getEMessage());
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity httpMediaTypeNotSupportedExceptionHandler(HttpServletRequest request, HttpMediaTypeNotSupportedException exception) {
-        return new CommonResult().badRequest("Http媒体类型不支持");
+        return new CommonResult().badRequest(new ErrorCodeUtils(4000002).getEMessage());
     }
 
     @ExceptionHandler(ArithmeticException.class)
     public ResponseEntity arithmeticExceptionHandler(HttpServletRequest request, ArithmeticException exception) {
-        return new CommonResult().badRequest("算术异常");
+        return new CommonResult().internalServerError(new ErrorCodeUtils(5000003).getEMessage());
     }
 
     @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
     public ResponseEntity arrayIndexOutOfBoundsExceptionHandler(HttpServletRequest request, ArrayIndexOutOfBoundsException exception) {
-        return new CommonResult().internalServerError("数组索引超出界限");
+        return new CommonResult().internalServerError(new ErrorCodeUtils(5000004).getEMessage());
     }
 
     @ExceptionHandler(CustomBadRequestException.class)
@@ -107,6 +115,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomNotFoundException.class)
     public ResponseEntity customNotFoundException(CustomNotFoundException exception) {
+        LoggerUtil.logger.warn("ok3");
         return new CommonResult().forbidden(exception.getMessage());
     }
 
@@ -117,6 +126,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity exceptionHandler(HttpServletRequest request, Exception exception) {
-        return new CommonResult().internalServerError("未知错误");
+        return new CommonResult().internalServerError(new ErrorCodeUtils(5000000).getEMessage());
     }
 }

@@ -3,6 +3,7 @@ package club.mrdaisite.torder.torderadmin.config;
 import club.mrdaisite.torder.torderadmin.bo.AdminUserDetails;
 import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
 import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.tordermbg.model.Admin;
@@ -72,9 +73,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsServiceBean() {
         return username -> {
-            Admin admin = adminAdminService.getAdminByUsername(username);
+            Admin admin = null;
+            try {
+                admin = adminAdminService.getAdminByUsername(username);
+            } catch (CustomNotFoundException e) {
+                e.printStackTrace();
+            }
             if (admin != null) {
-                List<Permission> permissionList = adminPermissionService.listPermissionByUsername(admin.getUsername());
+                List<Permission> permissionList = null;
+                try {
+                    permissionList = adminPermissionService.listPermissionByUsername(admin.getUsername());
+                } catch (CustomNotFoundException e) {
+                    e.printStackTrace();
+                }
                 return new AdminUserDetails(admin, permissionList);
             }
             throw new UsernameNotFoundException("用户名或密码错误");

@@ -3,6 +3,7 @@ package club.mrdaisite.torder.torderadmin.controller;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
@@ -37,9 +38,9 @@ public class AdminPermissionController {
     @ApiOperation(value = "获取指定单个权限")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('permission:read')")
-    public ResponseEntity getPermissionById(@PathVariable Long id) {
+    public ResponseEntity getPermissionById(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminPermissionService.permissionExists(id)) {
-            new ErrorCodeUtils(4046000).throwError();
+            new ErrorCodeUtils(4047000).throwNotFoundException();
         }
         return new CommonResult().success(adminPermissionService.getPermissionById(id));
     }
@@ -54,9 +55,9 @@ public class AdminPermissionController {
     @ApiOperation(value = "修改权限信息")
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:update')")
-    public ResponseEntity updatePermission(@PathVariable Long id, @Validated @RequestBody PermissionUpdateParamDTO permissionUpdateParamDTO, BindingResult result) {
+    public ResponseEntity updatePermission(@PathVariable Long id, @Validated @RequestBody PermissionUpdateParamDTO permissionUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
         if (!adminPermissionService.permissionExists(id)) {
-            new ErrorCodeUtils(4046000).throwError();
+            new ErrorCodeUtils(4047000).throwNotFoundException();
         }
         return new CommonResult().success(adminPermissionService.updatePermission(id, permissionUpdateParamDTO));
     }
@@ -64,9 +65,9 @@ public class AdminPermissionController {
     @ApiOperation(value = "删除权限")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:delete')")
-    public void deletePermission(@PathVariable Long id) {
+    public void deletePermission(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminPermissionService.permissionExists(id)) {
-            new ErrorCodeUtils(4046000).throwError();
+            new ErrorCodeUtils(4047000).throwNotFoundException();
         }
         adminPermissionService.deletePermission(id);
     }

@@ -2,6 +2,7 @@ package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ public interface AdminPermissionService {
      * @param username 用户名
      * @return 指定用户的权限列表
      */
-    List<Permission> listPermissionByUsername(String username);
+    List<Permission> listPermissionByUsername(String username) throws CustomNotFoundException;
 
     /**
      * 根据id获取指定权限

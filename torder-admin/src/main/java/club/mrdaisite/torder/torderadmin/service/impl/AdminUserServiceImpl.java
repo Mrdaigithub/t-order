@@ -3,6 +3,7 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 import club.mrdaisite.torder.torderadmin.dto.UserInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.UserUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminUserService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
@@ -13,7 +14,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,11 +50,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public UserResultDTO getUserById(Long id) {
+    public UserResultDTO getUserById(Long id) throws CustomNotFoundException {
         UserResultDTO userResultDTO = new UserResultDTO();
         User user = userMapper.selectByPrimaryKey(id);
         if (user == null) {
-            new ErrorCodeUtils(4041000).throwError();
+            new ErrorCodeUtils(4042000).throwNotFoundException();
         }
         BeanUtils.copyProperties(user, userResultDTO);
         return userResultDTO;
@@ -90,7 +90,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws AccessDeniedException{
+    public UserResultDTO updateUser(Long id, UserUpdateParamDTO userUpdateParamDTO) throws CustomNotFoundException {
         User user = userMapper.selectByPrimaryKey(id);
         BeanUtils.copyProperties(userUpdateParamDTO, user);
         if (user.getPid() == null) {
@@ -105,7 +105,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void deleteUser(Long id) throws AccessDeniedException {
+    public void deleteUser(Long id) {
         userMapper.deleteByPrimaryKey(id);
     }
 

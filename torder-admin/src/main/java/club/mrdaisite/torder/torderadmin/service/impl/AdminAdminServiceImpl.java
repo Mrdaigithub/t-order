@@ -3,6 +3,7 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
@@ -54,9 +55,9 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public List<Admin> listAdminByRoleId(Long roleId) {
+    public List<Admin> listAdminByRoleId(Long roleId) throws CustomNotFoundException {
         if (!adminRoleService.roleExists(roleId)) {
-            new ErrorCodeUtils(4045000).throwError();
+            new ErrorCodeUtils(4046000).throwNotFoundException();
         }
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
         adminRoleRelationExample.or().andRoleIdEqualTo(roleId);
@@ -68,11 +69,11 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public AdminResultDTO getAdminById(Long id) {
+    public AdminResultDTO getAdminById(Long id) throws CustomNotFoundException {
         AdminResultDTO adminResultDTO = new AdminResultDTO();
         Admin admin = adminMapper.selectByPrimaryKey(id);
         if (admin == null) {
-            new ErrorCodeUtils(4040000).throwError();
+            new ErrorCodeUtils(4041000).throwNotFoundException();
         }
         assert admin != null;
         BeanUtils.copyProperties(admin, adminResultDTO);
@@ -80,12 +81,12 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public Admin getAdminByUsername(String username) {
+    public Admin getAdminByUsername(String username) throws CustomNotFoundException {
         AdminExample adminExample = new AdminExample();
         adminExample.or().andUsernameEqualTo(username);
         List<Admin> adminList = adminMapper.selectByExample(adminExample);
         if (adminList == null || adminList.size() <= 0) {
-            new ErrorCodeUtils(4040000).throwError();
+            new ErrorCodeUtils(4041000).throwNotFoundException();
         }
         assert adminList != null;
         return adminList.get(0);
@@ -119,9 +120,9 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO) {
+    public AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO) throws CustomNotFoundException {
         if (!adminExists(id)) {
-            new ErrorCodeUtils(4040000).throwError();
+            new ErrorCodeUtils(4041000).throwNotFoundException();
         }
         Admin admin = adminMapper.selectByPrimaryKey(id);
         BeanUtils.copyProperties(adminUpdateParamDTO, admin);
@@ -134,9 +135,9 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public void deleteAdmin(Long id) {
+    public void deleteAdmin(Long id) throws CustomNotFoundException {
         if (!adminExists(id)) {
-            new ErrorCodeUtils(4040000).throwError();
+            new ErrorCodeUtils(4041000).throwNotFoundException();
         }
         Admin admin = adminMapper.selectByPrimaryKey(id);
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();

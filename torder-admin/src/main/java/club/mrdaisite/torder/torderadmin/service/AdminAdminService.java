@@ -3,8 +3,8 @@ package club.mrdaisite.torder.torderadmin.service;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.tordermbg.model.Admin;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,23 +33,25 @@ public interface AdminAdminService {
      * @param roleId roleId 角色组id
      * @return 管理员列表
      */
-    List<Admin> listAdminByRoleId(Long roleId);
+    List<Admin> listAdminByRoleId(Long roleId) throws CustomNotFoundException;
 
     /**
      * 根据id获取管理员
      *
      * @param id 管理员id
      * @return 指定后台管理员
+     * @throws CustomNotFoundException
      */
-    AdminResultDTO getAdminById(Long id);
+    AdminResultDTO getAdminById(Long id) throws CustomNotFoundException;
 
     /**
      * 根据用户名获取后台管理员
      *
      * @param username 用户名
      * @return 指定后台管理员
+     * @throws CustomNotFoundException
      */
-    Admin getAdminByUsername(String username);
+    Admin getAdminByUsername(String username) throws CustomNotFoundException;
 
     /**
      * 添加管理员
@@ -67,17 +69,18 @@ public interface AdminAdminService {
      * @param id                  管理员id
      * @param adminUpdateParamDTO 修改后的管理员参数
      * @return 修改后的管理员信息
+     * @throws CustomNotFoundException
      */
-    AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO);
+    AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO) throws CustomNotFoundException;
 
     /**
      * 删除管理员
      *
      * @param id 管理员id
-     * @throws AccessDeniedException 管理员不存在异常
+     * @throws CustomNotFoundException 管理员不存在异常
      */
     @Transactional(rollbackFor = Exception.class)
-    void deleteAdmin(Long id);
+    void deleteAdmin(Long id) throws CustomNotFoundException;
 
     /**
      * 判断管理员是否存在

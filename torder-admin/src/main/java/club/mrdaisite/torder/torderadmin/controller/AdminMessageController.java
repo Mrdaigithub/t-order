@@ -3,6 +3,7 @@ package club.mrdaisite.torder.torderadmin.controller;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.MessageInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminMessageService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
@@ -46,9 +47,9 @@ public class AdminMessageController {
     @ApiOperation(value = "获取指定单个消息")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('message:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) {
+    public ResponseEntity getUserById(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminMessageService.messageExists(id)) {
-            new ErrorCodeUtils(4043000).throwError();
+            new ErrorCodeUtils(4044000).throwNotFoundException();
         }
         return new CommonResult().success(adminMessageService.getMessageById(id));
     }
@@ -56,10 +57,10 @@ public class AdminMessageController {
     @ApiOperation(value = "添加消息")
     @PostMapping()
     @PreAuthorize("hasAuthority('message:create')")
-    public ResponseEntity insertMessage(@Validated @RequestBody MessageInsertParamDTO messageInsertParamDTO, BindingResult result, Principal principal) {
+    public ResponseEntity insertMessage(@Validated @RequestBody MessageInsertParamDTO messageInsertParamDTO, BindingResult result, Principal principal) throws CustomNotFoundException {
         Admin admin = adminAdminService.getAdminByUsername(principal.getName());
         if (!adminAdminService.adminExists(admin.getId())) {
-            new ErrorCodeUtils(4041000).throwError();
+            new ErrorCodeUtils(4042000).throwNotFoundException();
         }
         return new CommonResult().success(adminMessageService.insertMessage(messageInsertParamDTO, admin.getId()));
     }
@@ -67,9 +68,9 @@ public class AdminMessageController {
     @ApiOperation(value = "修改消息信息")
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('message:update')")
-    public ResponseEntity updateMessage(@PathVariable Long id, @Validated @RequestBody MessageUpdateParamDTO messageUpdateParamDTO, BindingResult result) {
+    public ResponseEntity updateMessage(@PathVariable Long id, @Validated @RequestBody MessageUpdateParamDTO messageUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
         if (!adminMessageService.messageExists(id)) {
-            new ErrorCodeUtils(4043000).throwError();
+            new ErrorCodeUtils(4044000).throwNotFoundException();
         }
         return new CommonResult().success(adminMessageService.updateMessage(id, messageUpdateParamDTO));
     }
@@ -77,9 +78,9 @@ public class AdminMessageController {
     @ApiOperation(value = "删除消息")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('message:delete')")
-    public void deleteMessage(@PathVariable Long id) {
+    public void deleteMessage(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminMessageService.messageExists(id)) {
-            new ErrorCodeUtils(4043000).throwError();
+            new ErrorCodeUtils(4044000).throwNotFoundException();
         }
         adminMessageService.deleteMessage(id);
     }
