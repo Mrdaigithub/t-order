@@ -68,7 +68,7 @@ public class AdminAdminController {
     @ApiOperation(value = "添加管理员")
     @PostMapping()
     @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity insertAdmin(@Validated @RequestBody AdminInsertParamDTO adminInsertParamDTO, BindingResult result) throws CustomInternalException {
+    public ResponseEntity insertAdmin(@Validated @RequestBody AdminInsertParamDTO adminInsertParamDTO, BindingResult result) throws CustomNotFoundException, CustomInternalException {
         AdminResultDTO adminResultDTO = adminAdminService.insertAdmin(adminInsertParamDTO, "admin");
         if (adminResultDTO == null) {
             new ErrorCodeUtils(5001000).throwInternalException();

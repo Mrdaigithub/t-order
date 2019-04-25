@@ -24,7 +24,7 @@ public class AdminInsertParamDTO {
     @Size(min = 4, max = 12, message = "密码长度必须位于4到12之间")
     @Pattern(regexp = "^\\w+$", message = "密码格式错误")
     private String password;
-    @ApiModelProperty(value = "启用状态", required = true)
+    @ApiModelProperty(value = "启用状态")
     private Boolean enabled;
 
     public String getUsername() {

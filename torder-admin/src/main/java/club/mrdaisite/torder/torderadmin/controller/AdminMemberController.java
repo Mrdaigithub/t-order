@@ -1,7 +1,6 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
-import club.mrdaisite.torder.torderadmin.dto.MemberInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminMemberService;
@@ -43,13 +42,6 @@ public class AdminMemberController {
     @PreAuthorize("hasAuthority('member:read')")
     public ResponseEntity getMemberById(@PathVariable Long id) throws CustomNotFoundException {
         return new CommonResult().success(adminMemberService.getMemberById(id));
-    }
-
-    @ApiOperation(value = "添加用户")
-    @PostMapping(value = "/member")
-    @PreAuthorize("hasAuthority('member:create')")
-    public ResponseEntity insertMember(@Validated @RequestBody MemberInsertParamDTO memberInsertParamDTO, BindingResult result) {
-        return new CommonResult().success(adminMemberService.insertMember(memberInsertParamDTO));
     }
 
     @ApiOperation(value = "修改用户信息")

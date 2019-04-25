@@ -20,7 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -93,30 +92,27 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public AdminResultDTO insertAdmin(AdminInsertParamDTO adminInsertParamDTO, String roleName) {
+    public AdminResultDTO insertAdmin(AdminInsertParamDTO adminInsertParamDTO, String roleName) throws CustomNotFoundException {
         Admin admin = new Admin();
-        AdminRoleRelation adminRoleRelation = new AdminRoleRelation();
-        AdminResultDTO adminResultDTO = new AdminResultDTO();
+        BeanUtils.copyProperties(adminInsertParamDTO, admin);
+        admin.setPassword(bCryptPasswordEncoder.encode(adminInsertParamDTO.getPassword()));
+        adminMapper.insertSelective(admin);
 
         RoleExample roleExample = new RoleExample();
         roleExample.or().andNameEqualTo(roleName);
         List<Role> roleList = roleMapper.selectByExample(roleExample);
+        if (roleList == null || roleList.size() <= 0) {
+            new ErrorCodeUtils(4046000).throwNotFoundException();
+        }
+        assert roleList != null;
         Role role = roleList.get(0);
-        BeanUtils.copyProperties(adminInsertParamDTO, admin);
 
-        String bCryptPassword = bCryptPasswordEncoder.encode(adminInsertParamDTO.getPassword());
-        admin.setPassword(bCryptPassword);
-        admin.setEnabled(adminInsertParamDTO.getEnabled());
-        admin.setGmtCreate(new Date());
-        admin.setGmtModified(new Date());
-        adminMapper.insert(admin);
+        AdminRoleRelation adminRoleRelation = new AdminRoleRelation();
         adminRoleRelation.setAdminId(admin.getId());
         adminRoleRelation.setRoleId(role.getId());
-        adminRoleRelation.setGmtCreate(new Date());
-        adminRoleRelation.setGmtModified(new Date());
-        adminRoleRelationMapper.insert(adminRoleRelation);
-        BeanUtils.copyProperties(admin, adminResultDTO);
-        return adminResultDTO;
+        adminRoleRelationMapper.insertSelective(adminRoleRelation);
+
+        return getAdminById(admin.getId());
     }
 
     @Override
@@ -129,7 +125,6 @@ public class AdminAdminServiceImpl implements AdminAdminService {
         if (admin.getPassword() != null) {
             admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
         }
-        admin.setGmtModified(new Date());
         adminMapper.updateByPrimaryKeySelective(admin);
         return getAdminById(id);
     }

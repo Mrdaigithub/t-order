@@ -2,7 +2,6 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.dto.MemberResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.MemberInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminMemberService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
@@ -62,32 +61,15 @@ public class AdminMemberServiceImpl implements AdminMemberService {
     }
 
     @Override
-    public Member getMemberByUsername(String username) {
+    public Member getMemberByUsername(String username) throws CustomNotFoundException {
         MemberExample memberExample = new MemberExample();
         memberExample.or().andUsernameEqualTo(username);
         List<Member> adminList = memberMapper.selectByExample(memberExample);
-        if (adminList != null && adminList.size() > 0) {
-            return adminList.get(0);
+        if (adminList == null || adminList.size() <= 0) {
+            new ErrorCodeUtils(4042000).throwNotFoundException();
         }
-        return null;
-    }
-
-    @Override
-    public MemberResultDTO insertMember(MemberInsertParamDTO memberInsertParamDTO) {
-        Member member = new Member();
-        MemberResultDTO memberResultDTO = new MemberResultDTO();
-
-        BeanUtils.copyProperties(memberInsertParamDTO, member);
-
-        String bCryptPassword = bCryptPasswordEncoder.encode(memberInsertParamDTO.getPassword());
-        member.setPassword(bCryptPassword);
-        member.setScore(0);
-        member.setEnabled(true);
-        member.setGmtCreate(new Date());
-        member.setGmtModified(new Date());
-        memberMapper.insert(member);
-        BeanUtils.copyProperties(member, memberResultDTO);
-        return memberResultDTO;
+        assert adminList != null;
+        return adminList.get(0);
     }
 
     @Override

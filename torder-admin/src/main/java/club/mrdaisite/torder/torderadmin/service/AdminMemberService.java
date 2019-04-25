@@ -1,6 +1,5 @@
 package club.mrdaisite.torder.torderadmin.service;
 
-import club.mrdaisite.torder.torderadmin.dto.MemberInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MemberResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
@@ -49,16 +48,7 @@ public interface AdminMemberService {
      * @param username 用户名
      * @return 指定后台用户
      */
-    Member getMemberByUsername(String username);
-
-    /**
-     * 添加用户
-     *
-     * @param memberInsertParamDTO 用户参数
-     * @return 返回添加的用户信息
-     */
-    @Transactional(rollbackFor = Exception.class)
-    MemberResultDTO insertMember(MemberInsertParamDTO memberInsertParamDTO);
+    Member getMemberByUsername(String username) throws CustomNotFoundException;
 
     /**
      * 修改用户信息

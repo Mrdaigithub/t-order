@@ -61,7 +61,7 @@ public interface AdminAdminService {
      * @return 返回添加的管理员信息
      */
     @Transactional(rollbackFor = Exception.class)
-    AdminResultDTO insertAdmin(AdminInsertParamDTO adminInsertParamDTO, String roleName);
+    AdminResultDTO insertAdmin(AdminInsertParamDTO adminInsertParamDTO, String roleName) throws CustomNotFoundException;
 
     /**
      * 修改管理员信息
