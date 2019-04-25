@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.OrderUserRelationMapper">
-  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.OrderUserRelation">
+<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.MessageMemberRelationMapper">
+  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.MessageMemberRelation">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="order_id" jdbcType="BIGINT" property="orderId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="message_id" jdbcType="BIGINT" property="messageId" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="have_read" jdbcType="BIT" property="haveRead" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
@@ -67,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_id, user_id, gmt_create, gmt_modified
+    id, message_id, member_id, have_read, gmt_create, gmt_modified
   </sql>
-  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.OrderUserRelationExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.MessageMemberRelationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order_user_relation
+    from message_member_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,39 +87,42 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order_user_relation
+    from message_member_relation
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from order_user_relation
+    delete from message_member_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.OrderUserRelationExample">
-    delete from order_user_relation
+  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.MessageMemberRelationExample">
+    delete from message_member_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.OrderUserRelation">
+  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.MessageMemberRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order_user_relation (order_id, user_id, gmt_create, 
-      gmt_modified)
-    values (#{orderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP})
+    insert into message_member_relation (message_id, member_id, have_read, 
+      gmt_create, gmt_modified)
+    values (#{messageId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, #{haveRead,jdbcType=BIT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.OrderUserRelation">
+  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.MessageMemberRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order_user_relation
+    insert into message_member_relation
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="orderId != null">
-        order_id,
+      <if test="messageId != null">
+        message_id,
       </if>
-      <if test="userId != null">
-        user_id,
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="haveRead != null">
+        have_read,
       </if>
       <if test="gmtCreate != null">
         gmt_create,
@@ -128,11 +132,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="orderId != null">
-        #{orderId,jdbcType=BIGINT},
+      <if test="messageId != null">
+        #{messageId,jdbcType=BIGINT},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="haveRead != null">
+        #{haveRead,jdbcType=BIT},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -142,23 +149,26 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.OrderUserRelationExample" resultType="java.lang.Long">
-    select count(*) from order_user_relation
+  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.MessageMemberRelationExample" resultType="java.lang.Long">
+    select count(*) from message_member_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update order_user_relation
+    update message_member_relation
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=BIGINT},
+      <if test="record.messageId != null">
+        message_id = #{record.messageId,jdbcType=BIGINT},
       </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=BIGINT},
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=BIGINT},
+      </if>
+      <if test="record.haveRead != null">
+        have_read = #{record.haveRead,jdbcType=BIT},
       </if>
       <if test="record.gmtCreate != null">
         gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
@@ -172,24 +182,28 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update order_user_relation
+    update message_member_relation
     set id = #{record.id,jdbcType=BIGINT},
-      order_id = #{record.orderId,jdbcType=BIGINT},
-      user_id = #{record.userId,jdbcType=BIGINT},
+      message_id = #{record.messageId,jdbcType=BIGINT},
+      member_id = #{record.memberId,jdbcType=BIGINT},
+      have_read = #{record.haveRead,jdbcType=BIT},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.OrderUserRelation">
-    update order_user_relation
+  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.MessageMemberRelation">
+    update message_member_relation
     <set>
-      <if test="orderId != null">
-        order_id = #{orderId,jdbcType=BIGINT},
+      <if test="messageId != null">
+        message_id = #{messageId,jdbcType=BIGINT},
       </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="haveRead != null">
+        have_read = #{haveRead,jdbcType=BIT},
       </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -200,10 +214,11 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.OrderUserRelation">
-    update order_user_relation
-    set order_id = #{orderId,jdbcType=BIGINT},
-      user_id = #{userId,jdbcType=BIGINT},
+  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.MessageMemberRelation">
+    update message_member_relation
+    set message_id = #{messageId,jdbcType=BIGINT},
+      member_id = #{memberId,jdbcType=BIGINT},
+      have_read = #{haveRead,jdbcType=BIT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

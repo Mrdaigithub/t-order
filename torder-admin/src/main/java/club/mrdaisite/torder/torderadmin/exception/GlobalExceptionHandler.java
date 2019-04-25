@@ -2,7 +2,6 @@ package club.mrdaisite.torder.torderadmin.exception;
 
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
@@ -115,8 +114,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomNotFoundException.class)
     public ResponseEntity customNotFoundException(CustomNotFoundException exception) {
-        LoggerUtil.logger.warn("ok3");
-        return new CommonResult().forbidden(exception.getMessage());
+        return new CommonResult().notFound(exception.getMessage());
     }
 
     @ExceptionHandler(CustomInternalException.class)

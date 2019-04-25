@@ -2,9 +2,8 @@ package club.mrdaisite.torder.tordermbg.mapper;
 
 import club.mrdaisite.torder.tordermbg.model.Admin;
 import club.mrdaisite.torder.tordermbg.model.AdminExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface AdminMapper {
     long countByExample(AdminExample example);

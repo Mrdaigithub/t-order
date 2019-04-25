@@ -3,14 +3,12 @@ package club.mrdaisite.torder.tordermbg.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MessageUserRelation implements Serializable {
+public class OrderMemberRelation implements Serializable {
     private Long id;
 
-    private Long messageId;
+    private Long orderId;
 
-    private Long userId;
-
-    private Boolean haveRead;
+    private Long memberId;
 
     private Date gmtCreate;
 
@@ -26,28 +24,20 @@ public class MessageUserRelation implements Serializable {
         this.id = id;
     }
 
-    public Long getMessageId() {
-        return messageId;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setMessageId(Long messageId) {
-        this.messageId = messageId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getMemberId() {
+        return memberId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Boolean getHaveRead() {
-        return haveRead;
-    }
-
-    public void setHaveRead(Boolean haveRead) {
-        this.haveRead = haveRead;
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
     public Date getGmtCreate() {
@@ -73,9 +63,8 @@ public class MessageUserRelation implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", messageId=").append(messageId);
-        sb.append(", userId=").append(userId);
-        sb.append(", haveRead=").append(haveRead);
+        sb.append(", orderId=").append(orderId);
+        sb.append(", memberId=").append(memberId);
         sb.append(", gmtCreate=").append(gmtCreate);
         sb.append(", gmtModified=").append(gmtModified);
         sb.append(", serialVersionUID=").append(serialVersionUID);

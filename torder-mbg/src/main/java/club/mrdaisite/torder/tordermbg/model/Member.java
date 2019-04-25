@@ -3,7 +3,7 @@ package club.mrdaisite.torder.tordermbg.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
+public class Member implements Serializable {
     private Long id;
 
     private String username;

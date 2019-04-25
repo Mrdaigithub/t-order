@@ -1,7 +1,7 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
-import club.mrdaisite.torder.torderadmin.dto.UserLoginParamDTO;
+import club.mrdaisite.torder.torderadmin.dto.MemberLoginParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +29,8 @@ public class AdminAuthController {
 
     @ApiOperation(value = "管理员登录返回token")
     @PostMapping(value = "/login")
-    public ResponseEntity login(@Validated @RequestBody UserLoginParamDTO userLoginParamDTO, BindingResult result) {
-        String token = adminAuthService.login(userLoginParamDTO.getUsername(), userLoginParamDTO.getPassword());
+    public ResponseEntity login(@Validated @RequestBody MemberLoginParamDTO memberLoginParamDTO, BindingResult result) {
+        String token = adminAuthService.login(memberLoginParamDTO.getUsername(), memberLoginParamDTO.getPassword());
         return new CommonResult().success(token);
     }
 }

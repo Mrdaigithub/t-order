@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.User">
+<mapper namespace="club.mrdaisite.torder.tordermbg.mapper.MemberMapper">
+  <resultMap id="BaseResultMap" type="club.mrdaisite.torder.tordermbg.model.Member">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
@@ -73,13 +73,13 @@
   <sql id="Base_Column_List">
     id, username, password, bank_card, score, pid, enabled, gmt_create, gmt_modified
   </sql>
-  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="club.mrdaisite.torder.tordermbg.model.MemberExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from user
+    from member
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,37 +88,37 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
+    select 
     <include refid="Base_Column_List" />
-    from user
+    from member
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from user
+    delete from member
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample">
-    delete from user
+  <delete id="deleteByExample" parameterType="club.mrdaisite.torder.tordermbg.model.MemberExample">
+    delete from member
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.User">
+  <insert id="insert" parameterType="club.mrdaisite.torder.tordermbg.model.Member">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into user (username, password, bank_card,
-      score, pid, enabled, gmt_create,
+    insert into member (username, password, bank_card, 
+      score, pid, enabled, gmt_create, 
       gmt_modified)
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR},
-      #{score,jdbcType=INTEGER}, #{pid,jdbcType=BIGINT}, #{enabled,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP},
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{bankCard,jdbcType=VARCHAR}, 
+      #{score,jdbcType=INTEGER}, #{pid,jdbcType=BIGINT}, #{enabled,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.User">
+  <insert id="insertSelective" parameterType="club.mrdaisite.torder.tordermbg.model.Member">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into user
+    insert into member
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="username != null">
         username,
@@ -172,14 +172,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.UserExample" resultType="java.lang.Long">
-    select count(*) from user
+  <select id="countByExample" parameterType="club.mrdaisite.torder.tordermbg.model.MemberExample" resultType="java.lang.Long">
+    select count(*) from member
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update user
+    update member
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
@@ -214,7 +214,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update user
+    update member
     set id = #{record.id,jdbcType=BIGINT},
       username = #{record.username,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
@@ -228,8 +228,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.User">
-    update user
+  <update id="updateByPrimaryKeySelective" parameterType="club.mrdaisite.torder.tordermbg.model.Member">
+    update member
     <set>
       <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
@@ -258,8 +258,8 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.User">
-    update user
+  <update id="updateByPrimaryKey" parameterType="club.mrdaisite.torder.tordermbg.model.Member">
+    update member
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       bank_card = #{bankCard,jdbcType=VARCHAR},

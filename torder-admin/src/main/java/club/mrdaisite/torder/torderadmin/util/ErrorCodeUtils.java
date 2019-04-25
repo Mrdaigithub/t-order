@@ -83,7 +83,6 @@ public class ErrorCodeUtils {
         if (getEMessage() == null || getECode() == null) {
             return;
         }
-        LoggerUtil.logger.warn("ok2");
         throw new CustomNotFoundException(getEMessage());
     }
 
@@ -101,7 +100,7 @@ public class ErrorCodeUtils {
         throw new CustomInternalException(getEMessage());
     }
 
-    public Integer getECode() {
+    private Integer getECode() {
         return eCode;
     }
 

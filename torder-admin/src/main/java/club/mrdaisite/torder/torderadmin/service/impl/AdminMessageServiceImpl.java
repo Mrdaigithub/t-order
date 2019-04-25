@@ -2,11 +2,10 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.dto.MessageInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.service.AdminMemberService;
 import club.mrdaisite.torder.torderadmin.service.AdminMessageService;
-import club.mrdaisite.torder.torderadmin.service.AdminUserService;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
 import club.mrdaisite.torder.tordermbg.mapper.MessageMapper;
-import club.mrdaisite.torder.tordermbg.mapper.MessageUserRelationMapper;
+import club.mrdaisite.torder.tordermbg.mapper.MessageMemberRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,11 +23,11 @@ import java.util.List;
 @Service
 public class AdminMessageServiceImpl implements AdminMessageService {
     @Autowired
-    private AdminUserService adminUserService;
+    private AdminMemberService adminMemberService;
     @Autowired
     private MessageMapper messageMapper;
     @Autowired
-    private MessageUserRelationMapper messageUserRelationMapper;
+    private MessageMemberRelationMapper messageMemberRelationMapper;
 
     @Override
     public List<Object> listMessage(Integer page, Integer perPage, String sortBy, String order) {
@@ -54,15 +53,15 @@ public class AdminMessageServiceImpl implements AdminMessageService {
         messageMapper.insert(message);
         Long messageId = message.getId();
 
-        List<User> userList = adminUserService.listUser();
-        for (User user : userList) {
-            MessageUserRelation messageUserRelation = new MessageUserRelation();
-            messageUserRelation.setMessageId(messageId);
-            messageUserRelation.setUserId(user.getId());
-            messageUserRelation.setHaveRead(false);
-            messageUserRelation.setGmtCreate(new Date());
-            messageUserRelation.setGmtModified(new Date());
-            messageUserRelationMapper.insert(messageUserRelation);
+        List<Member> memberList = adminMemberService.listMember();
+        for (Member member : memberList) {
+            MessageMemberRelation messageMemberRelation = new MessageMemberRelation();
+            messageMemberRelation.setMessageId(messageId);
+            messageMemberRelation.setMemberId(member.getId());
+            messageMemberRelation.setHaveRead(false);
+            messageMemberRelation.setGmtCreate(new Date());
+            messageMemberRelation.setGmtModified(new Date());
+            messageMemberRelationMapper.insert(messageMemberRelation);
         }
         return message;
     }
@@ -78,9 +77,9 @@ public class AdminMessageServiceImpl implements AdminMessageService {
 
     @Override
     public void deleteMessage(Long id) {
-        MessageUserRelationExample messageUserRelationExample = new MessageUserRelationExample();
-        messageUserRelationExample.or().andMessageIdEqualTo(id);
-        messageUserRelationMapper.deleteByExample(messageUserRelationExample);
+        MessageMemberRelationExample messageMemberRelationExample = new MessageMemberRelationExample();
+        messageMemberRelationExample.or().andMessageIdEqualTo(id);
+        messageMemberRelationMapper.deleteByExample(messageMemberRelationExample);
         messageMapper.deleteByPrimaryKey(id);
     }
 

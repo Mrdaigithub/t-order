@@ -61,7 +61,7 @@ public class AdminAdminController {
     @ApiOperation(value = "获取指定单个管理员")
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('admin:read')")
-    public ResponseEntity getUserById(@PathVariable Long id) throws CustomNotFoundException {
+    public ResponseEntity getAdminById(@PathVariable Long id) throws CustomNotFoundException {
         return new CommonResult().success(adminAdminService.getAdminById(id));
     }
 
