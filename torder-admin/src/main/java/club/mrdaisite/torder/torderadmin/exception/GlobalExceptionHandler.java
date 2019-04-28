@@ -122,8 +122,8 @@ public class GlobalExceptionHandler {
         return new CommonResult().internalServerError(exception.getMessage());
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity exceptionHandler(HttpServletRequest request, Exception exception) {
-        return new CommonResult().internalServerError(new ErrorCodeUtils(5000000).getEMessage());
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity exceptionHandler(HttpServletRequest request, Exception exception) {
+//        return new CommonResult().internalServerError(new ErrorCodeUtils(5000000).getEMessage());
+//    }
 }

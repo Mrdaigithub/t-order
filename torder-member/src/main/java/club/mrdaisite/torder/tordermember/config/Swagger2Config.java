@@ -1,4 +1,4 @@
-package club.mrdaisite.torder.torderadmin.config;
+package club.mrdaisite.torder.tordermember.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * torder
+ *
  * @author dai
- * @date 2019/04/10
+ * @date 2019/04/28
  */
 @Configuration
 @EnableSwagger2
@@ -35,15 +37,15 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .securitySchemes(schemeList)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("club.mrdaisite.torder.torderadmin.controller"))
+                .apis(RequestHandlerSelectors.basePackage("club.mrdaisite.torder.tordermember.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("T Order 后台模块")
-                .description("T Order 后台模块")
+                .title("T Order 客户端模块")
+                .description("T Order 客户端模块")
                 .version("1.0")
                 .build();
     }
