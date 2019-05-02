@@ -2,6 +2,7 @@ package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.tordermbg.model.Role;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,6 +80,7 @@ public interface AdminRoleService {
      *
      * @param id 角色组id
      * @return 角色组是否存在
+     * @throws CustomNotFoundException
      */
-    Boolean roleExists(Long id);
+    void roleExists(Long id) throws CustomNotFoundException;
 }

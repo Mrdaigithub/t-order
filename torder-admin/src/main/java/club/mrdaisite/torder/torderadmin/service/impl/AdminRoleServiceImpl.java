@@ -2,7 +2,9 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
+import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.mapper.AdminRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RolePermissionRelationMapper;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author dai
@@ -88,7 +91,9 @@ public class AdminRoleServiceImpl implements AdminRoleService {
     }
 
     @Override
-    public Boolean roleExists(Long id) {
-        return roleMapper.selectByPrimaryKey(id) != null;
+    public void roleExists(Long id) throws CustomNotFoundException {
+        Role role = roleMapper.selectByPrimaryKey(id);
+        Optional.ofNullable(role)
+                .orElseThrow(() -> new CustomNotFoundException(new ErrorCodeUtils(4046000).getEMessage()));
     }
 }

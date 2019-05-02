@@ -5,7 +5,6 @@ import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,7 @@ public class AdminRoleController {
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:read')")
     public ResponseEntity getRoleById(@PathVariable Long id) throws CustomNotFoundException {
-        if (!adminRoleService.roleExists(id)) {
-            new ErrorCodeUtils(4046000).throwNotFoundException();
-        }
+        adminRoleService.roleExists(id);
         return new CommonResult().success(adminRoleService.getRoleById(id));
     }
 
@@ -59,9 +56,7 @@ public class AdminRoleController {
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:update')")
     public ResponseEntity updateRole(@PathVariable Long id, @Validated @RequestBody RoleUpdateParamDTO roleUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
-        if (!adminRoleService.roleExists(id)) {
-            new ErrorCodeUtils(4046000).throwNotFoundException();
-        }
+        adminRoleService.roleExists(id);
         return new CommonResult().success(adminRoleService.updateRole(id, roleUpdateParamDTO));
     }
 
@@ -69,9 +64,7 @@ public class AdminRoleController {
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:delete')")
     public void deleteRole(@PathVariable Long id) throws CustomNotFoundException {
-        if (!adminRoleService.roleExists(id)) {
-            new ErrorCodeUtils(4046000).throwNotFoundException();
-        }
+        adminRoleService.roleExists(id);
         adminRoleService.deleteRole(id);
     }
 }

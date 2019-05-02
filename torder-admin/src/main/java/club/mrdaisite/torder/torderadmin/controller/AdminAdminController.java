@@ -5,7 +5,6 @@ import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.CommonResult;
 import club.mrdaisite.torder.torderadmin.exception.CustomForbiddenException;
-import club.mrdaisite.torder.torderadmin.exception.CustomInternalException;
 import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
@@ -21,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Optional;
 
 /**
  * 管理员控制器
@@ -48,10 +48,9 @@ public class AdminAdminController {
     @ApiOperation(value = "获取当前登录管理员")
     @GetMapping(value = "/info")
     public ResponseEntity getInfo(Principal principal) throws CustomForbiddenException, CustomNotFoundException {
-        if (principal == null) {
-            new ErrorCodeUtils(4030000).throwForbiddenException();
-        }
-        assert principal != null;
+        Optional.ofNullable(principal)
+                .map(Principal::getName)
+                .orElseThrow(() -> new CustomForbiddenException(new ErrorCodeUtils(4030000).getEMessage()));
         Admin admin = adminAdminService.getAdminByUsername(principal.getName());
         AdminResultDTO adminResultDTO = new AdminResultDTO();
         BeanUtils.copyProperties(admin, adminResultDTO);
@@ -68,12 +67,8 @@ public class AdminAdminController {
     @ApiOperation(value = "添加管理员")
     @PostMapping()
     @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity insertAdmin(@Validated @RequestBody AdminInsertParamDTO adminInsertParamDTO, BindingResult result) throws CustomNotFoundException, CustomInternalException {
-        AdminResultDTO adminResultDTO = adminAdminService.insertAdmin(adminInsertParamDTO, "admin");
-        if (adminResultDTO == null) {
-            new ErrorCodeUtils(5001000).throwInternalException();
-        }
-        return new CommonResult().success(adminResultDTO);
+    public ResponseEntity insertAdmin(@Validated @RequestBody AdminInsertParamDTO adminInsertParamDTO, BindingResult result) throws CustomNotFoundException {
+        return new CommonResult().success(adminAdminService.insertAdmin(adminInsertParamDTO, "admin"));
     }
 
     @ApiOperation(value = "修改管理员信息")

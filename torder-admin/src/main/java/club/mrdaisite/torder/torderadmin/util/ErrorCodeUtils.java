@@ -40,6 +40,7 @@ public class ErrorCodeUtils {
         hashMap.put(5000005, "插入到数据库的数据不完整");
         // admin
         hashMap.put(4041000, "不存在的管理员");
+        hashMap.put(4041001, "未设定用户组的的管理员");
         hashMap.put(5001000, "添加管理员失败");
         // user
         hashMap.put(4042000, "不存在的用户");
@@ -72,11 +73,11 @@ public class ErrorCodeUtils {
         throw new CustomUnauthorizedException(getEMessage());
     }
 
-    public void throwForbiddenException() throws CustomForbiddenException {
+    public CustomForbiddenException throwForbiddenException() throws CustomForbiddenException {
         if (getEMessage() == null || getECode() == null) {
-            return;
+            return null;
         }
-        throw new CustomForbiddenException(getEMessage());
+        return new CustomForbiddenException(getEMessage());
     }
 
     public void throwNotFoundException() throws CustomNotFoundException {
