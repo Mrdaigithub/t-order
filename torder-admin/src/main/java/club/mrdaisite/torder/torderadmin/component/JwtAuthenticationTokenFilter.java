@@ -1,7 +1,7 @@
 package club.mrdaisite.torder.torderadmin.component;
 
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
+import cn.hutool.log.StaticLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,13 +42,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // The part after "Bearer "
             String authToken = authHeader.substring(this.tokenHead.length());
             String username = jwtTokenUtil.getUserNameFromToken(authToken);
-            LoggerUtil.logger.info("checking username:{}", username);
+            StaticLog.info("checking username:{}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
                 if (jwtTokenUtil.vallidateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToke = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authenticationToke.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    LoggerUtil.logger.info("authenticated user:{}", username);
+                    StaticLog.info("authenticated user:{}", username);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToke);
                 }
             }

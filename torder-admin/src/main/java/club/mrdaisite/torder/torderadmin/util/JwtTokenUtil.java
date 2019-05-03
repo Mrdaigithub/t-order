@@ -1,5 +1,6 @@
 package club.mrdaisite.torder.torderadmin.util;
 
+import cn.hutool.log.StaticLog;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -54,7 +55,7 @@ public class JwtTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            LoggerUtil.logger.info("JWT格式验证失败:{}", token);
+            StaticLog.info("JWT格式验证失败:{}", token);
         }
         return claims;
     }

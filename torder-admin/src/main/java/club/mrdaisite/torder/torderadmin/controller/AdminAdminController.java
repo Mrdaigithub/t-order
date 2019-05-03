@@ -9,6 +9,7 @@ import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.model.Admin;
+import cn.hutool.log.StaticLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;

@@ -13,6 +13,7 @@
         <module>torder-admin</module>
         <module>torder-mbg</module>
         <module>torder-member</module>
+        <module>torder-common</module>
     </modules>
 
 

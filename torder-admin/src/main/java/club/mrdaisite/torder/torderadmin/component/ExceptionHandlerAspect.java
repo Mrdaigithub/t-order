@@ -1,6 +1,6 @@
 package club.mrdaisite.torder.torderadmin.component;
 
-import club.mrdaisite.torder.torderadmin.util.LoggerUtil;
+import cn.hutool.log.StaticLog;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -27,7 +27,7 @@ public class ExceptionHandlerAspect {
         for (int i = 0; i < joinpoint.getArgs().length; i++) {
             if (joinpoint.getArgs()[i] instanceof Exception) {
                 Exception exception = (Exception) joinpoint.getArgs()[i];
-                LoggerUtil.logger.error(exception.getClass().getName() + ": " + exception.getMessage());
+                StaticLog.error(exception.getClass().getName() + ": " + exception.getMessage());
             }
         }
     }
