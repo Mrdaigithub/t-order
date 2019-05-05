@@ -3,7 +3,7 @@ package club.mrdaisite.torder.torderadmin.config;
 import club.mrdaisite.torder.torderadmin.bo.AdminUserDetails;
 import club.mrdaisite.torder.torderadmin.component.JwtAuthenticationTokenFilter;
 import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.tordermbg.model.Admin;
@@ -29,6 +29,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,15 +53,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/swagger-resources/**", "/v2/api-docs/**").permitAll()
-                .antMatchers("/admin/login", "/admin/insertAdmin", "/error").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.gif", "/swagger-resources/**", "/v2/api-docs/**", "/error").permitAll()
+                .antMatchers(HttpMethod.POST, "/**/auth/login").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
         http.headers().cacheControl();
         http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//        http.exceptionHandling()
+        http.exceptionHandling()
 //                .accessDeniedHandler(restfulAccessDeniedHandler)
-//                .authenticationEntryPoint(restAuthenticationEntryPoint);
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTION"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

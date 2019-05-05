@@ -1,6 +1,11 @@
 package club.mrdaisite.torder.torderadmin.component;
 
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import cn.hutool.log.StaticLog;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -20,9 +25,14 @@ import java.io.IOException;
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+        JSONObject jsonObject = JSONUtil.createObj();
+        jsonObject.put("code", Convert.toStr(HttpStatus.UNAUTHORIZED.value()));
+        jsonObject.put("message", new ErrorCodeUtils(4030000).getEMessage());
+        StaticLog.error(jsonObject.toStringPretty());
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json");
-        httpServletResponse.getWriter().println(new CommonResult().unauthorized(e.getMessage()));
+        httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        httpServletResponse.getWriter().println(jsonObject.toString());
         httpServletResponse.getWriter().flush();
     }
 }

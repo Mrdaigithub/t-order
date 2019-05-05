@@ -1,8 +1,8 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.common.api.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminMemberService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
@@ -49,7 +49,7 @@ public class AdminMemberController {
     @PreAuthorize("hasAuthority('member:update')")
     public ResponseEntity updateMember(@PathVariable Long id, @Validated @RequestBody MemberUpdateParamDTO memberUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
         if (!adminMemberService.memberExists(id)) {
-            new ErrorCodeUtils(4042000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4042000).getEMessage());
         }
         return new CommonResult().success(adminMemberService.updateMember(id, memberUpdateParamDTO));
     }
@@ -59,7 +59,7 @@ public class AdminMemberController {
     @PreAuthorize("hasAuthority('member:delete')")
     public void deleteMember(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminMemberService.memberExists(id)) {
-            new ErrorCodeUtils(4042000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4042000).getEMessage());
         }
         adminMemberService.deleteMember(id);
     }

@@ -1,9 +1,9 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.common.api.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

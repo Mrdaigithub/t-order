@@ -1,6 +1,6 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.common.api.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.MemberLoginParamDTO;
 import club.mrdaisite.torder.torderadmin.service.AdminAuthService;
 import io.swagger.annotations.Api;

@@ -1,9 +1,9 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.common.api.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.MessageInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminMessageService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
@@ -49,7 +49,7 @@ public class AdminMessageController {
     @PreAuthorize("hasAuthority('message:read')")
     public ResponseEntity getUserById(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminMessageService.messageExists(id)) {
-            new ErrorCodeUtils(4044000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4044000).getEMessage());
         }
         return new CommonResult().success(adminMessageService.getMessageById(id));
     }
@@ -68,7 +68,7 @@ public class AdminMessageController {
     @PreAuthorize("hasAuthority('message:update')")
     public ResponseEntity updateMessage(@PathVariable Long id, @Validated @RequestBody MessageUpdateParamDTO messageUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
         if (!adminMessageService.messageExists(id)) {
-            new ErrorCodeUtils(4044000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4044000).getEMessage());
         }
         return new CommonResult().success(adminMessageService.updateMessage(id, messageUpdateParamDTO));
     }
@@ -78,7 +78,7 @@ public class AdminMessageController {
     @PreAuthorize("hasAuthority('message:delete')")
     public void deleteMessage(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminMessageService.messageExists(id)) {
-            new ErrorCodeUtils(4044000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4044000).getEMessage());
         }
         adminMessageService.deleteMessage(id);
     }

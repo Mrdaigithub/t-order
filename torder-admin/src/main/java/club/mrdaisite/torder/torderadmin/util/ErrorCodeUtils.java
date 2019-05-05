@@ -1,7 +1,5 @@
 package club.mrdaisite.torder.torderadmin.util;
 
-import club.mrdaisite.torder.torderadmin.exception.*;
-
 import java.util.HashMap;
 
 /**
@@ -11,7 +9,6 @@ import java.util.HashMap;
  * @date 2019/04/23
  */
 public class ErrorCodeUtils {
-    private Integer eCode;
     private String eMessage;
 
     /**
@@ -55,58 +52,7 @@ public class ErrorCodeUtils {
         // permission
         hashMap.put(4047000, "不存在的权限");
 
-        setECode(eC);
         setEMessage(hashMap.get(eC));
-    }
-
-    public void throwBadRequestException() throws CustomBadRequestException {
-        if (getEMessage() == null || getECode() == null) {
-            return;
-        }
-        throw new CustomBadRequestException(getEMessage());
-    }
-
-    public void throwUnauthorizedException() throws CustomUnauthorizedException {
-        if (getEMessage() == null || getECode() == null) {
-            return;
-        }
-        throw new CustomUnauthorizedException(getEMessage());
-    }
-
-    public CustomForbiddenException throwForbiddenException() throws CustomForbiddenException {
-        if (getEMessage() == null || getECode() == null) {
-            return null;
-        }
-        return new CustomForbiddenException(getEMessage());
-    }
-
-    public void throwNotFoundException() throws CustomNotFoundException {
-        if (getEMessage() == null || getECode() == null) {
-            return;
-        }
-        throw new CustomNotFoundException(getEMessage());
-    }
-
-    public void throwMethodNotAllowedException() throws CustomMethodNotAllowedException {
-        if (getEMessage() == null || getECode() == null) {
-            return;
-        }
-        throw new CustomMethodNotAllowedException(getEMessage());
-    }
-
-    public void throwInternalException() throws CustomInternalException {
-        if (getEMessage() == null || getECode() == null) {
-            return;
-        }
-        throw new CustomInternalException(getEMessage());
-    }
-
-    private Integer getECode() {
-        return eCode;
-    }
-
-    private void setECode(Integer eCode) {
-        this.eCode = eCode;
     }
 
     public String getEMessage() {

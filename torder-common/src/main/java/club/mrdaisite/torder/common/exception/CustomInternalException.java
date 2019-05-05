@@ -1,10 +1,10 @@
-package club.mrdaisite.torder.torderadmin.exception;
+package club.mrdaisite.torder.common.exception;
 
 /**
- * 自定义500异常
+ * torder
  *
- * @author dai
- * @date 2019/03/25
+ * @author CustomInternalException
+ * @date 2019/05/05
  */
 public class CustomInternalException extends Exception {
     public CustomInternalException(String message) {

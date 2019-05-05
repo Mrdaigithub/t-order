@@ -2,7 +2,7 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;

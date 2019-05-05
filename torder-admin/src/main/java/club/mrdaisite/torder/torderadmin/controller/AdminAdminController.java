@@ -1,15 +1,15 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
+import club.mrdaisite.torder.common.api.CommonResult;
+import club.mrdaisite.torder.common.exception.CustomForbiddenException;
+import club.mrdaisite.torder.common.exception.CustomInternalException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
-import club.mrdaisite.torder.torderadmin.exception.CustomForbiddenException;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.model.Admin;
-import cn.hutool.log.StaticLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -48,7 +48,7 @@ public class AdminAdminController {
 
     @ApiOperation(value = "获取当前登录管理员")
     @GetMapping(value = "/info")
-    public ResponseEntity getInfo(Principal principal) throws CustomForbiddenException, CustomNotFoundException {
+    public ResponseEntity getInfo(Principal principal) throws CustomForbiddenException, CustomNotFoundException, CustomInternalException {
         Optional.ofNullable(principal)
                 .map(Principal::getName)
                 .orElseThrow(() -> new CustomForbiddenException(new ErrorCodeUtils(4030000).getEMessage()));

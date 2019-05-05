@@ -2,7 +2,7 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.dto.MemberResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminMemberService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
@@ -53,7 +53,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
         MemberResultDTO memberResultDTO = new MemberResultDTO();
         Member member = memberMapper.selectByPrimaryKey(id);
         if (member == null) {
-            new ErrorCodeUtils(4042000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4042000).getEMessage());
         }
         assert member != null;
         BeanUtils.copyProperties(member, memberResultDTO);
@@ -66,7 +66,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
         memberExample.or().andUsernameEqualTo(username);
         List<Member> adminList = memberMapper.selectByExample(memberExample);
         if (adminList == null || adminList.size() <= 0) {
-            new ErrorCodeUtils(4042000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4042000).getEMessage());
         }
         assert adminList != null;
         return adminList.get(0);

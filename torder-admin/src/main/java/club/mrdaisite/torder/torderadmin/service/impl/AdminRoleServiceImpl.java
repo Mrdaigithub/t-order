@@ -2,7 +2,7 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.mapper.AdminRoleRelationMapper;

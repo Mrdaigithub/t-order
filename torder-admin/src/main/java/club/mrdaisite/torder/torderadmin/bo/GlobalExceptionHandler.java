@@ -1,6 +1,7 @@
-package club.mrdaisite.torder.torderadmin.exception;
+package club.mrdaisite.torder.torderadmin.bo;
 
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.common.api.CommonResult;
+import club.mrdaisite.torder.common.exception.*;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -122,8 +123,8 @@ public class GlobalExceptionHandler {
         return new CommonResult().internalServerError(exception.getMessage());
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity exceptionHandler(HttpServletRequest request, Exception exception) {
-//        return new CommonResult().internalServerError(new ErrorCodeUtils(5000000).getEMessage());
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity exceptionHandler(HttpServletRequest request, Exception exception) {
+        return new CommonResult().internalServerError(new ErrorCodeUtils(5000000).getEMessage());
+    }
 }

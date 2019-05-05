@@ -3,8 +3,8 @@ package club.mrdaisite.torder.torderadmin.service;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomForbiddenException;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomForbiddenException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.tordermbg.model.Admin;
 import org.springframework.transaction.annotation.Transactional;
 

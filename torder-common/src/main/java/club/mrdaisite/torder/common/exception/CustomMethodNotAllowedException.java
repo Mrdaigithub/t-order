@@ -1,4 +1,4 @@
-package club.mrdaisite.torder.torderadmin.exception;
+package club.mrdaisite.torder.common.exception;
 
 /**
  * 自定义405异常

@@ -2,7 +2,7 @@ package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.tordermbg.model.Role;
 import org.springframework.transaction.annotation.Transactional;
 

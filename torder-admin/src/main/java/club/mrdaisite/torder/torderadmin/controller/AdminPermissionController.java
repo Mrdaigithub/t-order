@@ -1,9 +1,9 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
-import club.mrdaisite.torder.torderadmin.dto.CommonResult;
+import club.mrdaisite.torder.common.api.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
-import club.mrdaisite.torder.torderadmin.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
@@ -40,7 +40,7 @@ public class AdminPermissionController {
     @PreAuthorize("hasAuthority('permission:read')")
     public ResponseEntity getPermissionById(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminPermissionService.permissionExists(id)) {
-            new ErrorCodeUtils(4047000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4047000).getEMessage());
         }
         return new CommonResult().success(adminPermissionService.getPermissionById(id));
     }
@@ -57,7 +57,7 @@ public class AdminPermissionController {
     @PreAuthorize("hasAuthority('role:update')")
     public ResponseEntity updatePermission(@PathVariable Long id, @Validated @RequestBody PermissionUpdateParamDTO permissionUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
         if (!adminPermissionService.permissionExists(id)) {
-            new ErrorCodeUtils(4047000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4047000).getEMessage());
         }
         return new CommonResult().success(adminPermissionService.updatePermission(id, permissionUpdateParamDTO));
     }
@@ -67,7 +67,7 @@ public class AdminPermissionController {
     @PreAuthorize("hasAuthority('role:delete')")
     public void deletePermission(@PathVariable Long id) throws CustomNotFoundException {
         if (!adminPermissionService.permissionExists(id)) {
-            new ErrorCodeUtils(4047000).throwNotFoundException();
+            throw new CustomNotFoundException(new ErrorCodeUtils(4047000).getEMessage());
         }
         adminPermissionService.deletePermission(id);
     }
