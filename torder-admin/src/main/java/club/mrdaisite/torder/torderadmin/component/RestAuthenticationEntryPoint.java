@@ -1,6 +1,6 @@
 package club.mrdaisite.torder.torderadmin.component;
 
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * RestAuthenticationEntryPoint
+ * 当访问接口没有权限时，自定义的返回结果
  *
  * @author dai
  * @date 2019/03/22

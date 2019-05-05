@@ -2,6 +2,7 @@ package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.torderadmin.service.AdminAuthService;
 import club.mrdaisite.torder.torderadmin.util.JwtTokenUtil;
+import cn.hutool.log.StaticLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

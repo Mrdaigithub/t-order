@@ -1,4 +1,4 @@
-package club.mrdaisite.torder.torderadmin.util;
+package club.mrdaisite.torder.common.util;
 
 import java.util.HashMap;
 
@@ -15,7 +15,7 @@ public class ErrorCodeUtils {
      * @param eC 错误码
      */
     public ErrorCodeUtils(Integer eC) {
-        HashMap<Integer, String> hashMap = new HashMap<>();
+        HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
 
         // global
         hashMap.put(4000000, "参数指定的数据已存在");

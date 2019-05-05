@@ -4,7 +4,7 @@ import club.mrdaisite.torder.torderadmin.dto.MemberResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminMemberService;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.tordermbg.mapper.MemberMapper;
 import club.mrdaisite.torder.tordermbg.model.Member;

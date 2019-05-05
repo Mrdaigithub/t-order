@@ -2,7 +2,7 @@ package club.mrdaisite.torder.torderadmin.bo;
 
 import club.mrdaisite.torder.common.api.CommonResult;
 import club.mrdaisite.torder.common.exception.*;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;

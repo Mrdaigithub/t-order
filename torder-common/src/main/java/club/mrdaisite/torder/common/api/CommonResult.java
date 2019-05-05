@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
- * torder
+ * CommonResult
  *
  * @author dai
  * @date 2019/05/05

@@ -1,5 +1,6 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
+import club.mrdaisite.torder.common.api.CommonPage;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
@@ -7,12 +8,16 @@ import club.mrdaisite.torder.common.exception.CustomForbiddenException;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.tordermbg.mapper.AdminMapper;
 import club.mrdaisite.torder.tordermbg.mapper.AdminRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
 import club.mrdaisite.torder.tordermbg.model.*;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import cn.hutool.log.StaticLog;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -43,7 +48,7 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     private AdminRoleRelationMapper adminRoleRelationMapper;
 
     @Override
-    public List<Object> listAdmin(Integer page, Integer perPage, String sortBy, String order) {
+    public CommonPage listAdmin(Integer page, Integer perPage, String sortBy, String order) {
         PageHelper.startPage(page, perPage, sortBy + " " + order);
         List<Admin> adminList = adminMapper.selectByExample(new AdminExample());
         PageInfo pageInfo = new PageInfo<>(adminList);
@@ -52,7 +57,7 @@ public class AdminAdminServiceImpl implements AdminAdminService {
         for (int i = 0; i < pageInfoList.size(); i++) {
             targetList.add(new AdminResultDTO());
         }
-        return new FuncUtils().beanUtilsCopyListProperties(pageInfoList, targetList);
+        return new CommonPage(pageInfo, new FuncUtils().beanUtilsCopyListProperties(pageInfoList, targetList));
     }
 
     @Override

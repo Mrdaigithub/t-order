@@ -4,7 +4,7 @@ import club.mrdaisite.torder.common.api.CommonResult;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminMemberService;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

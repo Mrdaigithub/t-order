@@ -5,7 +5,7 @@ import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

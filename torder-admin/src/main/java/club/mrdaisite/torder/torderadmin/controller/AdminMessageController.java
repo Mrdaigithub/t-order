@@ -6,7 +6,7 @@ import club.mrdaisite.torder.torderadmin.dto.MessageUpdateParamDTO;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminMessageService;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.model.Admin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

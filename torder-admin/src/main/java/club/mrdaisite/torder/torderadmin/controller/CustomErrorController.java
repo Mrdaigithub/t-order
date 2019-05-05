@@ -1,7 +1,7 @@
 package club.mrdaisite.torder.torderadmin.controller;
 
 import club.mrdaisite.torder.common.exception.CustomInternalException;
-import club.mrdaisite.torder.torderadmin.util.ErrorCodeUtils;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

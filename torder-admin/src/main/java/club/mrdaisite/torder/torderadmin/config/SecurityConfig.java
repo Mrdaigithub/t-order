@@ -6,6 +6,7 @@ import club.mrdaisite.torder.torderadmin.component.RestAuthenticationEntryPoint;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.model.Admin;
 import club.mrdaisite.torder.tordermbg.model.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +54,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.gif", "/swagger-resources/**", "/v2/api-docs/**", "/error").permitAll()
+                .antMatchers(HttpMethod.GET,
+                        "/",
+                        "/*.html", "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js", "/**/*.png",
+                        "/**/*.gif",
+                        "/swagger-resources/**",
+                        "/v2/api-docs/**",
+                        "/error"
+                )
+                .permitAll()
                 .antMatchers(HttpMethod.POST, "/**/auth/login").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
         http.headers().cacheControl();
         http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         http.exceptionHandling()
-//                .accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
@@ -88,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 }
                 return new AdminUserDetails(admin, permissionList);
             }
-            throw new UsernameNotFoundException("用户名或密码错误");
+            throw new UsernameNotFoundException(new ErrorCodeUtils(4010000).getEMessage());
         };
     }
 
