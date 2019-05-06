@@ -58,9 +58,9 @@ public class AdminAdminServiceImpl implements AdminAdminService {
 
     @Override
     public List<Admin> listAdminByRoleId(Long roleId) throws CustomNotFoundException, CustomForbiddenException {
-        adminRoleService.roleExists(roleId);
+        Role role = adminRoleService.getRoleById(roleId);
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
-        adminRoleRelationExample.or().andRoleIdEqualTo(roleId);
+        adminRoleRelationExample.or().andRoleIdEqualTo(role.getId());
         List<AdminRoleRelation> adminRoleRelationList = adminRoleRelationMapper.selectByExample(adminRoleRelationExample);
         Optional.ofNullable(adminRoleRelationList)
                 .filter(adminRoleRelations -> adminRoleRelations.size() > 0)

@@ -59,7 +59,6 @@ public class AdminMessageController {
     @PreAuthorize("hasAuthority('message:create')")
     public ResponseEntity insertMessage(@Validated @RequestBody MessageInsertParamDTO messageInsertParamDTO, BindingResult result, Principal principal) throws CustomNotFoundException {
         Admin admin = adminAdminService.getAdminByUsername(principal.getName());
-        adminAdminService.adminExists(admin.getId());
         return new CommonResult().success(adminMessageService.insertMessage(messageInsertParamDTO, admin.getId()));
     }
 
