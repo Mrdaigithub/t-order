@@ -6,11 +6,13 @@ import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminPermissionService;
 import club.mrdaisite.torder.common.util.ErrorCodeUtils;
+import club.mrdaisite.torder.tordermbg.model.Permission;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +41,6 @@ public class AdminPermissionController {
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('permission:read')")
     public ResponseEntity getPermissionById(@PathVariable Long id) throws CustomNotFoundException {
-        if (!adminPermissionService.permissionExists(id)) {
-            throw new CustomNotFoundException(new ErrorCodeUtils(4047000).getEMessage());
-        }
         return new CommonResult().success(adminPermissionService.getPermissionById(id));
     }
 
@@ -56,19 +55,14 @@ public class AdminPermissionController {
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:update')")
     public ResponseEntity updatePermission(@PathVariable Long id, @Validated @RequestBody PermissionUpdateParamDTO permissionUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
-        if (!adminPermissionService.permissionExists(id)) {
-            throw new CustomNotFoundException(new ErrorCodeUtils(4047000).getEMessage());
-        }
         return new CommonResult().success(adminPermissionService.updatePermission(id, permissionUpdateParamDTO));
     }
 
     @ApiOperation(value = "删除权限")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:delete')")
+    @Transactional(rollbackFor = Exception.class)
     public void deletePermission(@PathVariable Long id) throws CustomNotFoundException {
-        if (!adminPermissionService.permissionExists(id)) {
-            throw new CustomNotFoundException(new ErrorCodeUtils(4047000).getEMessage());
-        }
         adminPermissionService.deletePermission(id);
     }
 }

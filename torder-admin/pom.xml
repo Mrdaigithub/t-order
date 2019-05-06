@@ -23,6 +23,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>club.mrdaisite.torder</groupId>
+            <artifactId>torder-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>club.mrdaisite</groupId>
             <artifactId>torder-mbg</artifactId>
             <version>0.0.1-SNAPSHOT</version>

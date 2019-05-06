@@ -1,23 +1,19 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
 import club.mrdaisite.torder.common.api.CommonPage;
+import club.mrdaisite.torder.common.exception.CustomForbiddenException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
-import club.mrdaisite.torder.common.exception.CustomForbiddenException;
-import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
-import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.util.FuncUtils;
 import club.mrdaisite.torder.tordermbg.mapper.AdminMapper;
 import club.mrdaisite.torder.tordermbg.mapper.AdminRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
 import club.mrdaisite.torder.tordermbg.model.*;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import cn.hutool.log.StaticLog;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -76,7 +72,15 @@ public class AdminAdminServiceImpl implements AdminAdminService {
     }
 
     @Override
-    public AdminResultDTO getAdminById(Long id) throws CustomNotFoundException {
+    public Admin getAdminById(Long id) throws CustomNotFoundException {
+        Admin admin = adminMapper.selectByPrimaryKey(id);
+        Optional.ofNullable(admin)
+                .orElseThrow(() -> new CustomNotFoundException(new ErrorCodeUtils(4041000).getEMessage()));
+        return admin;
+    }
+
+    @Override
+    public AdminResultDTO getAdminDtoById(Long id) throws CustomNotFoundException {
         AdminResultDTO adminResultDTO = new AdminResultDTO();
         Admin admin = adminMapper.selectByPrimaryKey(id);
         Optional.ofNullable(admin)
@@ -116,35 +120,26 @@ public class AdminAdminServiceImpl implements AdminAdminService {
         adminRoleRelation.setRoleId(role.getId());
         adminRoleRelationMapper.insertSelective(adminRoleRelation);
 
-        return getAdminById(admin.getId());
+        return getAdminDtoById(admin.getId());
     }
 
     @Override
     public AdminResultDTO updateAdmin(Long id, AdminUpdateParamDTO adminUpdateParamDTO) throws CustomNotFoundException {
-        adminExists(id);
-        Admin admin = adminMapper.selectByPrimaryKey(id);
+        Admin admin = getAdminById(id);
         BeanUtils.copyProperties(adminUpdateParamDTO, admin);
-        if (admin.getPassword() != null) {
-            admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
-        }
+        admin.setPassword(admin.getPassword() == null ? null : bCryptPasswordEncoder.encode(admin.getPassword()));
         adminMapper.updateByPrimaryKeySelective(admin);
-        return getAdminById(id);
+        return getAdminDtoById(id);
     }
 
     @Override
     public void deleteAdmin(Long id) throws CustomNotFoundException {
-        adminExists(id);
-        Admin admin = adminMapper.selectByPrimaryKey(id);
+        Admin admin = getAdminById(id);
+
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
         adminRoleRelationExample.or().andAdminIdEqualTo(admin.getId());
         adminRoleRelationMapper.deleteByExample(adminRoleRelationExample);
-        adminMapper.deleteByPrimaryKey(id);
-    }
 
-    @Override
-    public void adminExists(Long id) throws CustomNotFoundException {
-        Admin admin = adminMapper.selectByPrimaryKey(id);
-        Optional.ofNullable(admin)
-                .orElseThrow(() -> new CustomNotFoundException(new ErrorCodeUtils(4041000).getEMessage()));
+        adminMapper.deleteByPrimaryKey(admin.getId());
     }
 }

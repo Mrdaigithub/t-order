@@ -36,7 +36,7 @@ public interface AdminPermissionService {
      * @param id 权限id
      * @return 指定权限
      */
-    Permission getPermissionById(Long id);
+    Permission getPermissionById(Long id) throws CustomNotFoundException;
 
     /**
      * 根据权限值获取权限
@@ -69,13 +69,5 @@ public interface AdminPermissionService {
      * @param id 权限id
      */
     @Transactional(rollbackFor = Exception.class)
-    void deletePermission(Long id);
-
-    /**
-     * 判断权限是否存在
-     *
-     * @param id 权限id
-     * @return 权限是否存在
-     */
-    Boolean permissionExists(Long id);
+    void deletePermission(Long id) throws CustomNotFoundException;
 }

@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,14 +42,13 @@ public class AdminRoleController {
     @GetMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:read')")
     public ResponseEntity getRoleById(@PathVariable Long id) throws CustomNotFoundException {
-        adminRoleService.roleExists(id);
         return new CommonResult().success(adminRoleService.getRoleById(id));
     }
 
     @ApiOperation(value = "添加角色组")
     @PostMapping()
     @PreAuthorize("hasAuthority('role:create')")
-    public ResponseEntity insertRole(@Validated @RequestBody RoleInsertParamDTO roleInsertParamDTO, BindingResult result) {
+    public ResponseEntity insertRole(@Validated @RequestBody RoleInsertParamDTO roleInsertParamDTO, BindingResult result) throws CustomNotFoundException {
         return new CommonResult().success(adminRoleService.insertRole(roleInsertParamDTO));
     }
 
@@ -56,15 +56,14 @@ public class AdminRoleController {
     @PutMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:update')")
     public ResponseEntity updateRole(@PathVariable Long id, @Validated @RequestBody RoleUpdateParamDTO roleUpdateParamDTO, BindingResult result) throws CustomNotFoundException {
-        adminRoleService.roleExists(id);
         return new CommonResult().success(adminRoleService.updateRole(id, roleUpdateParamDTO));
     }
 
     @ApiOperation(value = "删除角色组")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasAuthority('role:delete')")
+    @Transactional(rollbackFor = Exception.class)
     public void deleteRole(@PathVariable Long id) throws CustomNotFoundException {
-        adminRoleService.roleExists(id);
         adminRoleService.deleteRole(id);
     }
 }

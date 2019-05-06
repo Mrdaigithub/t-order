@@ -1,5 +1,6 @@
 package club.mrdaisite.torder.torderadmin.service;
 
+import club.mrdaisite.torder.common.api.CommonPage;
 import club.mrdaisite.torder.torderadmin.dto.MemberResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.MemberUpdateParamDTO;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
@@ -24,7 +25,7 @@ public interface AdminMemberService {
      * @param order   排序顺序
      * @return 用户分页列表
      */
-    List<Object> listMember(Integer page, Integer perPage, String sortBy, String order);
+    CommonPage listMember(Integer page, Integer perPage, String sortBy, String order);
 
     /**
      * 获取用户列表
@@ -40,7 +41,16 @@ public interface AdminMemberService {
      * @return 指定用户
      * @throws CustomNotFoundException 用户不存在异常
      */
-    MemberResultDTO getMemberById(Long id) throws CustomNotFoundException;
+    Member getMemberById(Long id) throws CustomNotFoundException;
+
+    /**
+     * 根据id获取用户dto
+     *
+     * @param id 用户id
+     * @return 指定用户dto
+     * @throws CustomNotFoundException 用户不存在异常
+     */
+    MemberResultDTO getMemberDtoById(Long id) throws CustomNotFoundException;
 
     /**
      * 根据用户名获取后台用户
@@ -64,15 +74,8 @@ public interface AdminMemberService {
      * 删除用户
      *
      * @param id 用户id
+     * @throws CustomNotFoundException 不存在的用户
      */
     @Transactional(rollbackFor = Exception.class)
-    void deleteMember(Long id);
-
-    /**
-     * 判断用户是否存在
-     *
-     * @param id 用户id
-     * @return 用户是否存在
-     */
-    Boolean memberExists(Long id);
+    void deleteMember(Long id) throws CustomNotFoundException;
 }

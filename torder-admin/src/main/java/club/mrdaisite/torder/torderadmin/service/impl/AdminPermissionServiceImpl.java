@@ -1,5 +1,6 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.dto.PermissionInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.PermissionUpdateParamDTO;
 import club.mrdaisite.torder.common.exception.CustomNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author dai
@@ -55,8 +57,11 @@ public class AdminPermissionServiceImpl implements AdminPermissionService {
     }
 
     @Override
-    public Permission getPermissionById(Long id) {
-        return permissionMapper.selectByPrimaryKey(id);
+    public Permission getPermissionById(Long id) throws CustomNotFoundException {
+        Permission permission = permissionMapper.selectByPrimaryKey(id);
+        Optional.ofNullable(permission)
+                .orElseThrow(() -> new CustomNotFoundException(new ErrorCodeUtils(4047000).getEMessage()));
+        return permission;
     }
 
     @Override
@@ -87,15 +92,11 @@ public class AdminPermissionServiceImpl implements AdminPermissionService {
     }
 
     @Override
-    public void deletePermission(Long id) {
+    public void deletePermission(Long id) throws CustomNotFoundException {
+        Permission permission = getPermissionById(id);
         RolePermissionRelationExample rolePermissionRelationExample = new RolePermissionRelationExample();
         rolePermissionRelationExample.or().andRoleIdEqualTo(id);
         rolePermissionRelationMapper.deleteByExample(rolePermissionRelationExample);
         permissionMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public Boolean permissionExists(Long id) {
-        return permissionMapper.selectByPrimaryKey(id) != null;
     }
 }

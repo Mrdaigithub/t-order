@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 /**
  * RoleInsertParamDTO
@@ -23,7 +22,6 @@ public class RoleInsertParamDTO {
     private String description;
 
     @ApiModelProperty(value = "角色组启用状态", required = true)
-    @NotNull(message = "角色组启用状态不能为null")
     private Boolean enabled;
 
     public String getName() {

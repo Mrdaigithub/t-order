@@ -1,21 +1,19 @@
 package club.mrdaisite.torder.torderadmin.service.impl;
 
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
+import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.torderadmin.dto.RoleInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.RoleUpdateParamDTO;
-import club.mrdaisite.torder.common.exception.CustomNotFoundException;
+import club.mrdaisite.torder.torderadmin.service.AdminAdminService;
 import club.mrdaisite.torder.torderadmin.service.AdminRoleService;
-import club.mrdaisite.torder.common.util.ErrorCodeUtils;
 import club.mrdaisite.torder.tordermbg.mapper.AdminRoleRelationMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RoleMapper;
 import club.mrdaisite.torder.tordermbg.mapper.RolePermissionRelationMapper;
 import club.mrdaisite.torder.tordermbg.model.*;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +24,8 @@ import java.util.Optional;
 @Service
 public class AdminRoleServiceImpl implements AdminRoleService {
     @Autowired
+    private AdminAdminService adminAdminService;
+    @Autowired
     private RoleMapper roleMapper;
     @Autowired
     private AdminRoleRelationMapper adminRoleRelationMapper;
@@ -33,11 +33,8 @@ public class AdminRoleServiceImpl implements AdminRoleService {
     private RolePermissionRelationMapper rolePermissionRelationMapper;
 
     @Override
-    public List<Object> listRole(Integer page, Integer perPage, String sortBy, String order) {
-        PageHelper.startPage(page, perPage, sortBy + " " + order);
-        List<Role> roleList = roleMapper.selectByExample(new RoleExample());
-        PageInfo pageInfo = new PageInfo<>(roleList);
-        return pageInfo.getList();
+    public List<Role> listRole(Integer page, Integer perPage, String sortBy, String order) {
+        return roleMapper.selectByExample(new RoleExample());
     }
 
     @Override
@@ -48,52 +45,53 @@ public class AdminRoleServiceImpl implements AdminRoleService {
     }
 
     @Override
-    public Role getRoleById(Long id) {
-        return roleMapper.selectByPrimaryKey(id);
+    public Role getRoleById(Long id) throws CustomNotFoundException {
+        Role role = roleMapper.selectByPrimaryKey(id);
+        Optional.ofNullable(role)
+                .orElseThrow(() -> new CustomNotFoundException(new ErrorCodeUtils(4046000).getEMessage()));
+        return role;
     }
 
     @Override
-    public Role getRoleByAdminId(Long id) {
+    public Role getRoleByAdminId(Long id) throws CustomNotFoundException {
+        Admin admin = adminAdminService.getAdminById(id);
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
-        adminRoleRelationExample.or().andAdminIdEqualTo(id);
+        adminRoleRelationExample.or().andAdminIdEqualTo(admin.getId());
         List<AdminRoleRelation> adminRoleRelationList = adminRoleRelationMapper.selectByExample(adminRoleRelationExample);
+        Optional.ofNullable(adminRoleRelationList)
+                .filter((adminRoleRelations) -> adminRoleRelations.size() > 0)
+                .orElseThrow(() -> new CustomNotFoundException(new ErrorCodeUtils(4041001).getEMessage()));
         return roleMapper.selectByPrimaryKey(adminRoleRelationList.get(0).getRoleId());
     }
 
     @Override
-    public Role insertRole(RoleInsertParamDTO roleInsertParamDTO) {
+    public Role insertRole(RoleInsertParamDTO roleInsertParamDTO) throws CustomNotFoundException {
         Role role = new Role();
         BeanUtils.copyProperties(roleInsertParamDTO, role);
-        role.setGmtCreate(new Date());
-        role.setGmtModified(new Date());
-        roleMapper.insert(role);
-        return role;
+        roleMapper.insertSelective(role);
+        return getRoleById(role.getId());
     }
 
     @Override
-    public Role updateRole(Long id, RoleUpdateParamDTO roleUpdateParamDTO) {
-        Role role = roleMapper.selectByPrimaryKey(id);
+    public Role updateRole(Long id, RoleUpdateParamDTO roleUpdateParamDTO) throws CustomNotFoundException {
+        Role role = getRoleById(id);
         BeanUtils.copyProperties(roleUpdateParamDTO, role);
-        role.setGmtModified(new Date());
         roleMapper.updateByPrimaryKeySelective(role);
-        return role;
+        return getRoleById(id);
     }
 
     @Override
-    public void deleteRole(Long id) {
+    public void deleteRole(Long id) throws CustomNotFoundException {
+        Role role = getRoleById(id);
+
         AdminRoleRelationExample adminRoleRelationExample = new AdminRoleRelationExample();
-        adminRoleRelationExample.or().andRoleIdEqualTo(id);
-        RolePermissionRelationExample rolePermissionRelationExample = new RolePermissionRelationExample();
-        rolePermissionRelationExample.or().andRoleIdEqualTo(id);
+        adminRoleRelationExample.or().andRoleIdEqualTo(role.getId());
         adminRoleRelationMapper.deleteByExample(adminRoleRelationExample);
-        rolePermissionRelationMapper.deleteByExample(rolePermissionRelationExample);
-        roleMapper.deleteByPrimaryKey(id);
-    }
 
-    @Override
-    public void roleExists(Long id) throws CustomNotFoundException {
-        Role role = roleMapper.selectByPrimaryKey(id);
-        Optional.ofNullable(role)
-                .orElseThrow(() -> new CustomNotFoundException(new ErrorCodeUtils(4046000).getEMessage()));
+        RolePermissionRelationExample rolePermissionRelationExample = new RolePermissionRelationExample();
+        rolePermissionRelationExample.or().andRoleIdEqualTo(role.getId());
+        rolePermissionRelationMapper.deleteByExample(rolePermissionRelationExample);
+
+        roleMapper.deleteByPrimaryKey(role.getId());
     }
 }

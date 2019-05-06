@@ -1,13 +1,12 @@
 package club.mrdaisite.torder.torderadmin.service;
 
 import club.mrdaisite.torder.common.api.CommonPage;
+import club.mrdaisite.torder.common.exception.CustomForbiddenException;
+import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.torderadmin.dto.AdminInsertParamDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminResultDTO;
 import club.mrdaisite.torder.torderadmin.dto.AdminUpdateParamDTO;
-import club.mrdaisite.torder.common.exception.CustomForbiddenException;
-import club.mrdaisite.torder.common.exception.CustomNotFoundException;
 import club.mrdaisite.torder.tordermbg.model.Admin;
-import cn.hutool.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public interface AdminAdminService {
      *
      * @param roleId roleId 角色组id
      * @return 管理员列表
-     * @throws CustomNotFoundException 不存在的角色组
+     * @throws CustomNotFoundException  不存在的角色组
      * @throws CustomForbiddenException 未设定用户组的的管理员
      */
     List<Admin> listAdminByRoleId(Long roleId) throws CustomNotFoundException, CustomForbiddenException;
@@ -47,7 +46,16 @@ public interface AdminAdminService {
      * @return 指定后台管理员
      * @throws CustomNotFoundException 不存在的管理员
      */
-    AdminResultDTO getAdminById(Long id) throws CustomNotFoundException;
+    Admin getAdminById(Long id) throws CustomNotFoundException;
+
+    /**
+     * 根据id获取管理员dto
+     *
+     * @param id 管理员id
+     * @return 指定后台管理员dto
+     * @throws CustomNotFoundException 不存在的管理员
+     */
+    AdminResultDTO getAdminDtoById(Long id) throws CustomNotFoundException;
 
     /**
      * 根据用户名获取后台管理员
@@ -87,12 +95,4 @@ public interface AdminAdminService {
      */
     @Transactional(rollbackFor = Exception.class)
     void deleteAdmin(Long id) throws CustomNotFoundException;
-
-    /**
-     * 判断管理员是否存在
-     *
-     * @param id 管理员id
-     * @throws CustomNotFoundException 不存在的管理员
-     */
-    void adminExists(Long id) throws CustomNotFoundException;
 }
